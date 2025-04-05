@@ -1,0 +1,431 @@
+@use "sass:color";
+@use "./scss/notification.scss";
+@use "./scss/keybinds.scss";
+
+$bg: #212223;
+$fg: #f1f1f1;
+$accent: #378DF7;
+$radius: 7px;
+
+window decoration {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+.window-frame {
+    box-shadow: 0 0 0 0;
+    margin: 0;
+}
+/*
+window.Bar {
+    border: none;
+    box-shadow: none;
+    background-color: $bg;
+    color: $fg;
+    font-size: 1.1em;
+    font-weight: bold;
+
+    label {
+        margin: 0 8px;
+    }
+    .clock {
+        color: #f1f1f1;
+    }
+
+    .Workspaces  {
+        button {
+            all: unset;
+            background-color: transparent;
+
+            &:hover label {
+                background-color: color.adjust($fg, $alpha: -0.84);
+                border-color: color.adjust($accent, $alpha: -0.8);
+            }
+
+            &:active label {
+                background-color: color.adjust($fg, $alpha: -0.8)
+            }
+        }
+
+        label {
+            transition: 200ms;
+            padding: 0 8px;
+            margin: 2px;
+            border-radius: $radius;
+            border: 1pt solid transparent;
+        }
+
+        .focused label {
+            color: $accent;
+            border-color: $accent;
+        }
+    }
+
+    .SysTray {
+        margin-right: 8px;
+
+        button {
+            padding: 0 4px;
+        }
+    }
+
+    .FocusedClient {
+        color: $accent;
+    }
+
+    .Media .Cover {
+        min-height: 1.2em;
+        min-width: 1.2em;
+        border-radius: $radius;
+        background-position: center;
+        background-size: contain;
+    }
+
+    .Battery label {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .AudioSlider {
+        * {
+            all: unset;
+        }
+
+        icon {
+            margin-right: .6em;
+        }
+
+        & {
+            margin: 0 1em;
+        }
+
+        trough {
+            background-color: color.adjust($fg, $alpha: -0.8);
+            border-radius: $radius;
+        }
+
+        highlight {
+            background-color: $accent;
+            min-height: .8em;
+            border-radius: $radius;
+        }
+
+        slider {
+            background-color: $fg;
+            border-radius: $radius;
+            min-height: 1em;
+            min-width: 1em;
+            margin: -.2em;
+        }
+    }
+}
+*/
+
+window.corner-screen {
+    background: transparent;
+}
+window.bar {
+    background-color: #17111B;
+
+
+    label {
+        font-weight: bold;
+    }
+    .workspaces {
+        margin: 4px 0px;
+        background: #29222C;
+        border-radius: 10px;
+        padding: 0px 4px;
+    }
+    .workspaces button {
+        all: unset;
+        margin: 0px 4px;
+        color: #505050;
+    }
+
+    .workspaces button.focused {
+        color: #ffffff;
+    }
+    .workspaces button:hover {
+        color: #ffffff;
+    }
+
+    .notification {
+        color: yellow;
+    }
+
+    levelbar block,
+    highlight {
+        min-height: 10px;
+    }
+
+
+    .clock {
+        all: unset;
+        background: #1F1923;
+        border-radius: 10px;
+        margin: 4px 4px;
+        padding: 0px 4px;
+        color: #ffffff;
+    }
+    .clock .clock-point {
+        font-size: 20px;
+    }
+    .clock .clock-calendar {
+        font-size: 14px;
+    }
+    .app-launcher-box {
+        padding: 0px 20px;
+    }
+    .app-launcher-box .media {
+        color: #505050;
+        font-size: 10px;
+    }
+    icon.media-icon {
+        margin: 0px 5px;
+    }
+    .app-launcher-box .app-launcher-btn {
+        all: unset;
+        color: #ffffff;
+        font-size: 14px;
+    }
+    .app-launcher-box .app-launcher-label {
+        color: #414141;
+        font-size: 12px;
+    }
+    .media-btn {
+        all: unset;
+        color: #ffffff;
+        font-size: 14px;
+        margin: 4px 4px;
+        background: #1F1923;
+        border-radius: 10px;
+        padding: 2px 4px 2px 10px;
+    }
+    .menu-shortcuts {
+        margin: 4px 0px;
+        background: #1F1923;
+        border-radius: 10px;
+        padding: 2px 4px;
+    }
+    .menu-shortcuts .menu-shortcuts-btn {
+        all: unset;
+        border-radius: 50%;
+        background: #29222C;
+        padding: 0px 4px;
+        margin: 0px 2px;
+    }
+    .battery-box {
+        margin: 4px 0px;
+        background: #1F1923;
+        border-radius: 10px;
+        padding: 2px 4px;
+        circularprogress {
+            color: white;
+            background-color: black;
+            min-width: 18px;
+            font-size: 2px;
+        }
+    }
+    
+    .menu-box {
+        all: unset;
+        margin: 4px 10px 4px 0px;
+        /*background: #3c373a; Moment*/ 
+        background: #1F1923;
+        border-radius: 10px;
+        padding: 0px 10px;
+        transition: all 300ms;
+    }
+    .menu-box .menu-btn {
+        all: unset;
+        padding: 0px 4px;
+        margin: 0px 2px;
+        font-size: 16px;
+    }
+    .menu-box .menu-btn:hover {
+        opacity: 0.8;
+    }
+}
+.cornerscreenleft {
+    font-size: 20px;
+    color: #1F1923;
+}
+.cornerscreenright {
+    font-size: 20px;
+}
+
+
+
+window.OSD {
+    box.OSD {
+        border-radius: 100px;
+        background-color: #111111;
+        padding: 8px 8px;
+        margin: 10px;
+        box-shadow: 3px 3px 7px 0 rgba(0,0,0,.4);
+    }
+
+    icon {
+        font-size: 30px;
+    }
+
+    label {
+        font-size: 20px;
+    }
+
+    levelbar {
+        trough {
+            margin: 10px;
+        }
+
+        block {
+            min-height: 10px;
+        }
+    }
+}
+window.osd {
+    background: transparent;
+}
+
+window.time {
+    all: unset;
+    background-color: transparent;
+    
+    .name-day {
+        font-size: 60px;
+        font-weight: bold;
+    }
+    .date-time {
+        font-size: 20px;
+        font-weight: bold;
+        padding: 0px 20px;
+    }
+    .date-time .year {
+        margin-left: 10px;
+    }
+    .date-time-hours {
+        padding: 0px 60px;
+        margin: 10px;
+        
+        .hour, .min, .sec {
+            font-size: 18px;
+            font-weight: bold;
+            /*border: 2px solid rgba(0,255,153,1);*/
+        }
+    }
+}
+
+window.sidebar {
+    all: unset;
+    background: transparent;
+
+    .btn-help {
+        button:hover {
+            background: #378DF7;
+        }
+    }
+    .btn-quick-settings-box {
+        background: #1F1923;
+        border-radius: 20px;
+        button:hover {
+            background: #378DF7;
+        }
+    }
+    .btn-quick-settings{
+        all: unset;
+        padding: 10px;
+        border-radius: 50%;
+    }
+    .btn-settings-box {
+        //margin: 10px 20px;
+        
+        button:hover {
+            background: #414141;
+        }
+        button:active {
+            background: #505050;
+        }
+    }
+    .notification-box {
+        all: unset;
+        background: #1F1923;
+        border-radius: 14px;
+        border: 0;
+        .frame {
+            border: 0;
+        }
+    }
+    .soundconf-box {
+        all: unset;
+        background: #1F1923;
+        border-radius: 14px;
+        padding: 10px;  
+    }
+    .keybindconf-box {
+        all: unset;
+        background: #1F1923;
+        border-radius: 14px;
+        padding: 10px;
+    }
+    
+    
+}
+.revealer-box{
+    background: #17111B;
+    border-radius: 14px;
+    padding: 10px;
+}
+
+window.mediapanel{
+    all: unset;
+    background-color: transparent;
+
+    .media-box {
+        background: #231e22;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        
+    }
+    scale {
+        padding: 0;
+        margin: 10px 0;
+
+        trough {
+            min-height: 8px;
+        }
+
+        highlight {
+            background-color: yellow;
+        }
+
+        slider {
+            all: unset;
+        }
+    }
+    icon.media-icon {
+        margin-left: 10px;
+    }
+    .cover-art {
+        border-radius: 10px;
+        padding: 20px;
+        min-width: 100px;
+        min-height: 100px;
+        background-size: cover;
+        background-position: center;
+    }
+    .control{
+        button {
+            all: unset;
+            padding: 10px;
+            margin: 0px 5px;
+            background: #231e22;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+        }
+    }
+}
+
+
+

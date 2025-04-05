@@ -1,0 +1,222 @@
+{
+    // General Settings
+    "layer": "top",
+    "position": "top",
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0, 
+    "spacing": 0,
+
+    // Modules Left
+    "modules-left": [
+        "hyprland/workspaces"
+    ],
+
+    // Modules Center
+    "modules-center": [
+        "clock"
+    ],
+
+    // Modules Right    
+    "modules-right": [
+        "custom/panel",
+        "battery",
+        "custom/notification",
+        "custom/power"
+    ],
+    "hyprland/workspaces": {
+	    "active-only": false,
+	    "all-outputs": true,
+	    "disable-scroll": false,
+	    "on-scroll-up": "hyprctl dispatch workspace e-1",
+	    "on-scroll-down": "hyprctl dispatch workspace e+1",
+	    "format": "{icon}",
+	    "on-click": "activate",
+	    "format-icons": {
+		    "urgent": "",
+		    "active": "",
+		    "default": "",
+		    "sort-by-number": true
+	    },
+        "persistent-workspaces": {
+             "*": 4 // 5 workspaces by default on every monitor
+             //"HDMI-A-1": 3 // but only three on HDMI-A-1
+        }
+
+    }
+    ,
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "<span foreground='#fffe00'></span> {:%A %B de %Y}",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+                    "mode"          : "month",
+                    "mode-mon-col"  : 3,
+                    "on-scroll"     : 1,
+                    "on-click-right": "mode",
+                    "format": {
+                            "months":     "<span color='#ffead3'><b>{}</b></span>",
+                            "days":       "<span color='#ffffff'><b>{}</b></span>",
+                            "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                            "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                            "today":      "<span color='#66FBFF'><b><u>{}</u></b></span>"
+                            }
+                    },
+        "actions":  {
+                    "on-click-right": "mode",
+                    "on-click-forward": "tz_up",
+                    "on-click-backward": "tz_down",
+                    "on-scroll-up": "shift_up",
+                    "on-scroll-down": "shift_down"
+                    }
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        //"tooltip-format": "{icon} {time} {capacity}%",
+        "format": "{icon}",
+        "format-charging": "{icon}",
+        "format-plugged": "{capacity}%",
+        "format-alt": "{icon} {time} {capacity}%",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+	},
+    "network": {
+        "format": "⚠  Disabled",
+        "format-wifi": "{icon}",
+        "format-ethernet": "󰖂 Wired",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠  Disconnected",
+        "format-alt": "{icon} {essid}",
+        "tooltip-format": " {ifname}: {ipaddr}/{cidr}",
+        "on-click-right": "nm-connection-editor",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+    },
+    "pulseaudio": {
+        "format": "{icon}",
+        "format-bluetooth": "blue {volume}%",
+        "format-muted": "  Muted",
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "on-click": "pavucontrol"
+    },
+    /*
+    "custom/cava-internal": {
+        "exec": "sh ~/.config/waybar/scripts/cava.sh",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "sh ~/.config/waybar/launch.sh",
+        "layer": "below",
+        "output": "all"
+    },
+    */
+
+    "custom/launcher": {
+        "format": "{icon}",
+        "format-icons": [""],
+        "on-click": "rofi -show drun",
+        "tooltip": false
+    },
+    "custom/power": {
+        "format": "{icon}",
+        "format-icons": [""],
+        /*"rotate": ,
+        "exec": "bash ~/.config/wlogout/launch.sh",*/
+        "on-click": "bash ~/.config/wlogout/launch.sh",
+        "interval" : 86400, // once every day
+        "tooltip": false
+    },
+    "custom/swaync": {
+        "tooltip": true,
+        "format": "{icon} {}",
+        "format-icons": {
+            "notification": "<span foreground='red'></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "sleep 0.1 && swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+    "custom/keyboard-layout": {
+        "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4",
+        // Interval set only as a fallback, as the value is updated by signal
+        "interval": 1,
+        "format": "  {}", // Icon: keyboard
+        // Signal sent by Sway key binding (~/.config/sway/key-bindings)
+        "signal": 1, // SIGHUP
+        "tooltip": false,
+        "on-click": "~/.config/waybar/scripts/keyhint.sh"
+    },
+    "cpu": {
+        "format": "{icon}",
+        "format-alt": "{icon} {usage: >3}%",
+        "format-icons": [""]
+    },
+    "memory": {
+        "format": "{icon}",
+        "format-alt": "{icon} {: >3}%",
+        "format-icons": [""]
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C ",
+        "format": "{icon}",
+        "format-alt": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", ""]
+    },
+    "custom/mpd": {
+        "format": "{icon} {}",
+        "format-icons": [""],
+        "interval": 10,
+        "on-click": "mpc toggle",
+        "tooltip": false
+    },
+    "custom/spotify": {
+        "exec": "/usr/bin/python3 /home/qu4s4r/.config/bin/mediaplayer.py --player spotify",
+        "format": "{}  ",
+        "return-type": "json",
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
+    "custom/notification": {
+        "format": "{icon}",
+        "format-icons": {
+        "notification": "󱅫",
+        "none": "󰂚",
+        "dnd-notification": "󱅫",
+        "dnd-none": "󰂛",
+        "inhibited-notification": "󰂚<span foreground='#DB4740'><sup></sup></span>",
+        "inhibited-none": "󰂚",
+        "dnd-inhibited-notification": "󰂛<span foreground='#DB4740'><sup></sup></span>",
+        "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "sleep 0.1; swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw"
+	},
+    "custom/panel": {
+        "format": "{icon}",
+        "format-icons": [""],
+        "on-click": "~/.config/eww/panel/panel_widget.sh panel"
+    }
+}
+
+ 

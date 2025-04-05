@@ -1,0 +1,34 @@
+window.sidebar {
+    scrollable {
+        min-width: 200px;
+        .frame {
+            border: 0;
+        }
+    }
+    
+    scrollbar {
+        all: unset;
+    }
+    trough {
+        background-color: transparent;
+    }
+    slider {
+        background: #3b1f28;
+    }
+    .keybind-label {
+        margin: 10px 0px 20px;
+
+    }
+    .items {
+        background: #29222C;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .items label.command {
+        background: #3b1f28;
+        padding: 5px;
+        border-radius: 4px;
+        margin-left: 100px;
+    }
+}
