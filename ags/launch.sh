@@ -52,6 +52,11 @@ function launch_wifi {
 }
 
 case $1 in
+    launch)
+        ags quit -i js
+        sleep 5 &
+        ags run ~/.config/ags/app.ts
+    ;;
 	launchvol)
         ags run ~/.config/ags/appVol.ts
 	;;

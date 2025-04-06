@@ -7,6 +7,15 @@ $fg: #f1f1f1;
 $accent: #378DF7;
 $radius: 7px;
 
+@function gtkalpha($c, $a) {
+    @return string.unquote("alpha(#{$c},#{$a})");
+}
+
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+$fg-color: #ffffff;
+$bg-color: #29222C;
+$error: rgb(128, 48, 48);
+
 window decoration {
     margin: 0;
     padding: 0;
@@ -336,6 +345,7 @@ window.sidebar {
         all: unset;
         padding: 10px;
         border-radius: 50%;
+        color: #fff;
     }
     .btn-settings-box {
         //margin: 10px 20px;
@@ -355,6 +365,101 @@ window.sidebar {
         .frame {
             border: 0;
         }
+        eventbox.Notification {
+
+        &:first-child>box {
+            margin-top: 4px;
+        }
+    
+        &:last-child>box {
+            margin-bottom: 4px;
+        }
+    
+        // eventboxes can not take margins so we style its inner box instead
+        >box {
+            min-width: 200px;
+            border-radius: 12px;
+            background-color: $bg-color;
+            //margin: .5rem 1rem .5rem 1rem;
+            margin: 2 4;
+            padding: 4px 10px 10px;
+            //box-shadow: 2px 3px 8px 0 gtkalpha(black, .4);
+            //border: 1pt solid gtkalpha($fg-color, .03);
+        }
+        
+        &.critical>box {
+            //border: 1pt solid gtkalpha($error, .4);
+            background: $error;
+    /*
+            .header {
+    
+                .app-name {
+                    color: #ffffff;
+    
+                }
+    
+                .app-icon {
+                    color: gtkalpha($error, .6);
+                }
+            }*/
+        }
+        &.normal>box {
+            background: green;
+        }
+        
+        
+    
+    
+        .content {
+            margin-top: 5px;
+            //background: #29222C;
+            
+    
+            .summary {
+                font-size: 16px;
+                color: #ffffff;
+            }
+    
+            .body {
+                font-size: 12px;
+                color: #ffffff;
+            }
+    
+            .image {
+                border: 1px solid #000000;
+                margin-right: .5rem;
+                border-radius: 9px;
+                min-width: 80px;
+                min-height: 80px;
+                background-size: cover;
+                background-position: center;
+            }
+        }
+        .btn-expand {
+            all: unset;
+            margin-left: 20px;
+        }
+        .btn-expand:hover {
+            color: #fff;
+        }
+    
+        .actions {
+            margin: 1rem;
+            margin-top: 0;
+    
+            button {
+                margin: 0 .3rem;
+    
+                &:first-child {
+                    margin-left: 0;
+                }
+    
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
     }
     .soundconf-box {
         all: unset;
@@ -370,7 +475,9 @@ window.sidebar {
     }
     
     
+    
 }
+
 .revealer-box{
     background: #17111B;
     border-radius: 14px;

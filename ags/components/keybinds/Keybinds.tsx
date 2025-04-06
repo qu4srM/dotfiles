@@ -9,7 +9,6 @@ import { list } from "./list"
 function OnKeybinds() {
     return (
         <box className="keybindconf-box" vertical heightRequest={550}>
-            <label className="keybind-label" label="Keybinds" />
             <scrollable vexpand heightRequest={100} vscroll={true}>
                 <box orientation={1}>
                     {

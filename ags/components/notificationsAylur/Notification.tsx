@@ -2,6 +2,7 @@ import { GLib } from "astal"
 import { Gtk, Astal } from "astal/gtk3"
 import { type EventBox } from "astal/gtk3/widget"
 import Notifd from "gi://AstalNotifd"
+import Variable from "astal/variable"
 
 const isIcon = (icon: string) =>
     !!Astal.Icon.lookup_icon(icon)
@@ -33,12 +34,25 @@ type Props = {
 export default function Notification(props: Props) {
     const { notification: n, onHoverLost, setup } = props
     const { START, CENTER, END } = Gtk.Align
+    const {SLIDE_DOWN, SLIDE_TOP} = Gtk.RevealerTransitionType
+    const visible = Variable(false)
+    const iconExpand = Variable("arrow-down")
+
+    function show(self) {
+        if (visible === true) {
+            self.revealChild = visible.get()
+            self.transitionType = SLIDE_TOP
+        } else {
+            self.revealChild = visible.get()
+            self.transitionType = SLIDE_DOWN
+        }
+    }
 
     return <eventbox
         className={`Notification ${urgency(n)}`}
         setup={setup}
         onHoverLost={onHoverLost}>
-        <box vertical>
+        <box vertical>{/*
             <box className="header">
                 {(n.appIcon || n.desktopEntry) && <icon
                     className="app-icon"
@@ -61,7 +75,7 @@ export default function Notification(props: Props) {
                     <icon icon="window-close-symbolic" />
                 </button>
             </box>
-            <Gtk.Separator visible />
+            <Gtk.Separator visible />*/}
             <box className="content">
                 {n.image && fileExists(n.image) && <box
                     valign={START}
@@ -81,16 +95,37 @@ export default function Notification(props: Props) {
                         xalign={0}
                         label={n.summary}
                         truncate
-                    />
-                    {n.body && <label
-                        className="body"
                         wrap
-                        useMarkup
-                        halign={START}
-                        xalign={0}
-                        justifyFill
-                        label={n.body}
-                    />}
+                    />
+                    <revealer
+                    setup={self => show(self)}
+                    revealChild={visible()}
+                    >
+                        {n.body && <label
+                            className="body"
+                            wrap
+                            useMarkup
+                            halign={START}
+                            xalign={0}
+                            justifyFill
+                            label={n.body}
+                        />}
+                    </revealer>
+                </box>
+                <box>
+                    <button className="btn-expand" onClick={
+                        ()=> {
+                            if (visible.get() == false){
+                                visible.set(true)
+                                iconExpand.set("arrow-up")
+                            } else {
+                                visible.set(false)
+                                iconExpand.set("arrow-down")
+                            }
+                        }
+                    }>
+                        <icon icon={iconExpand.get()} />
+                    </button>
                 </box>
             </box>
             {n.get_actions().length > 0 && <box className="actions">

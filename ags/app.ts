@@ -30,7 +30,7 @@ App.start({
         CornerScreen()
         OSD()
         //Osd()
-        Time()
+        //Time()
         NotificationPopups()
     },
 })

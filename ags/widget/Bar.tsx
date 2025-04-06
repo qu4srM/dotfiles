@@ -3,7 +3,9 @@ import { Variable, GLib, bind } from "astal"
 import { Astal, Gtk, Gdk } from "astal/gtk3"
 import { subprocess, exec, execAsync } from "astal/process"
 import { interval,timeout } from "astal/time"
+import { readFile, readFileAsync, writeFile, writeFileAsync, monitorFile, } from "astal/file"
 import Hyprland from "gi://AstalHyprland"
+
 
 // ----------------import function-------
 import SoundConf from "../components/soundconf/SoundConf"
@@ -11,6 +13,11 @@ import CalendarConfig from "../components/calendar/Calendar"
 import NotificationConfig from "../components/notification/Notification"
 import KeybindsConfig from "../components/keybinds/Keybinds"
 
+
+
+const password = Variable("").poll(1000, ["bash", "-c", "cat ~/.config/ags/password.txt"])
+
+const logo = Variable("./assets/img/archlinux.png")
 
 const artist = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getartist"])
 const title = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh gettitle"])
@@ -36,14 +43,14 @@ const stateBattery = Variable().poll(1000, ["bash", "-c", "~/.config/ags/scripts
 const lengthMusic = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlength"])
 const position = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getposition"])
 const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
+console.log(image)
 const url = Variable("./assets/img/coverArt.jpg")
 const buttonOnMediaPanel = Variable(false)
 
 // -------------CalendarPanel-----------
 const buttonOnCalendarPanel = Variable(false)
 
-// -------------KeybindPanel------------
-const buttonOnKeybindPanel = Variable(false)
+
 
 
 
@@ -246,6 +253,8 @@ function Workspaces() {
 const visibleSound = Variable(false)
 const visibleNotification = Variable(true)
 const visibleKeybind = Variable(false)
+const nameSideBar = Variable("Notification")
+
 
 function QuickSettings () {
     return <centerbox expand vertical className="revealer-box">
@@ -266,6 +275,16 @@ function QuickSettings () {
                     <icon
                     className="menu-shortcuts-btn-icon"
                     icon="org.gnome.Settings-screen-lock-symbolic"
+                    />
+                </button>
+                <button className="btn-quick-settings" onClick={
+                    () => {
+                        execAsync(["bash", "-c", `echo "${password.get()}" | sudo -S pacman -Syu --noconfirm`])
+                    }
+                }>
+                    <icon
+                    className="menu-shortcuts-btn-icon"
+                    icon={bind(logo)}
                     />
                 </button>
             </box>
@@ -297,7 +316,7 @@ function QuickSettings () {
             </box>
         </box>
         <box vertical vexpand>
-            <box className="btn-settings-box">
+            <box className="btn-settings-box" hexpand>
                 <button className="btn-quick-settings" onClicked={
                     () => {
                         //execAsync(["bash", "-c", "~/.config/ags/launch.sh launchsidebar"])
@@ -306,6 +325,7 @@ function QuickSettings () {
                             visibleSound.set(false)
                             visibleKeybind.set(false)
                             console.log(visibleNotification)
+                            nameSideBar.set("Notification")
                         } 
                     }
                 } >
@@ -321,6 +341,7 @@ function QuickSettings () {
                             visibleSound.set(true)
                             visibleNotification.set(false)
                             visibleKeybind.set(false)
+                            nameSideBar.set("Volume")
                             console.log(visibleSound)
                         } else {
                             visibleSound.set(true)
@@ -340,6 +361,7 @@ function QuickSettings () {
                             visibleKeybind.set(true)
                             visibleNotification.set(false)
                             visibleSound.set(false)
+                            nameSideBar.set("Keybinds")
                             console.log(visibleKeybind)
                         } else {
                             visibleKeybind.set(true)
@@ -349,10 +371,11 @@ function QuickSettings () {
                 } >
                     <icon
                     className="menu-shortcuts-btn-icon"
-                    icon="org.gnome.Settings-sound-symbolic"
+                    icon="org.gnome.Settings-keyboard-symbolic"
                     />
                 </button>
             </box>
+            <label label={bind(nameSideBar)} hexpand />
             <box vertical hexpand>
                 <NotificationConfig config={visibleNotification} />
                 <SoundConf config={visibleSound} />

@@ -23,8 +23,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     return <revealer
         setup={self => show(self)}
         revealChild={visible()}>
-        <box className="soundconf-box" vertical heightRequest={550}>
-            <label label="Volume Config" /> 
+        <box className="soundconf-box" vertical heightRequest={550}> 
             <box orientation={1} expand>
                 <box vertical>
                     <label label={bind(capture)} />

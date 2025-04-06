@@ -22,13 +22,13 @@ let reload = function () {
         stop()
         setTimeout(()=> {
             ready()
-        }, 40000)
+        }, 60000)
     } else if (percentageFloat.get() == 0.15){
         execAsync(["bash", "-c", `notify-send "Discharging" "Conecte el cargador, queda poca bateria" -u critical`])
         stop()
         setTimeout(()=> {
             ready()
-        }, 40000)
+        }, 60000)
     } else {
         print("Reanudando")
         stop()
@@ -135,7 +135,7 @@ function NotificationWidget() {
     const notifs = new NotifiationMap()
     return <centerbox vertical className="revealer-box notification-box" expand>
         <scrollable vscroll={true} heightRequest={550} widthRequest={250} vexpand>
-            <box vertical expand noImplicitDestroy>
+            <box className="box" vertical expand noImplicitDestroy>
                 {bind(notifs)}
             </box>
         </scrollable>

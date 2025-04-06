@@ -11,7 +11,6 @@ $error: rgb(128, 48, 48);
 
 window.NotificationPopups {
     all: unset;
-}
 
 eventbox.Notification {
 
@@ -25,7 +24,7 @@ eventbox.Notification {
 
     // eventboxes can not take margins so we style its inner box instead
     >box {
-        min-width: 200px;
+        min-width: 300px;
         border-radius: 14px;
         background-color: $bg-color;
         //margin: .5rem 1rem .5rem 1rem;
@@ -111,6 +110,14 @@ eventbox.Notification {
             background-position: center;
         }
     }
+    .btn-expand {
+        all: unset;
+        margin-left: 30px;
+    }
+    .btn-expand:hover {
+        background: blue;
+    }
+
 
     .actions {
         margin: 1rem;
@@ -128,4 +135,5 @@ eventbox.Notification {
             }
         }
     }
+}
 }
