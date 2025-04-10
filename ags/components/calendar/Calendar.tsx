@@ -3,6 +3,7 @@ import { timeout } from "astal/time"
 import Variable from "astal/variable"
 import { bind } from "astal"
 import { subprocess, exec, execAsync } from "astal/process"
+import { show } from "../../hooks/revealer"
 
 
 function Volume() {
@@ -12,18 +13,10 @@ function Volume() {
 }
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-    function show(self) {
-        if (visible === true) {
-            self.revealChild = visible.get()
-        } else {
-            self.revealChild = visible.get()
-        }
-    }
     
     return <revealer
-        setup={self => show(self)}
-        revealChild={visible()}
-        transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}>
+        setup={self => show(self, visible)}
+        revealChild={visible()}>
         <Volume />
     </revealer>
     

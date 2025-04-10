@@ -4,6 +4,7 @@ import Variable from "astal/variable"
 import { bind } from "astal"
 import { subprocess, exec, execAsync } from "astal/process"
 import { list } from "./list"
+import { show } from "../../hooks/revealer"
 
 
 function OnKeybinds() {
@@ -26,19 +27,9 @@ function OnKeybinds() {
 }
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-    const {SLIDE_DOWN, SLIDE_TOP} = Gtk.RevealerTransitionType
-    function show(self) {
-        if (visible === true) {
-            self.revealChild = visible.get()
-            self.transitionType = SLIDE_TOP
-        } else {
-            self.revealChild = visible.get()
-            self.transitionType = SLIDE_DOWN
-        }
-    }
     
     return <revealer
-        setup={self => show(self)}
+        setup={self => show(self, visible)}
         revealChild={visible()}>
         <OnKeybinds />
     </revealer>

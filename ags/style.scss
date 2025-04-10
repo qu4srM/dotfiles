@@ -255,6 +255,9 @@ window.bar {
     .menu-box .menu-btn:hover {
         opacity: 0.8;
     }
+    .menu-box .menu-btn .menu-btn-icon.medium {
+        margin: 0 6;
+    }
 }
 .cornerscreenleft {
     font-size: 20px;
@@ -473,7 +476,141 @@ window.sidebar {
         border-radius: 14px;
         padding: 10px;
     }
-    
+    .wificonf-box {
+        all: unset;
+        background: #1F1923;
+        border-radius: 14px;
+        padding: 0px;
+        centerbox.power {
+            padding: 0px 10px;
+            background: #29222C;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            button {
+                all: unset;
+                scale {
+                    trough {
+                        all: unset;
+                        background: gray;
+                        border-radius: 10px;
+                        min-height: 14px;
+                
+                        highlight {
+                            all: unset;
+                            background: green;
+                            border-radius: 10px;
+                            min-height: 16px;
+                        }
+                        slider {
+                            all: unset;
+                            background: #fff;
+                            min-height: 16px;
+                            min-width: 16px;
+                            border-radius: 50%;
+                            margin: 0px 2px;
+                        }
+                    }  
+                }
+            }
+        }
+        .current {
+            label {
+                margin-left: 16px;
+                font-size: 14px;
+                color: #505050;
+            }
+            box {
+                margin: 10px 0px;
+                background: #29222C;
+                border-radius: 20px;
+                icon {
+                    all: unset;
+                    margin: 0px 0px 0px 10px;
+                    font-size: 30px;
+                }
+                .label-1 {
+                    color: #378DF7;
+                    font-size: 16px;
+                }
+                .label-2 {
+                    color: #505050;
+                    font-size: 14px;
+                }
+            }
+        }
+        .nets {
+            label {
+                margin-left: 16px;
+                font-size: 14px;
+                color: #505050;
+            }
+            box {
+                margin: 10px 0px 0px;
+                background: #29222C;
+                border-radius: 20px;
+                box {
+                    icon {
+                        all: unset;
+                        margin: 0px 0px 0px 0px;
+                        font-size: 30px;
+                    }
+                    button {
+                        all: unset;
+                        label {
+                            color: #ffffff;
+                            font-size: 16px;
+                        }
+                    }
+                }
+            
+            .items-info-box {
+                all: unset;
+                margin: 0;
+                centerbox{
+                    margin: 10px 0px;
+                    padding: 10px 0px;
+                    border-radius: 20px;
+                    background: #3b1f28;
+                    label {
+                        margin-left: 12px;
+                        font-size: 14px;
+                        color: #505050;
+                    }
+                    entry {
+                        all: unset;
+                        font-size: 14px;
+                        border-bottom: 1px solid #fff;
+                    }
+                }
+                button {
+                    margin: 0px 30px;
+                    padding: 10px 0px;
+                    background: #378DF7;
+                    border-radius: 20px;
+                }
+                button:hover {
+                    opacity: 0.8;
+                }
+
+            }
+            
+            }
+            
+        }
+        .items {
+            background: #000000;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .items label.command {
+            background: #3b1f28;
+            padding: 5px;
+            border-radius: 4px;
+            margin-left: 100px;
+        }
+    }
     
     
 }

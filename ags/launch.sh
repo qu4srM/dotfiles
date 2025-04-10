@@ -57,6 +57,9 @@ case $1 in
         sleep 5 &
         ags run ~/.config/ags/app.ts
     ;;
+    quit)
+        ags quit -i js
+    ;;
 	launchvol)
         ags run ~/.config/ags/appVol.ts
 	;;

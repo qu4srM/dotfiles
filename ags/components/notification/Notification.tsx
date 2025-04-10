@@ -4,6 +4,7 @@ import Notification from "../notificationsAylur/Notification"
 import { type Subscribable } from "astal/binding"
 import { Variable, bind, timeout } from "astal"
 import { subprocess, exec, execAsync } from "astal/process"
+import { show } from "../../hooks/revealer"
 
 
 const percentageFloat = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getsum"])
@@ -143,19 +144,8 @@ function NotificationWidget() {
 }
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-    const {SLIDE_DOWN, SLIDE_TOP} = Gtk.RevealerTransitionType
-    function show(self) {
-        if (visible === true) {
-            self.revealChild = visible.get()
-            self.transitionType = SLIDE_TOP
-        } else {
-            self.revealChild = visible.get()
-            self.transitionType = SLIDE_DOWN
-        }
-    }
-    
     return <revealer expand
-        setup={self => show(self)}
+        setup={self => show(self, visible)}
         revealChild={visible()}>
         <NotificationWidget />
     </revealer>

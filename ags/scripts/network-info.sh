@@ -62,4 +62,21 @@ case $1 in
     power)
     power
     ;;
+    status)
+        if [ $status = "enabled" ];then
+            echo "On"
+        elif [ $status = "disabled" ];then
+            echo "Off"
+        fi
+    ;;
+    networkstatus)
+        if [ $status = "enabled" ];then
+            echo "Connected"
+        elif [ $status = "disabled" ];then
+            echo "Disconnected"
+        fi
+    ;;
+    listupdate)
+        nmcli -t -f active,ssid,signal dev wifi | grep "^no" | head -n 6 | awk -F: 'BEGIN { print "export var networks = [" } { print "{\"id\":"NR",\"name\":\""$2"\",\"signal\":"$3"}," } END { print "]" }' > ~/.config/ags/components/wificonf/networks.js
+    ;;
 esac
