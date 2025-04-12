@@ -1,10 +1,10 @@
-import { Astal, Gtk, Gdk } from "astal/gtk3"
+import { Gtk } from "astal/gtk3"
 import Notifd from "gi://AstalNotifd"
 import Notification from "../notificationsAylur/Notification"
 import { type Subscribable } from "astal/binding"
 import { Variable, bind, timeout } from "astal"
-import { subprocess, exec, execAsync } from "astal/process"
-import { show } from "../../hooks/revealer"
+import { show } from "../../utils/revealer"
+import { safeExecAsync } from "../../utils/manage"
 
 
 const percentageFloat = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getsum"])
@@ -19,19 +19,18 @@ let onInterval = function ({percentage}) {
 let interval = setInterval(onInterval, 1000)*/
 let reload = function () {
     if (percentageFloat.get() == 1) {
-        execAsync(["bash", "-c", `notify-send "Charging" "La bateria se cargó correctamente" -u normal`])
+        safeExecAsync(["bash", "-c", `notify-send "Charging" "La bateria se cargó correctamente" -u normal`])
         stop()
         setTimeout(()=> {
             ready()
         }, 60000)
     } else if (percentageFloat.get() == 0.15){
-        execAsync(["bash", "-c", `notify-send "Discharging" "Conecte el cargador, queda poca bateria" -u critical`])
+        safeExecAsync(["bash", "-c", `notify-send "Discharging" "Conecte el cargador, queda poca bateria" -u critical`])
         stop()
         setTimeout(()=> {
             ready()
         }, 60000)
     } else {
-        print("Reanudando")
         stop()
         ready()
     }

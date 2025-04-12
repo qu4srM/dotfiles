@@ -1,6 +1,6 @@
-import { Astal, Gtk, Gdk } from "astal/gtk3"
+import { App, Astal, Gdk, Gtk } from "astal/gtk3"
 
-import { TOP, LEFT, RIGHT, BOTTOM } from "../hooks/initvars"
+import { TOP, LEFT, RIGHT, BOTTOM } from "../utils/initvars"
 
 export function WindowSide(monitor: Gdk.Monitor | null = null, name: string, visible: boolean, Component: any) {
     if (!monitor) {
@@ -12,6 +12,8 @@ export function WindowSide(monitor: Gdk.Monitor | null = null, name: string, vis
 
     return <window
         className={name}
+        name={name}
+        application={App}
         gdkmonitor={monitor}
         exclusivity={Astal.Exclusivity.NORMAL}
         anchor={TOP | RIGHT | BOTTOM}
@@ -39,6 +41,8 @@ export function WindowTop(monitor: Gdk.Monitor | null = null, name: string, visi
 
     return <window
         className={name}
+        name={name}
+        application={App}
         gdkmonitor={monitor}
         exclusivity={Astal.Exclusivity.NORMAL}
         anchor={TOP}
@@ -65,6 +69,8 @@ export function WindowRight(monitor: Gdk.Monitor | null = null, name: string, vi
 
     return <window
         className={name}
+        name={name}
+        application={App}
         gdkmonitor={monitor}
         exclusivity={Astal.Exclusivity.NORMAL}
         anchor={TOP | RIGHT}
@@ -91,6 +97,8 @@ export function WindowLeft(monitor: Gdk.Monitor | null = null, name: string, vis
 
     return <window
         className={name}
+        name={name}
+        application={App}
         gdkmonitor={monitor}
         exclusivity={Astal.Exclusivity.NORMAL}
         anchor={TOP | LEFT}
@@ -105,5 +113,30 @@ export function WindowLeft(monitor: Gdk.Monitor | null = null, name: string, vis
         marginLeft="12"
         >
         <Component visible={visibleOn}/>
+    </window>
+}
+
+export function WindowAlert(monitor: Gdk.Monitor | null = null, name: string, visible: boolean, Component: any) {
+    if (!monitor) {
+        const display = Gdk.Display.get_default()
+        monitor = display?.get_primary_monitor()
+    }
+    const visibleOn = visible
+
+    return <window    
+        gdkmonitor={monitor}
+        name="volume"
+        application={App}
+        className="volume"
+        keymode={Astal.Keymode.NONE}
+        exclusivity={Astal.Exclusivity.NORMAL}
+        layer={Astal.Layer.OVERLAY}
+        anchor={TOP}
+        iconTheme="Papirus"
+        marginTop="12"
+        >
+        <eventbox>
+            <Component visible={visibleOn}/>
+        </eventbox>
     </window>
 }

@@ -1,22 +1,27 @@
 import { App } from "astal/gtk3"
 import style from "./style.scss"
-import Bar from "./widget/Bar"
-import CornerScreen from "./widget/CornerScreen"
-import OSD from "./widget/OSD"
-import Time from "./widget/Time"
+import Bar from "./components/bar/Bar"
+import CornerScreen from "./components/corners/CornerScreen"
+import OSD from "./components/osd/OSD"
+import Time from "./components/clock/Time"
 import NotificationPopups from "./components/notificationsAylur/NotificationPopups"
-import { Charging } from "./widget/Bar"
-import Osd from "./components/osd/Osd"
-import { CalendarPanel } from "./widget/Bar"
-import { WindowLeft, WindowRight, WindowTop, WindowSide } from "./components/Windows"
-import { buttonOnCalendarPanel, buttonOnMediaPanel, buttonOnSideBar } from "./hooks/initvars"
-import { sidebarName, mediaName, calendarName } from "./hooks/initvars"
 
-// --------Panels--------
+import { WindowLeft, WindowRight, WindowTop, WindowSide, WindowAlert } from "./components/Windows"
+import { buttonOnCalendarPanel, buttonOnMediaPanel, buttonOnSideBar } from "./utils/initvars"
+import { sidebarName, mediaName, calendarName, volumeName } from "./utils/initvars"
+
+// -------Alerts-----
+import { visibleVol } from "./utils/initvars"
+
+// --------Panel---------
 import { OnSideBar } from "./components/sidebar/Sidebar"
 import { OnMediaPanel } from "./components/media/Media"
+import { OnVolume } from "./components/osd/VolumeOsd"
 
+// --------Icons---------
 App.add_icons("./assets")
+App.add_icons("./assets/cornerscreen")
+
 
 App.start({
     css: style,
@@ -26,16 +31,17 @@ App.start({
         print(request)
         res("ok")
     },
-    main: () => {//App.get_monitors().map(Bar, CornerScreen)
+    main: () => {
         Bar()
-        Charging()
-        CalendarPanel()
+
+        
+        //CalendarPanel()
         CornerScreen()
         OSD()
         //Osd()
         //Time()
         NotificationPopups()
-        WindowSide( // Sidebar
+        WindowSide(
             null,              // monitor (usa el principal por defecto)
             sidebarName,       // nombre de la ventana (string)
             buttonOnSideBar,   // visible (boolean)
@@ -46,6 +52,12 @@ App.start({
             mediaName,
             buttonOnMediaPanel,
             OnMediaPanel
+        )
+        WindowAlert(
+            null,
+            volumeName,
+            visibleVol,
+            OnVolume
         )
     },
 })

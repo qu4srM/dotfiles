@@ -1,36 +1,38 @@
 import { App } from "astal/gtk3"
 import { Variable, GLib, bind } from "astal"
 import { Astal, Gtk, Gdk } from "astal/gtk3"
-import { subprocess, exec, execAsync } from "astal/process"
 import { interval,timeout } from "astal/time"
-import { readFile, readFileAsync, writeFile, writeFileAsync, monitorFile, } from "astal/file"
 import Hyprland from "gi://AstalHyprland"
+
+// ----------Utils-----------
+import { safeExecAsync } from "../../utils/manage"
 
 
 // ----------------import function-------
-import CalendarConfig from "../components/calendar/Calendar"
+import CalendarConfig from "../calendar/Calendar"
 
 // -----------------import variables------
 
-import { artist } from "../hooks/initvars"
-import { title } from "../hooks/initvars"
-import { iconApp } from "../hooks/initvars"
-import { percentageFloat } from "../hooks/initvars"
-import { percentageBattery } from "../hooks/initvars"
-import { iconBattery } from "../hooks/initvars"
-import { date } from "../hooks/initvars"
-import { point } from "../hooks/initvars"
-import { calendar } from "../hooks/initvars"
-import { iconWifi } from "../hooks/initvars"
-import { iconBluetooth } from "../hooks/initvars"
-import { stateBattery } from "../hooks/initvars"
+import { artist } from "../../utils/initvars"
+import { title } from "../../utils/initvars"
+import { iconApp } from "../../utils/initvars"
+import { percentageFloat } from "../../utils/initvars"
+import { percentageBattery } from "../../utils/initvars"
+import { iconBattery } from "../../utils/initvars"
+import { date } from "../../utils/initvars"
+import { point } from "../../utils/initvars"
+import { calendar } from "../../utils/initvars"
+import { iconWifi } from "../../utils/initvars"
+import { iconBluetooth } from "../../utils/initvars"
+import { stateBattery } from "../../utils/initvars"
 
 
 // ------------ Gestiones -----------------
 
-import { buttonOnSideBar } from "../hooks/initvars"
-import { buttonOnMediaPanel } from "../hooks/initvars"
-import { buttonOnCalendarPanel } from "../hooks/initvars"
+import { buttonOnSideBar } from "../../utils/initvars"
+import { buttonOnMediaPanel } from "../../utils/initvars"
+import { buttonOnCalendarPanel } from "../../utils/initvars"
+
 
 function Clock() {
     return <button  className="clock"  cursor="pointer" onClicked={
@@ -39,10 +41,8 @@ function Clock() {
                 buttonOnCalendarPanel.set(true)
                 buttonOnSideBar.set(false)
                 buttonOnMediaPanel.set(false)
-                console.log(buttonOnCalendarPanel)
             } else {
                 buttonOnCalendarPanel.set(false)
-                console.log(buttonOnCalendarPanel)
             }
         }
     } >
@@ -71,9 +71,7 @@ function MenuShortcuts() {
     return <box className="menu-shortcuts">
         <button className="menu-shortcuts-btn" cursor="pointer" onClicked={
             () => {
-                execAsync(["bash", "-c", "whoami"])
-                    .then((out) => console.log(out))
-                    .catch((err) => console.error(err))
+                safeExecAsync(["bash", "-c", "whoami"])
             }
         } >
             <icon
@@ -83,9 +81,7 @@ function MenuShortcuts() {
         </button>
         <button className="menu-shortcuts-btn" cursor="pointer" onClicked={
             () => {
-                execAsync(["bash", "-c", "hyprpicker -f hex | cat | wl-copy"])
-                    .then((out) => console.log(out))
-                    .catch((err) => console.error(err))
+                safeExecAsync(["bash", "-c", "hyprpicker -f hex | cat | wl-copy"])
             }
         } >
             <icon
@@ -95,9 +91,7 @@ function MenuShortcuts() {
         </button>
         <button className="menu-shortcuts-btn" cursor="pointer" onClicked={
             () => {
-                execAsync(["bash", "-c", "whoami"])
-                    .then((out) => console.log(out))
-                    .catch((err) => console.error(err))
+                safeExecAsync(["bash", "-c", "whoami"])
             }
         } >
             <icon
@@ -112,9 +106,7 @@ function AppLauncher() {
         <label className="app-launcher-label" halign={Gtk.Align.START}  label="org.gnome.Settings" />
         <button className="app-launcher-btn" halign={Gtk.Align.START} cursor="pointer" onClicked={
             () => {
-            execAsync(["bash", "-c", "bash ~/.config/rofi/launcher/launch.sh"])
-                .then((out) => console.log(out))
-                .catch((err) => console.error(err))
+                safeExecAsync(["bash", "-c", "bash ~/.config/rofi/launcher/launch.sh"])
             }
         } >
             Apps
@@ -128,10 +120,8 @@ function MediaFocus () {
                 buttonOnMediaPanel.set(true)
                 buttonOnSideBar.set(false)
                 buttonOnCalendarPanel.set(false)
-                console.log(buttonOnMediaPanel)
             } else {
                 buttonOnMediaPanel.set(false)
-                console.log(buttonOnMediaPanel)
             }
         }
     } >
@@ -148,11 +138,9 @@ function Menu() {
                     buttonOnSideBar.set(true)
                     buttonOnMediaPanel.set(false)
                     buttonOnCalendarPanel.set(false)
-                    execAsync(["bash", "-c", "~/.config/ags/scripts/network-info.sh listupdate"])
-                    console.log(buttonOnSideBar)
+                    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/network-info.sh listupdate"])
                 } else {
                     buttonOnSideBar.set(false)
-                    console.log(buttonOnSideBar)
                 }
             }
         } >
@@ -216,7 +204,7 @@ function Workspaces() {
 
 // ----------------------------------Charging-------------------------------
 
-
+/*
 
 function ChargingOn() {
     return <box visible={(stateBattery === true) ? true : false}>
@@ -227,7 +215,7 @@ function ChargingOn() {
             <box css="color: black;" className="overlay" valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>{bind(percentageBattery)}</box>
         </overlay>
     </box>
-}
+}*/
 
 
 
@@ -236,6 +224,8 @@ export default function Bar(monitor: Gdk.Monitor) {
 
     return <window
         className="bar"
+        name="bar"
+        application={App}
         gdkmonitor={monitor}
         exclusivity={Astal.Exclusivity.EXCLUSIVE}
         anchor={TOP | LEFT | RIGHT}
@@ -259,7 +249,7 @@ export default function Bar(monitor: Gdk.Monitor) {
         </centerbox>
     </window>
 }
-
+/*
 export function CalendarPanel(monitor: Gdk.Monitor) {
     const {TOP} = Astal.WindowAnchor
     const visible = buttonOnCalendarPanel
@@ -300,4 +290,4 @@ export function Charging(monitor: Gdk.Monitor) {
         >
         <ChargingOn />
     </window>
-}
+}*/

@@ -22,3 +22,13 @@ export function showh(self, visible) {
         self.transitionType = SLIDE_LEFT
     }
 }
+
+export function showNumber(self, visible, number) {
+    if (number === 1) {
+        self.revealChild = visible.get();  // Visibilidad basada en la variable 'visible'
+        self.transitionType = Gtk.RevealerTransitionType.SLIDE_RIGHT;  // Transición hacia la derecha
+    } else {
+        self.revealChild = visible.get();  // Visibilidad basada en la variable 'visible'
+        self.transitionType = Gtk.RevealerTransitionType.SLIDE_LEFT;  // Transición hacia la izquierda
+    }
+}

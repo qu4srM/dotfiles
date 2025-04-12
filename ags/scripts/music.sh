@@ -1,73 +1,83 @@
 #!/usr/bin/env bash
 
-state=`playerctl status`
-length=``
+# Obtener metadata del reproductor (usado varias veces)
+metadata=$(playerctl metadata)
+
+# Obtener el estado del reproductor
+state=$(playerctl status)
+
+# Directorio de imágenes
 folder="$HOME/.config/ags/assets/img"
-function get_icon {
-    app=`playerctl metadata | awk '{print $1}' | head -n 1`
-    if [ $app = "firefox" ];then
-        echo "firefox"
-    elif [ $app = "spotify" ];then
-        echo "spotify"
-    fi
+
+# Función para obtener el ícono del reproductor
+get_icon() {
+    app=$(echo "$metadata" | awk '{print $1}' | head -n 1)
+    case "$app" in
+        "firefox") echo "firefox" ;;
+        "spotify") echo "spotify" ;;
+        *) echo "unknown" ;;
+    esac
 }
 
-function get_artist {
-    dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:org.mpris.MediaPlayer2.Player string:Metadata | sed -n '/artist/{n;n;p}' | cut -d '"' -f 2
+# Función para obtener el artista actual
+get_artist() {
+    echo "$metadata" | sed -n '/artist/{n;n;p}' | cut -d '"' -f 2
 }
-function get_title {
-    dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:org.mpris.MediaPlayer2.Player string:Metadata | sed -n '/title/{n;p}' | cut -d '"' -f 2
+
+# Función para obtener el título de la canción actual
+get_title() {
+    echo "$metadata" | sed -n '/title/{n;p}' | cut -d '"' -f 2
 }
-function get_image {
-    url=`playerctl metadata | grep 'artUrl' | awk '{print $3}'`
-    curl -o $folder/coverArt.jpg $url
+
+# Función para obtener la imagen del álbum
+get_image() {
+    url=$(echo "$metadata" | grep 'artUrl' | awk '{print $3}')
+    curl -s -o "$folder/coverArt.jpg" "$url"
 }
-function get_length {
-    playerctl metadata | grep length | awk '{print $3}' | cut -c 1,2,3
+
+# Función para obtener la duración total de la pista
+get_length() {
+    echo "$metadata" | grep length | awk '{print $3}' | cut -c 1-5
 }
-function get_position {
+
+# Función para obtener la posición actual de reproducción
+get_position() {
     playerctl position
 }
-function pause_or-play {
+
+# Función para pausar o reproducir la canción
+pause_or_play() {
     playerctl play-pause
 }
-function stop {
+
+# Función para detener la reproducción
+stop() {
     playerctl stop
 }
-function set_previous {
+
+# Función para reproducir la pista anterior
+set_previous() {
     playerctl previous
 }
-function set_next {
+
+# Función para reproducir la pista siguiente
+set_next() {
     playerctl next
 }
-    
 
+# Ejecutar la función correspondiente al argumento
 case $1 in
-    geticon)
-    get_icon
-    ;;
-    getlength)
-    get_length
-    ;;
-    getposition)
-    get_position
-    ;;
-    getartist)
-	get_artist
-	;;
-    gettitle)
-    get_title
-    ;;
-    getimage)
-    get_image
-    ;;
-    playorpause)
-    pause_or-play
-    ;;
-    previous)
-    set_previous
-    ;;
-    next)
-    set_next
-    ;;
+    geticon) get_icon ;;
+    getlength) get_length ;;
+    getposition) get_position ;;
+    getartist) get_artist ;;
+    gettitle) get_title ;;
+    getimage) get_image ;;
+    playorpause) pause_or_play ;;
+    previous) set_previous ;;
+    next) set_next ;;
+    *)
+        echo "Uso: $0 {geticon|getlength|getposition|getartist|gettitle|getimage|playorpause|previous|next}"
+        exit 1
+        ;;
 esac

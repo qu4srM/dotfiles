@@ -5,7 +5,8 @@ import { bind } from "astal"
 import { subprocess, exec, execAsync } from "astal/process"
 
 import { networks } from "./networks"
-import { show } from "../../hooks/revealer"
+import { show } from "../../utils/revealer"
+import { showNumber } from "../../utils/revealer"
 
 const passwordSudo = Variable("").poll(1000, ["bash", "-c", "cat ~/.config/ags/password.txt"])
 
@@ -15,10 +16,7 @@ const name = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/netwo
 const networkstatus = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-    const {SLIDE_DOWN, SLIDE_TOP} = Gtk.RevealerTransitionType
-    const visibleConnect = Variable(false)
-    const password = Variable("")
-
+    const visibleConnectIndex = Variable(-1)
     const value = Variable(1)
     
     return <revealer
@@ -60,24 +58,27 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                         
                         <box orientation={1} expand>
                             {  
-                                networks.map(i => (
+                                networks.map((i, idx) => (
                                     <box className="items" vertical>
                                         <box>
                                             <icon icon={bind(iconWifi)} />
                                             <button onClick={
-                                            ()=> {
-                                                if (visibleConnect.get() === false){
-                                                    visibleConnect.set(true)
+                                            () => {
+                                                // Actualizamos el índice de visibilidad con la Variable
+                                                if (visibleConnectIndex.get() === idx) {
+                                                    visibleConnectIndex.set(-1) // Ocultar si ya está visible
                                                 } else {
-                                                    visibleConnect.set(false)
+                                                    visibleConnectIndex.set(idx) // Mostrar el nuevo item
                                                 }
+                                                // Llamada a showNumber con el número para aplicar la transición
+                                                showNumber(self, visible, visibleConnectIndex.get() === -1 ? 1 : 2)
                                             }}>
                                                 <label label={i.name} />  
                                             </button>
                                         </box>
                                         <revealer
-                                        setup={self => show(self, visibleConnect)}
-                                        revealChild={visibleConnect()}>
+                                        setup={self => showNumber(self, visible, visibleConnectIndex.get() === idx ? 1 : 2)}
+                                        revealChild={visibleConnectIndex.get() === idx}>
                                             <box className="items-info-box" vertical expand> 
                                                 <centerbox vertical hexpand>
                                                     <label label="Password" hexpand halign={Gtk.Align.START}/>

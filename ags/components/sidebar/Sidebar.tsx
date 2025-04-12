@@ -1,6 +1,6 @@
 import { Variable, bind } from "astal"
-import { execAsync } from "astal/process"
-import { showh } from "../../hooks/revealer"
+import { showh } from "../../utils/revealer"
+import { safeExecAsync } from "../../utils/manage"
 
 import SoundConf from "../soundconf/SoundConf"
 import WifiConf from "../wificonf/WifiConf"
@@ -8,13 +8,13 @@ import NotificationConfig from "../notification/Notification"
 import KeybindsConfig from "../keybinds/Keybinds"
 import CalendarConfig from "../calendar/Calendar"
 
-import { password, logo } from "../../hooks/initvars"
+import { password, logo } from "../../utils/initvars"
 
-import { nameSideBar } from "../../hooks/initvars"
-import { visibleSound, visibleBluetooth, visibleNotification, visibleKeybind, visibleWifi } from "../../hooks/initvars"
+import { nameSideBar } from "../../utils/initvars"
+import { visibleSound, visibleBluetooth, visibleNotification, visibleKeybind, visibleWifi } from "../../utils/initvars"
 
-import { iconWifi } from "../../hooks/initvars"
-import { iconBluetooth } from "../../hooks/initvars"
+import { iconWifi } from "../../utils/initvars"
+import { iconBluetooth } from "../../utils/initvars"
 
 function QuickSettings () {
     return <centerbox expand vertical className="revealer-box">
@@ -29,7 +29,7 @@ function QuickSettings () {
                 </button>
                 <button className="btn-quick-settings" onClick={
                     () => {
-                        execAsync(["bash", "-c", "wlogout"])
+                        safeExecAsync(["bash", "-c", "wlogout"])
                     }
                 }>
                     <icon
@@ -39,7 +39,7 @@ function QuickSettings () {
                 </button>
                 <button className="btn-quick-settings" onClick={
                     () => {
-                        execAsync(["bash", "-c", `echo "${password.get()}" | sudo -S pacman -Syu --noconfirm`])
+                        safeExecAsync(["bash", "-c", `echo "${password.get()}" | sudo -S pacman -Syu --noconfirm`])
                     }
                 }>
                     <icon
@@ -86,7 +86,6 @@ function QuickSettings () {
                             visibleBluetooth.set(false)
                             visibleSound.set(false)
                             visibleKeybind.set(false)
-                            console.log(visibleNotification)
                             nameSideBar.set("Notification")
                         } 
                     }

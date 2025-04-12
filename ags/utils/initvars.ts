@@ -17,10 +17,17 @@ export const iconWifi = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/sc
 export const iconBluetooth = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/bluetooth-info.sh geticon"])
 export const stateBattery = Variable().poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getstate"])
 
+// Sound config
+
+export const capture = Variable("").poll(100, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getcapture"])
+export const newCapture = Variable("").poll(100, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumcapture"])
+export const volume = Variable("").poll(100, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getvolume"])
+export const newvolume = Variable("").poll(100, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumvolume"])
+
 // Media Panel 
 export const lengthMusic = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlength"])
 export const position = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getposition"])
-export const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
+//export const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
 export const url = Variable("./assets/img/coverArt.jpg")
 
 // Panels
@@ -42,3 +49,7 @@ export const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor
 export const sidebarName = "sidebar"
 export const mediaName = "mediapanel"
 export const calendarName = "calendar"
+export const volumeName = "volume"
+
+// Alerts
+export const visibleVol = Variable(false)

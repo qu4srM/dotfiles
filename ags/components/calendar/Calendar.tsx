@@ -3,7 +3,7 @@ import { timeout } from "astal/time"
 import Variable from "astal/variable"
 import { bind } from "astal"
 import { subprocess, exec, execAsync } from "astal/process"
-import { show } from "../../hooks/revealer"
+import { show } from "../../utils/revealer"
 
 
 function Volume() {

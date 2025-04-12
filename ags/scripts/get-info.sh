@@ -1,21 +1,45 @@
 #!/usr/bin/env bash
-percentage=`amixer get Master | grep % | head -n 1 | cut -d "[" -f 2 | cut -d "%" -f 1`
-percentageCapture=`amixer get Capture | grep % | head -n 1 | cut -d "[" -f 2 | cut -d "%" -f 1`
 
+# Obtener volumen actual
+get_volume() {
+    amixer get Master | awk -F'[][]' '/%/ { print $2; exit }'
+}
 
-case $1 in
-	getvolume)
-    amixer get Master | grep % | head -n 1 | cut -d "[" -f 2 | cut -d "]" -f 1
-	;;
-	getsumvolume)
-    num=$(($percentage))
-    echo "scale=2;$num/100" | bc
-	;;
-	getcapture)
-	amixer get Capture | grep % | head -n 1 | cut -d "[" -f 2 | cut -d "]" -f 1
-	;;
-	getsumcapture)
-	num2=$(($percentageCapture))
-    echo "scale=2;$num2/100" | bc
-	;;
+# Obtener volumen como decimal (para el slider de AGS)
+get_volume_normalized() {
+    local volume
+    volume=$(get_volume | tr -d '%')
+    echo "scale=2; $volume / 100" | bc
+}
+
+# Obtener volumen del micrófono
+get_capture() {
+    amixer get Capture | awk -F'[][]' '/%/ { print $2; exit }'
+}
+
+# Obtener volumen del micrófono como decimal
+get_capture_normalized() {
+    local capture
+    capture=$(get_capture | tr -d '%')
+    echo "scale=2; $capture / 100" | bc
+}
+
+# Manejador principal
+case "$1" in
+    getvolume)
+        get_volume
+        ;;
+    getsumvolume)
+        get_volume_normalized
+        ;;
+    getcapture)
+        get_capture
+        ;;
+    getsumcapture)
+        get_capture_normalized
+        ;;
+    *)
+        echo "Uso: $0 {getvolume|getsumvolume|getcapture|getsumcapture}"
+        exit 1
+        ;;
 esac
