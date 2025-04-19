@@ -21,12 +21,12 @@ get_icon() {
 
 # Función para obtener el artista actual
 get_artist() {
-    echo "$metadata" | sed -n '/artist/{n;n;p}' | cut -d '"' -f 2
+    echo "$metadata" | grep "xesam:artist" | awk '{$1=""; $2=""; print $0}' | sed 's/^[ \t]*//'
 }
 
 # Función para obtener el título de la canción actual
 get_title() {
-    echo "$metadata" | sed -n '/title/{n;p}' | cut -d '"' -f 2
+    echo "$metadata" | grep "xesam:title" | awk '{$1=""; $2=""; print $0}' | sed 's/^[ \t]*//'
 }
 
 # Función para obtener la imagen del álbum
@@ -37,7 +37,7 @@ get_image() {
 
 # Función para obtener la duración total de la pista
 get_length() {
-    echo "$metadata" | grep length | awk '{print $3}' | cut -c 1-5
+    echo "$metadata" | grep "mpris:length" | awk '{$1=""; $2=""; print $0}' | sed 's/^[ \t]*//'
 }
 
 # Función para obtener la posición actual de reproducción

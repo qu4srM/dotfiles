@@ -28,8 +28,8 @@ eventbox.Notification {
         border-radius: 14px;
         background-color: $bg-color;
         //margin: .5rem 1rem .5rem 1rem;
-        margin: 0 12 12;
-        box-shadow: 2px 3px 8px 0 gtkalpha(black, .4);
+        margin: 0px 12px 12px;
+        box-shadow: 2px 3px 8px 0px gtkalpha(black, .4);
         border: 1pt solid gtkalpha($fg-color, .03);
     }
 
@@ -58,7 +58,7 @@ eventbox.Notification {
         color: gtkalpha($fg-color, 0.5);
 
         .app-icon {
-            margin: 0 .4rem;
+            margin: 0px .4rem;
         }
 
         .app-name {
@@ -76,13 +76,13 @@ eventbox.Notification {
 
         button {
             padding: .2rem;
-            min-width: 0;
-            min-height: 0;
+            min-width: 0px;
+            min-height: 0px;
         }
     }
 
     separator {
-        margin: 0 .4rem;
+        margin: 0px .4rem;
         background-color: gtkalpha($fg-color, .1);
     }
 
@@ -121,17 +121,17 @@ eventbox.Notification {
 
     .actions {
         margin: 1rem;
-        margin-top: 0;
+        margin-top: 0px;
 
         button {
-            margin: 0 .3rem;
+            margin: 0px .3rem;
 
             &:first-child {
-                margin-left: 0;
+                margin-left: 0px;
             }
 
             &:last-child {
-                margin-right: 0;
+                margin-right: 0px;
             }
         }
     }

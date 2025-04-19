@@ -38,6 +38,7 @@ export const workspaceNumber = Variable("").poll(100, ["bash", "-c", "~/.config/
 
 
 
+
 function Clock() {
     return <button  className="clock"  cursor="pointer">
         <box>
@@ -92,7 +93,7 @@ function MenuShortcuts() {
     </box>
 }
 function AppLauncher() {
-    return <box className="app-launcher-box" homogeneus={false} vertical={true}>
+    return <box className="app-launcher-box" vertical={true}>
         <label className="app-launcher-label" halign={Gtk.Align.START}  label="org.gnome.Settings" />
         <button className="app-launcher-btn" halign={Gtk.Align.START} cursor="pointer" onClicked={
             () => {
@@ -108,7 +109,7 @@ function AppLauncher() {
 }
 function MediaBar() {
     return <box className="media">
-        <label label={bind(title)} maxWidthChars={20} truncate={true}/>
+        <label label={bind(title)} maxWidthChars={16} truncate={true}/>
         <label label={bind(point)} />
         <label label={bind(artist)} maxWidthChars={18} truncate={true}/>
         <icon
@@ -172,24 +173,11 @@ function Workspaces() {
     </box>
 }
 
-// ----------------------------------Charging-------------------------------
-
-/*
-
-function ChargingOn() {
-    return <box visible={(stateBattery === true) ? true : false}>
-        <overlay>
-            <box heightRequest={40} widthRequest={40}>
-                <levelbar value={bind(percentageFloat)} widthRequest={100} />
-            </box>
-            <box css="color: black;" className="overlay" valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>{bind(percentageBattery)}</box>
-        </overlay>
-    </box>
-}*/
-
-
-
-export default function Bar(monitor: Gdk.Monitor) {
+export default function BarTop(monitor: Gdk.Monitor) {
+    if (!monitor) {
+        const display = Gdk.Display.get_default()
+        monitor = display?.get_primary_monitor()
+    }
 
     return <window
         className="bar"
@@ -199,62 +187,21 @@ export default function Bar(monitor: Gdk.Monitor) {
         exclusivity={EXCLUSIVE}
         anchor={TOP | LEFT | RIGHT}
         >
+            
         <centerbox>
             <box hexpand halign={START}>
                 <AppLauncher />
-                <BatteryHealth />
                 <MediaFocus/>
             </box>
-            <box hexpand halign={CENTER}>
+            <box>
                 <Workspaces />
             </box>
-            <box hexpand halign={END} >
+            <box hexpand halign={END}>
                 <Clock/>
                 <MenuShortcuts />
+                <BatteryHealth />
                 <Menu />
             </box>
         </centerbox>
     </window>
 }
-/*
-export function CalendarPanel(monitor: Gdk.Monitor) {
-    const {TOP} = Astal.WindowAnchor
-    const visible = buttonOnCalendarPanel
-
-    return <window
-        className="calendarpanel"
-        gdkmonitor={monitor}
-        exclusivity={Astal.Exclusivity.NORMAL}
-        anchor={TOP}
-        iconTheme="Papirus"
-        keymode={Astal.Keymode.ON_DEMAND}
-        onKeyPressEvent={(self, event: Gdk.Event) => {
-            if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                self.hide()
-            }
-        }}
-        marginTop="12"
-        >
-        <CalendarConfig config={buttonOnCalendarPanel} />
-    </window>
-}
-export function Charging(monitor: Gdk.Monitor) {
-    const { BOTTOM } = Astal.WindowAnchor
-
-    return <window
-        className="charging"
-        gdkmonitor={monitor}
-        exclusivity={Astal.Exclusivity.NORMAL}
-        anchor={BOTTOM}
-        iconTheme="Papirus"
-        keymode={Astal.Keymode.ON_DEMAND}
-        onKeyPressEvent={(self, event: Gdk.Event) => {
-            if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                self.hide()
-            }
-        }}
-        marginBottom="12"
-        >
-        <ChargingOn />
-    </window>
-}*/

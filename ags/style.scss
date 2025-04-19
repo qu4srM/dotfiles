@@ -16,15 +16,6 @@ $fg-color: #ffffff;
 $bg-color: #29222C;
 $error: rgb(128, 48, 48);
 
-window decoration {
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-.window-frame {
-    box-shadow: 0 0 0 0;
-    margin: 0;
-}
 /*
 window.Bar {
     border: none;
@@ -35,7 +26,7 @@ window.Bar {
     font-weight: bold;
 
     label {
-        margin: 0 8px;
+        margin: 0px 8px;
     }
     .clock {
         color: #f1f1f1;
@@ -58,7 +49,7 @@ window.Bar {
 
         label {
             transition: 200ms;
-            padding: 0 8px;
+            padding: 0px 8px;
             margin: 2px;
             border-radius: $radius;
             border: 1pt solid transparent;
@@ -74,7 +65,7 @@ window.Bar {
         margin-right: 8px;
 
         button {
-            padding: 0 4px;
+            padding: 0px 4px;
         }
     }
 
@@ -91,8 +82,8 @@ window.Bar {
     }
 
     .Battery label {
-        padding-left: 0;
-        margin-left: 0;
+        padding-left: 0px;
+        margin-left: 0px;
     }
 
     .AudioSlider {
@@ -105,7 +96,7 @@ window.Bar {
         }
 
         & {
-            margin: 0 1em;
+            margin: 0px 1em;
         }
 
         trough {
@@ -134,6 +125,7 @@ window.corner-screen {
     background: transparent;
     
 }
+/*
 window.bar {
     background-color: colors.$bg;
 
@@ -149,12 +141,14 @@ window.bar {
     }
     .workspaces button {
         all: unset;
-        margin: 0px 4px;
+        margin: 2px 0px;
         color: colors.$color-btn-work;
+        border-radius: 50%;
+        padding: 0px 6px;
     }
-
     .workspaces button.focused {
-        color: #ffffff;
+        color: colors.$bg;
+        background: #378DF7;
     }
     .workspaces button:hover {
         color: #ffffff;
@@ -177,13 +171,6 @@ window.bar {
     }
     .app-launcher-box {
         padding: 0px 20px;
-    }
-    .app-launcher-box .media {
-        color: colors.$color-btn-work;
-        font-size: 10px;
-    }
-    icon.media-icon {
-        margin: 0px 5px;
     }
     .app-launcher-box .app-launcher-btn {
         all: unset;
@@ -232,8 +219,6 @@ window.bar {
     .menu-box {
         all: unset;
         margin: 4px 10px 4px 0px;
-        /*background: #3c373a; Moment*/ 
-        background: colors.$bg-widgets;
         border-radius: 10px;
         padding: 0px 10px;
         transition: all 300ms;
@@ -242,13 +227,128 @@ window.bar {
         all: unset;
         padding: 0px 4px;
         margin: 0px 2px;
-        font-size: 16px;
+        font-size: 14px;
     }
     .menu-box .menu-btn:hover {
-        opacity: 0.8;
+        background: colors.$bg-widgets;
+    }
+    .menu-box .menu-btn icon {
+        font-size: 18px;
     }
     .menu-box .menu-btn .menu-btn-icon.medium {
-        margin: 0 6;
+        margin: 0px 6px;
+    }
+}*/
+window.bar {
+    background-color: colors.$bg;
+
+    .workspaces {
+        margin: 4px 0px;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        padding: 0px 4px;
+    }
+    .workspaces button {
+        all: unset;
+        margin: 2px 0px;
+        color: colors.$color-btn-work;
+        border-radius: 50%;
+        padding: 0px 6px;
+    }
+    .workspaces button.focused {
+        color: colors.$bg;
+        background: blueviolet;
+    }
+    .workspaces button:hover {
+        color: white;
+    }
+
+
+    .clock {
+        all: unset;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        margin: 4px 4px;
+        padding: 0px 4px;
+        color: white;
+    }
+    .clock .clock-point {
+        font-size: 20px;
+    }
+    .clock .clock-calendar {
+        font-size: 14px;
+    }
+    .app-launcher-box {
+        padding: 0px 20px;
+    }
+    .app-launcher-box .app-launcher-btn {
+        all: unset;
+        color: #ffffff;
+        font-size: 14px;
+    }
+    .app-launcher-box .app-launcher-label {
+        color: #414141;
+        font-size: 12px;
+    }
+    .media-btn {
+        all: unset;
+        color: #ffffff;
+        font-size: 14px;
+        margin: 4px 4px;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        padding: 2px 4px 2px 10px;
+    }
+    .media-btn .media-icon {
+        margin: 0px 5px;
+    }
+    .menu-shortcuts {
+        margin: 4px 0px;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        padding: 2px 4px;
+    }
+    .menu-shortcuts .menu-shortcuts-btn {
+        all: unset;
+        border-radius: 50%;
+        background: colors.$fg-widgets;
+        padding: 0px 4px;
+        margin: 0px 2px;
+    }
+    .battery-box {
+        margin: 4px 0px;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        padding: 2px 4px;
+        circularprogress {
+            color: white;
+            background-color: black;
+            min-width: 18px;
+            font-size: 2px;
+        }
+    }
+    
+    .menu-box {
+        all: unset;
+        margin: 4px 10px 4px 0px;
+        border-radius: 10px;
+        padding: 0px 10px;
+        transition: all 300ms;
+    }
+    .menu-box .menu-btn {
+        all: unset;
+        padding: 0px 4px;
+        margin: 0px 2px;
+        font-size: 14px;
+    }
+    .menu-box .menu-btn:hover {
+        background: colors.$bg-widgets;
+    }
+    .menu-box .menu-btn icon {
+        font-size: 18px;
+    }
+    .menu-box .menu-btn .menu-btn-icon.medium {
+        margin: 0px 6px;
     }
 }
 .cornerscreenleft {
@@ -266,7 +366,7 @@ window.OSD {
         background-color: #111111;
         padding: 8px 8px;
         margin: 10px;
-        box-shadow: 3px 3px 7px 0 rgba(0,0,0,.4);
+        box-shadow: 3px 3px 7px 0px rgba(0,0,0,.4);
     }
 
     icon {
@@ -342,8 +442,6 @@ window.sidebar {
         color: #fff;
     }
     .btn-settings-box {
-        //margin: 10px 20px;
-        
         button:hover {
             background: #414141;
         }
@@ -354,9 +452,9 @@ window.sidebar {
     .notification-box {
         all: unset;
         border-radius: 14px;
-        border: 0;
+        border: 0px;
         .frame {
-            border: 0;
+            border: 0px;
         }
         eventbox.Notification {
 
@@ -374,9 +472,9 @@ window.sidebar {
             border-radius: 12px;
             background-color: colors.$bg-panels;
             //margin: .5rem 1rem .5rem 1rem;
-            margin: 2 4;
+            margin: 2px 4px;
             padding: 4px 10px 10px;
-            //box-shadow: 2px 3px 8px 0 gtkalpha(black, .4);
+            //box-shadow: 2px 3px 8px 0px gtkalpha(black, .4);
             //border: 1pt solid gtkalpha($fg-color, .03);
         }
         
@@ -438,17 +536,17 @@ window.sidebar {
     
         .actions {
             margin: 1rem;
-            margin-top: 0;
+            margin-top: 0px;
     
             button {
-                margin: 0 .3rem;
+                margin: 0px .3rem;
     
                 &:first-child {
-                    margin-left: 0;
+                    margin-left: 0px;
                 }
     
                 &:last-child {
-                    margin-right: 0;
+                    margin-right: 0px;
                 }
             }
         }
@@ -553,7 +651,7 @@ window.sidebar {
             
             .items-info-box {
                 all: unset;
-                margin: 0;
+                margin: 0px;
                 centerbox{
                     margin: 10px 0px;
                     padding: 10px 0px;
@@ -604,11 +702,11 @@ window.sidebar {
 
 .revealer-box{
     background: colors.$bg;
-    border-radius: 14px;
+    border-radius: 20px;
     padding: 10px;
 }
 
-window.mediapanel{
+window.media{
     all: unset;
     background-color: transparent;
 
@@ -619,8 +717,8 @@ window.mediapanel{
         
     }
     scale {
-        padding: 0;
-        margin: 10px 0;
+        padding: 0px;
+        margin: 10px 0px;
 
         trough {
             min-height: 8px;
@@ -640,7 +738,7 @@ window.mediapanel{
     .cover-art {
         border-radius: 10px;
         padding: 20px;
-        min-width: 100px;
+        min-width: 60px;
         min-height: 100px;
         background-size: cover;
         background-position: center;

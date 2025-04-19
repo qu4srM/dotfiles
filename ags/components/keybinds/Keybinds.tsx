@@ -3,6 +3,8 @@ import Variable from "astal/variable"
 import { list } from "./list"
 import { show } from "../../utils/revealer"
 
+import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
+
 
 function OnKeybinds() {
     return (
@@ -26,7 +28,7 @@ function OnKeybinds() {
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     
     return <revealer
-        setup={self => show(self, visible)}
+        setup={self => show(self, visible, SLIDE_UP, SLIDE_DOWN)}
         revealChild={visible()}>
         <OnKeybinds />
     </revealer>

@@ -4,6 +4,7 @@ import Notification from "../notificationsAylur/Notification"
 import { type Subscribable } from "astal/binding"
 import { Variable, bind, timeout } from "astal"
 import { show } from "../../utils/revealer"
+import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/manage"
 
 
@@ -144,7 +145,7 @@ function NotificationWidget() {
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     return <revealer expand
-        setup={self => show(self, visible)}
+        setup={self => show(self, visible, SLIDE_UP, SLIDE_DOWN)}
         revealChild={visible()}>
         <NotificationWidget />
     </revealer>

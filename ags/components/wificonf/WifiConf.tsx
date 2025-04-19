@@ -6,7 +6,8 @@ import { subprocess, exec, execAsync } from "astal/process"
 
 import { networks } from "./networks"
 import { show } from "../../utils/revealer"
-import { showNumber } from "../../utils/revealer"
+
+import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
 
 const passwordSudo = Variable("").poll(1000, ["bash", "-c", "cat ~/.config/ags/password.txt"])
 
@@ -20,7 +21,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     const value = Variable(1)
     
     return <revealer
-        setup={self => show(self, visible)}
+        setup={self => show(self, visible, SLIDE_UP, SLIDE_DOWN)}
         revealChild={visible()}>
         <box className="wificonf-box" vertical heightRequest={550}> 
             <scrollable expand heightRequest={100} vscroll={true}>
@@ -58,37 +59,27 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                         
                         <box orientation={1} expand>
                             {  
-                                networks.map((i, idx) => (
+                                networks.map((i) => (
                                     <box className="items" vertical>
                                         <box>
                                             <icon icon={bind(iconWifi)} />
                                             <button onClick={
-                                            () => {
-                                                // Actualizamos el índice de visibilidad con la Variable
-                                                if (visibleConnectIndex.get() === idx) {
-                                                    visibleConnectIndex.set(-1) // Ocultar si ya está visible
-                                                } else {
-                                                    visibleConnectIndex.set(idx) // Mostrar el nuevo item
-                                                }
-                                                // Llamada a showNumber con el número para aplicar la transición
-                                                showNumber(self, visible, visibleConnectIndex.get() === -1 ? 1 : 2)
-                                            }}>
-                                                <label label={i.name} />  
+                                            () => {}}>
+                                                <label label={i.name} maxWidthChars={16} wrap/>  
                                             </button>
                                         </box>
                                         <revealer
-                                        setup={self => showNumber(self, visible, visibleConnectIndex.get() === idx ? 1 : 2)}
-                                        revealChild={visibleConnectIndex.get() === idx}>
+                                        revealChild={true}>
                                             <box className="items-info-box" vertical expand> 
                                                 <centerbox vertical hexpand>
                                                     <label label="Password" hexpand halign={Gtk.Align.START}/>
-                                                    <entry marginLeft={12} placeHolderText="Enter password" hexpand halign={Gtk.Align.START} onActivate={(self)=> {
-                                                        password.set(self.text)
+                                                    <entry placeHolderText="Enter password" hexpand halign={Gtk.Align.START} onActivate={(self)=> {
+                                                        //password.set(self.text)
                                                     }}/>
                                                 </centerbox>
                                                 <button hexpand onClick={
                                                     ()=> {
-                                                        execAsync(["bash", "-c", `echo "${passwordSudo.get()}" | sudo -S nmcli dev wifi connect "${i.name}" password "${password.get()}"`])
+                                                        //execAsync(["bash", "-c", `echo "${passwordSudo.get()}" | sudo -S nmcli dev wifi connect "${i.name}" password "${password.get()}"`])
                                                         
                                                     }
                                                 }>

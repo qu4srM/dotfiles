@@ -1,33 +1,50 @@
+import { App, Astal, Gdk} from "astal/gtk3"
 import { Variable, bind } from "astal"
-import { showh } from "../../utils/revealer"
+import { TOP, RIGHT, BOTTOM, LEFT, IGNORE } from "../../utils/initvars"
+import { SLIDE_LEFT, SLIDE_RIGHT } from "../../utils/initvars"
+import { NORMAL } from "../../utils/initvars"
+
+export const sidebarWindowName = "sidebar"
+export const visibleSideBar = Variable(false)
+
 import { safeExecAsync } from "../../utils/manage"
 
 import SoundConf from "../soundconf/SoundConf"
 import WifiConf from "../wificonf/WifiConf"
 import NotificationConfig from "../notification/Notification"
 import KeybindsConfig from "../keybinds/Keybinds"
-import CalendarConfig from "../calendar/Calendar"
 
-import { password, logo } from "../../utils/initvars"
+import { password, logo } from "../bar/BarTop"
 
-import { nameSideBar } from "../../utils/initvars"
-import { visibleSound, visibleBluetooth, visibleNotification, visibleKeybind, visibleWifi } from "../../utils/initvars"
+// Sidebar
+export const visibleSound = Variable(false)
+export const visibleNotification = Variable(true)
+export const visibleKeybind = Variable(false)
+export const nameSideBar = Variable("Notification")
+export const visibleWifi = Variable(false)
+export const visibleBluetooth = Variable(false)
 
-import { iconWifi } from "../../utils/initvars"
-import { iconBluetooth } from "../../utils/initvars"
+
+import { show } from "../../utils/revealer"
+import { iconWifi } from "../bar/BarTop"
+import { iconBluetooth } from "../bar/BarTop"
 
 function QuickSettings () {
     return <centerbox expand vertical className="revealer-box">
         <box vertical>
             <box className="btn-help">
                 <label label="Uptime" />
-                <button css="margin-left: 100px;" className="btn-quick-settings">
+                <button marginLeft="100" className="btn-quick-settings" cursor="pointer" onClick={
+                    () => {
+                        safeExecAsync(["bash", "-c", "wlogout"])
+                    }
+                }>
                     <icon
                     className="menu-shortcuts-btn-icon"
                     icon="org.gnome.Settings-symbolic"
                     />
                 </button>
-                <button className="btn-quick-settings" onClick={
+                <button className="btn-quick-settings" cursor="pointer" onClick={
                     () => {
                         safeExecAsync(["bash", "-c", "wlogout"])
                     }
@@ -37,9 +54,9 @@ function QuickSettings () {
                     icon="org.gnome.Settings-screen-lock-symbolic"
                     />
                 </button>
-                <button className="btn-quick-settings" onClick={
+                <button className="btn-quick-settings" cursor="pointer" onClick={
                     () => {
-                        safeExecAsync(["bash", "-c", `echo "${password.get()}" | sudo -S pacman -Syu --noconfirm`])
+                        safeExecAsync(["bash", "-c", "wlogout"])
                     }
                 }>
                     <icon
@@ -49,35 +66,40 @@ function QuickSettings () {
                 </button>
             </box>
             <box className="btn-quick-settings-box">
-                <button className="btn-quick-settings">
+                <button className="btn-quick-settings" cursor="pointer">
                     <icon
                     className="menu-shortcuts-btn-icon"
                     icon={bind(iconWifi)}
                     />
                 </button>
-                <button className="btn-quick-settings">
+                <button className="btn-quick-settings" cursor="pointer">
                     <icon
                     className="menu-shortcuts-btn-icon"
                     icon={bind(iconWifi)}
                     />
                 </button>
-                <button className="btn-quick-settings">
+                <button className="btn-quick-settings" cursor="pointer">
                     <icon
                     className="menu-shortcuts-btn-icon"
                     icon={bind(iconWifi)}
                     />
                 </button>
-                <button className="btn-quick-settings">
+                <button className="btn-quick-settings" cursor="pointer" onClick={
+                    ()=> {
+                        safeExecAsync(["bash", "-c", "~/.config/rofi/wall/launch.sh"])
+                        safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh sidebar"])
+                    }
+                }>
                     <icon
                     className="menu-shortcuts-btn-icon"
-                    icon={bind(iconWifi)}
+                    icon="org.gnome.Settings-appearance-symbolic"
                     />
                 </button>
             </box>
         </box>
         <box vertical vexpand>
             <box className="btn-settings-box" hexpand>
-                <button className="btn-quick-settings" onClicked={
+                <button className="btn-quick-settings" cursor="pointer" onClicked={
                     () => {
                         //execAsync(["bash", "-c", "~/.config/ags/launch.sh launchsidebar"])
                         if (visibleNotification.get() === false) {
@@ -92,10 +114,10 @@ function QuickSettings () {
                 } >
                     <icon
                     className="menu-shortcuts-btn-icon"
-                    icon="org.gnome.Settings-notifications-symbolic"
+                    icon="chat-bubbles"
                     />
                 </button>
-                <button className="btn-quick-settings" onClicked={
+                <button className="btn-quick-settings" cursor="pointer" onClicked={
                     () => {
                         //execAsync(["bash", "-c", "~/.config/ags/launch.sh launchsidebar"])
                         if (visibleSound.get() === false) {
@@ -115,7 +137,7 @@ function QuickSettings () {
                     icon="org.gnome.Settings-sound-symbolic"
                     />
                 </button>
-                <button className="btn-quick-settings" onClicked={
+                <button className="btn-quick-settings" cursor="pointer" onClicked={
                     () => {
                         //execAsync(["bash", "-c", "~/.config/ags/launch.sh launchsidebar"])
                         if (visibleKeybind.get() === false) {
@@ -135,7 +157,7 @@ function QuickSettings () {
                     icon="org.gnome.Settings-keyboard-symbolic"
                     />
                 </button>
-                <button className="btn-quick-settings" onClicked={
+                <button className="btn-quick-settings" cursor="pointer" onClicked={
                     () => {
                         //execAsync(["bash", "-c", "~/.config/ags/launch.sh launchsidebar"])
                         if (visibleWifi.get() === false) {
@@ -155,7 +177,7 @@ function QuickSettings () {
                     icon={bind(iconWifi)}
                     />
                 </button>
-                <button className="btn-quick-settings" onClicked={
+                <button className="btn-quick-settings" cursor="pointer" onClicked={
                     () => {
                         //execAsync(["bash", "-c", "~/.config/ags/launch.sh launchsidebar"])
                         if (visibleBluetooth.get() === false) {
@@ -178,23 +200,55 @@ function QuickSettings () {
             </box>
             <label label={bind(nameSideBar)} expand/>
             <box vertical hexpand>
+                {/*
                 <NotificationConfig config={visibleNotification} />
                 <SoundConf config={visibleSound} />
                 <KeybindsConfig config={visibleKeybind}/>
-                <WifiConf config={visibleWifi} />
+                
+                <WifiConf config={visibleWifi} />*/
+                }
             </box>
         </box> 
     </centerbox>
 }
 
-
-export function OnSideBar ({ visible }: { visible: Variable<boolean> }) {
+function OnRevealer ({ visible }: { visible: Variable<boolean> }) {   
     return <revealer
-        setup={self => showh(self, visible)}
-        revealChild={visible()}
-        //transitionDuration={100}
-        >
+        setup={self => show(self, visible)}
+        revealChild={visibleSideBar()}
+        transitionType={SLIDE_RIGHT}
+        transitionDuration={100}>
         <QuickSettings />
     </revealer>
     
+}
+
+export default function SideBar(monitor: Gdk.Monitor) {
+    if (!monitor) {
+        const display = Gdk.Display.get_default()
+        monitor = display?.get_primary_monitor()
+    }
+    return <window
+        className={sidebarWindowName}
+        name={sidebarWindowName}
+        application={App}
+        gdkmonitor={monitor}
+        exclusivity={IGNORE}
+        layer={Astal.Layer.OVERLAY}
+        anchor={TOP | RIGHT | BOTTOM}
+        marginTop="38"
+        marginRight="6"
+        marginBottom="6"
+        >
+        <eventbox onHoverLost={
+            ()=> {
+                safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh sidebar"])
+            }
+        }>
+            <centerbox>
+                <OnRevealer visible={visibleSideBar} />
+            </centerbox>
+        </eventbox>
+        
+    </window>
 }

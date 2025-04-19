@@ -3,7 +3,11 @@ import { TOP, LEFT, RIGHT } from "../../utils/initvars"
 
 
 export default function CornerRadius(monitor: Gdk.Monitor) {
-
+    if (!monitor) {
+        const display = Gdk.Display.get_default()
+        monitor = display?.get_primary_monitor()
+    }
+    
     return <window
         className="corner-screen"
         name="corners"
