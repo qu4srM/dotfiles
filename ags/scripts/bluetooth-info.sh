@@ -10,11 +10,18 @@ function get_name {
 }
 
 function get_icon {
-    state=$(bluetoothctl show | grep "Powered" | awk '{print $2}')
-    if [ "$state" == "yes" ]; then
-        echo "bluetooth-indicator-full"
+    bluetoothctl show | grep -q "Powered: yes"
+    if [ $? -ne 0 ]; then
+        # Bluetooth apagado
+        echo "bluetooth-disabled-symbolic"
     else
-        echo "bluetooth-indicator-none"
+        # Bluetooth encendido, verificar si hay algo conectado
+        connected_devices=$(bluetoothctl info | grep "Connected: yes")
+        if [ -n "$connected_devices" ]; then
+            echo "bluetooth-connected-symbolic"
+        else
+            echo "bluetooth-active-symbolic"
+        fi
     fi
 }
 

@@ -38,6 +38,11 @@ case "$1" in
     getsumcapture)
         get_capture_normalized
         ;;
+    getuptime)
+        uptime_seconds=$(awk '{print $1}' /proc/uptime)
+        uptime_minutes=$(echo "$uptime_seconds / 60" | bc)
+        echo "$uptime_minutes minutos"
+    ;;
     *)
         echo "Uso: $0 {getvolume|getsumvolume|getcapture|getsumcapture}"
         exit 1

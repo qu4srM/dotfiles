@@ -41,20 +41,21 @@ get_name() {
 
 # Obtener el ícono correspondiente al nivel de señal Wi-Fi
 get_icon() {
-    case "$wifi_state" in
-        "disconnected") echo "wifi-indicator-none" ;;
-        *)
-            if [ "$wifi_signal" -ge 75 ]; then
-                echo "wifi-level-max"
-            elif [ "$wifi_signal" -ge 50 ]; then
-                echo "wifi-level-3"
-            elif [ "$wifi_signal" -ge 25 ]; then
-                echo "wifi-level-2"
-            else
-                echo "wifi-level-min"
-            fi
-            ;;
-    esac
+    if [ "$wifi_state" = "no" ]; then
+        echo "network-wireless-offline-symbolic"
+    else
+        if [ "$wifi_signal" -le 20 ]; then
+            echo "network-wireless-signal-none-symbolic"
+        elif [ "$wifi_signal" -le 40 ]; then
+            echo "network-wireless-signal-weak-symbolic"
+        elif [ "$wifi_signal" -le 60 ]; then
+            echo "network-wireless-signal-ok-symbolic"
+        elif [ "$wifi_signal" -le 80 ]; then
+            echo "network-wireless-signal-good-symbolic"
+        else
+            echo "network-wireless-signal-excellent-symbolic"
+        fi
+    fi
 }
 
 # Mostrar el estado del Wi-Fi (On o Off)

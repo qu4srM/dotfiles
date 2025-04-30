@@ -1,101 +1,102 @@
 import { App, Astal, Gdk, Gtk } from "astal/gtk3"
-import { timeout } from "astal/time"
 import Variable from "astal/variable"
 import { bind } from "astal"
-import { subprocess, exec, execAsync } from "astal/process"
-
+import { safeExecAsync } from "../../utils/exec"
+import { SLIDE_UP, START, CENTER, END } from "../../utils/initvars"
 import { networks } from "./networks"
 import { show } from "../../utils/revealer"
 
-import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
 
-const passwordSudo = Variable("").poll(1000, ["bash", "-c", "cat ~/.config/ags/password.txt"])
+//const passwordSudo = Variable("").poll(1000, ["bash", "-c", "cat ~/.config/ags/password.txt"])
 
-const iconWifi = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
-const status = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh status"])
-const name = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
-const networkstatus = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
+const iconWifi = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
+const status = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh status"])
+const name = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
+const networkstatus = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-    const visibleConnectIndex = Variable(-1)
     const value = Variable(1)
     
     return <revealer
-        setup={self => show(self, visible, SLIDE_UP, SLIDE_DOWN)}
-        revealChild={visible()}>
-        <box className="wificonf-box" vertical heightRequest={550}> 
-            <scrollable expand heightRequest={100} vscroll={true}>
-                <box orientation={1}>
-                    <centerbox className="power" hexpand>
-                        <label label={bind(status)} hexpand halign={Gtk.Align.START}/>
-                        <label label="" hexpand halign={Gtk.Align.CENTER}/>
-                        <button hexpand halign={Gtk.Align.END} onClick={
-                            ()=> {
-                                if (value.get() == 0 && status.get() == "Off") {
-                                    value.set(1) 
-                                    execAsync(["bash", "-c", "nmcli radio wifi on"])
-                                } else {
-                                    value.set(0)
-                                    execAsync(["bash", "-c", "nmcli radio wifi off"])
-                                }
+        setup={self => show(self, visible)}
+        revealChild={visible()}
+        transitionType={SLIDE_UP}
+        transitionDuration={100}>
+        <box className="wificonf-box" vertical> 
+            <box vertical>
+
+                <centerbox className="power">
+                    <label label={bind(status)} halign={START}/>
+                    <label label="" halign={CENTER}/>
+                    <button halign={END} onClicked={
+                        ()=> {
+                            if (value.get() == 0 && status.get() == "Off") {
+                                value.set(1)
+                                safeExecAsync(["bash", "-c", "nmcli radio wifi on"])
+                            } else {
+                                value.set(0)
+                                safeExecAsync(["bash", "-c", "nmcli radio wifi off"])
                             }
-                        }>
-                            <slider value={bind(value)} widthRequest={50}/>
-                        </button>
-                    </centerbox>
-                    <Gtk.Separator visible />
-                    <box className="current" vertical>
-                        <label label="Current network" hexpand halign={Gtk.Align.START}/>
-                        <box>
-                            <icon icon={bind(iconWifi)} />
-                            <box vertical>
-                                <label className="label-1" label={bind(name)} hexpand halign={Gtk.Align.START}/>
-                                <label className="label-2" label={bind(networkstatus)} hexpand halign={Gtk.Align.START}/>
-                            </box>
+                        }
+                    }>
+                        <slider value={bind(value)} widthRequest={50}/>
+                    </button>
+                </centerbox>
+
+                <box className="current" vertical>
+                    <label label="Current network" halign={START}/>
+                    <box>
+                        <icon icon={bind(iconWifi)} />
+                        <box vertical>
+                            <label className="label-1" label={bind(name)} halign={START}/>
+                            <label className="label-2" label={bind(networkstatus)} halign={START}/>
                         </box>
-                    </box>
-                    <box className="nets" orientation={1} expand>
-                        <label label="Available networks" hexpand halign={Gtk.Align.START}/>
-                        
-                        <box orientation={1} expand>
-                            {  
-                                networks.map((i) => (
-                                    <box className="items" vertical>
-                                        <box>
-                                            <icon icon={bind(iconWifi)} />
-                                            <button onClick={
-                                            () => {}}>
-                                                <label label={i.name} maxWidthChars={16} wrap/>  
-                                            </button>
-                                        </box>
-                                        <revealer
-                                        revealChild={true}>
-                                            <box className="items-info-box" vertical expand> 
-                                                <centerbox vertical hexpand>
-                                                    <label label="Password" hexpand halign={Gtk.Align.START}/>
-                                                    <entry placeHolderText="Enter password" hexpand halign={Gtk.Align.START} onActivate={(self)=> {
-                                                        //password.set(self.text)
-                                                    }}/>
-                                                </centerbox>
-                                                <button hexpand onClick={
-                                                    ()=> {
-                                                        //execAsync(["bash", "-c", `echo "${passwordSudo.get()}" | sudo -S nmcli dev wifi connect "${i.name}" password "${password.get()}"`])
-                                                        
-                                                    }
-                                                }>
-                                                    Connect
-                                                </button>
-                                            </box>
-                                        </revealer>
-                                    </box>   
-                                ))
-                                
-                            }
-                        </box>
-                        
                     </box>
                 </box>
-            </scrollable>
+
+                {/*
+                <box className="nets" orientation={1} expand>
+                    <label label="Available networks" hexpand halign={Gtk.Align.START}/>
+                    
+                    <box orientation={1} expand>
+                        {  
+                            networks.map((i) => (
+                                <box className="items" vertical>
+                                    <box>
+                                        <icon icon={bind(iconWifi)} />
+                                        <button onClick={
+                                        () => {}}>
+                                            <label label={i.name} maxWidthChars={16} wrap/>  
+                                        </button>
+                                    </box>
+                                    <revealer
+                                    revealChild={true}>
+                                        <box className="items-info-box" vertical expand> 
+                                            <centerbox vertical hexpand>
+                                                <label label="Password" hexpand halign={Gtk.Align.START}/>
+                                                <entry placeHolderText="Enter password" hexpand halign={Gtk.Align.START} onActivate={(self)=> {
+                                                    //password.set(self.text)
+                                                }}/>
+                                            </centerbox>
+                                            <button hexpand onClick={
+                                                ()=> {
+                                                    //execAsync(["bash", "-c", `echo "${passwordSudo.get()}" | sudo -S nmcli dev wifi connect "${i.name}" password "${password.get()}"`])
+                                                    
+                                                }
+                                            }>
+                                                Connect
+                                            </button>
+                                        </box>
+                                    </revealer>
+                                </box>   
+                            ))
+                            
+                        }
+                    </box>
+                    
+                </box>
+                */}
+            </box>
         </box>
     </revealer>
     

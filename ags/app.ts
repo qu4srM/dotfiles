@@ -3,7 +3,8 @@ import style from "./style.scss"
 
 import Bar from "./components/bar/Bar"
 import BarTop from "./components/bar/BarTop"
-import CornerScreen from "./components/corners/CornerScreen"
+import CornerScreenTop from "./components/corners/CornerScreenTop"
+import CornerScreenBottom from "./components/corners/CornerScreenBottom"
 /*
 import OSD from "./components/osd/OSD"
 import Time from "./components/clock/Time"
@@ -44,7 +45,8 @@ App.start({
     main: () => {
         BarTop(null)
         
-        CornerScreen(null)
+        CornerScreenTop(null)
+        CornerScreenBottom(null)
         
         SideBar(null)
         Media(null)
@@ -53,34 +55,6 @@ App.start({
         //Osd()
         //Time()
         //NotificationPopups()
-        /*
-        WindowSide(
-            null,              // monitor (usa el principal por defecto)
-            sidebarName,       // nombre de la ventana (string)
-            buttonOnSideBar,   // visible (boolean)
-            OnSideBar     // tu componente JSX
-        )
-
-        
-        WindowRight(
-            null,
-            mediaName,
-            buttonOnMediaPanel,
-            OnMediaPanel
-        )
-        
-        WindowAlert(
-            null,
-            volumeName,
-            visibleVol,
-            OnVolume
-        )
-        WindowNormal(
-            null,
-            updateName,
-            buttonOnUpdate,
-            OnUpdate
-        )*/
     },
     requestHandler(request, res) {
         

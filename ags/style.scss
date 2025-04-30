@@ -16,115 +16,7 @@ $fg-color: #ffffff;
 $bg-color: #29222C;
 $error: rgb(128, 48, 48);
 
-/*
-window.Bar {
-    border: none;
-    box-shadow: none;
-    background-color: $bg;
-    color: $fg;
-    font-size: 1.1em;
-    font-weight: bold;
 
-    label {
-        margin: 0px 8px;
-    }
-    .clock {
-        color: #f1f1f1;
-    }
-
-    .Workspaces  {
-        button {
-            all: unset;
-            background-color: transparent;
-
-            &:hover label {
-                background-color: color.adjust($fg, $alpha: -0.84);
-                border-color: color.adjust($accent, $alpha: -0.8);
-            }
-
-            &:active label {
-                background-color: color.adjust($fg, $alpha: -0.8)
-            }
-        }
-
-        label {
-            transition: 200ms;
-            padding: 0px 8px;
-            margin: 2px;
-            border-radius: $radius;
-            border: 1pt solid transparent;
-        }
-
-        .focused label {
-            color: $accent;
-            border-color: $accent;
-        }
-    }
-
-    .SysTray {
-        margin-right: 8px;
-
-        button {
-            padding: 0px 4px;
-        }
-    }
-
-    .FocusedClient {
-        color: $accent;
-    }
-
-    .Media .Cover {
-        min-height: 1.2em;
-        min-width: 1.2em;
-        border-radius: $radius;
-        background-position: center;
-        background-size: contain;
-    }
-
-    .Battery label {
-        padding-left: 0px;
-        margin-left: 0px;
-    }
-
-    .AudioSlider {
-        * {
-            all: unset;
-        }
-
-        icon {
-            margin-right: .6em;
-        }
-
-        & {
-            margin: 0px 1em;
-        }
-
-        trough {
-            background-color: color.adjust($fg, $alpha: -0.8);
-            border-radius: $radius;
-        }
-
-        highlight {
-            background-color: $accent;
-            min-height: .8em;
-            border-radius: $radius;
-        }
-
-        slider {
-            background-color: $fg;
-            border-radius: $radius;
-            min-height: 1em;
-            min-width: 1em;
-            margin: -.2em;
-        }
-    }
-}
-*/
-
-window.corner-screen {
-    background: transparent;
-    
-}
 /*
 window.bar {
     background-color: colors.$bg;
@@ -257,10 +149,10 @@ window.bar {
     }
     .workspaces button.focused {
         color: colors.$bg;
-        background: blueviolet;
+        background: #BECAB7;
     }
     .workspaces button:hover {
-        color: white;
+        color: colors.$text-color;
     }
 
 
@@ -270,7 +162,7 @@ window.bar {
         border-radius: 10px;
         margin: 4px 4px;
         padding: 0px 4px;
-        color: white;
+        color: colors.$text-color;
     }
     .clock .clock-point {
         font-size: 20px;
@@ -283,7 +175,7 @@ window.bar {
     }
     .app-launcher-box .app-launcher-btn {
         all: unset;
-        color: #ffffff;
+        color: colors.$text-color;
         font-size: 14px;
     }
     .app-launcher-box .app-launcher-label {
@@ -292,7 +184,7 @@ window.bar {
     }
     .media-btn {
         all: unset;
-        color: #ffffff;
+        color: colors.$text-color;
         font-size: 14px;
         margin: 4px 4px;
         background: colors.$bg-widgets;
@@ -316,16 +208,11 @@ window.bar {
         margin: 0px 2px;
     }
     .battery-box {
-        margin: 4px 0px;
+        margin: 4px 4px;
         background: colors.$bg-widgets;
+        color: colors.$text-color;
         border-radius: 10px;
         padding: 2px 4px;
-        circularprogress {
-            color: white;
-            background-color: black;
-            min-width: 18px;
-            font-size: 2px;
-        }
     }
     
     .menu-box {
@@ -345,18 +232,21 @@ window.bar {
         background: colors.$bg-widgets;
     }
     .menu-box .menu-btn icon {
-        font-size: 18px;
+        color: colors.$text-color;
+        font-size: 14px;
     }
     .menu-box .menu-btn .menu-btn-icon.medium {
         margin: 0px 6px;
     }
 }
-.cornerscreenleft {
-    font-size: 20px;
+window.corner-screen {
+    background: transparent;
+    icon {
+        font-size: 20px;
+        color: colors.$bg;
+    }
 }
-.cornerscreenright {
-    font-size: 20px;
-}
+
 
 
 
@@ -424,12 +314,15 @@ window.sidebar {
     background: transparent;
 
     .btn-help {
+        label {
+            color: colors.$text-color;
+            margin-right: 50px;
+        }
         button:hover {
             background: #378DF7;
         }
     }
     .btn-quick-settings-box {
-        background: colors.$bg-panels;
         border-radius: 20px;
         button:hover {
             background: #378DF7;
@@ -439,9 +332,29 @@ window.sidebar {
         all: unset;
         padding: 10px;
         border-radius: 50%;
-        color: #fff;
+        color: colors.$text-color;
+        .menu-shortcuts-icon-arrow {
+            color: colors.$text-color;
+        }
+    }
+    .normal {
+        all: unset;
+        padding: 10px;
+        border-radius: 50%;
+        color: colors.$text-color;
+    }
+    .active {
+        all: unset;
+        padding: 10px;
+        border-radius: 50%;
+        color: colors.$text-color;
+        background: #378DF7;
     }
     .btn-settings-box {
+        margin-top: 10px;
+        .btn-quick-settings {
+            border-radius: 0px;
+        }
         button:hover {
             background: #414141;
         }
@@ -508,12 +421,12 @@ window.sidebar {
     
             .summary {
                 font-size: 16px;
-                color: #ffffff;
+                color: colors.$text-color;
             }
     
             .body {
                 font-size: 12px;
-                color: #ffffff;
+                color: colors.$text-color;
             }
     
             .image {
@@ -531,7 +444,7 @@ window.sidebar {
             margin-left: 20px;
         }
         .btn-expand:hover {
-            color: #fff;
+            color: colors.$text-color;
         }
     
         .actions {
@@ -555,17 +468,15 @@ window.sidebar {
     .soundconf-box {
         all: unset;
         border-radius: 14px;
-        padding: 10px;  
+        //padding: 10px;  
     }
     .keybindconf-box {
         all: unset;
         border-radius: 14px;
-        padding: 10px;
     }
     .wificonf-box {
         all: unset;
         border-radius: 14px;
-        padding: 0px;
         centerbox.power {
             padding: 0px 10px;
             background: colors.$bg-panels;
@@ -623,7 +534,7 @@ window.sidebar {
                     font-size: 14px;
                 }
             }
-        }
+        }/*
         .nets {
             label {
                 margin-left: 16px;
@@ -682,7 +593,7 @@ window.sidebar {
             
             }
             
-        }
+        }*/
         .items {
             background: #000000;
             margin: 5px;
@@ -703,55 +614,73 @@ window.sidebar {
 .revealer-box{
     background: colors.$bg;
     border-radius: 20px;
+    border: 1px solid #1A1B19;
     padding: 10px;
 }
 
 window.media{
     all: unset;
     background-color: transparent;
-
-    .media-box {
-        background: #231e22;
+    .revealer-box {
+        background: colors.$bg;
         border-radius: 20px;
-        margin-bottom: 20px;
-        
+    }
+    .media-box {
+        centerbox {
+            icon {
+                font-size: 18px;
+            }
+        }
+    
+        box {
+            label {
+                font-size: 12px;
+                color: #858585;
+            }
+        }
+    }
+    .media-menu {
+        margin-left: 10px;
     }
     scale {
         padding: 0px;
-        margin: 10px 0px;
+        margin: 40px 0px 4px;
 
         trough {
             min-height: 8px;
+            border-radius: 10px;
+            background: #454545;
+            border: none;
         }
 
         highlight {
-            background-color: yellow;
+            all: unset;
+            background-color: colors.$text-color;
+            border-radius: 10px;
         }
 
         slider {
             all: unset;
         }
     }
-    icon.media-icon {
-        margin-left: 10px;
-    }
     .cover-art {
-        border-radius: 10px;
+        border-radius: 14px;
         padding: 20px;
-        min-width: 60px;
-        min-height: 100px;
+        min-width: 80px;
+        min-height: 80px;
         background-size: cover;
         background-position: center;
     }
     .control{
-        button {
-            all: unset;
-            padding: 10px;
-            margin: 0px 5px;
-            background: #231e22;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
+        box {
+            margin: 0px 10px;
+            button {
+                all: unset;
+                background: #393939;
+                margin: 0px 2px;
+                padding: 0px 8px;
+                border-radius: 4px;
+            }
         }
     }
 }

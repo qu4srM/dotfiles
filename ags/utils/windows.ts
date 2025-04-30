@@ -6,6 +6,7 @@ import { sidebarWindowName } from "../components/sidebar/Sidebar"
 import { visibleSideBar } from "../components/sidebar/Sidebar"
 
 
+// Arreglar para manehjar er
 export function ToggleWindow(windowName: string, visible: Variable) {
     const window = App.get_windows().find((window) => window.name === windowName)
     if (window !== undefined && !window.visible) {

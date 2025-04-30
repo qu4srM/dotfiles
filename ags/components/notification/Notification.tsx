@@ -4,8 +4,8 @@ import Notification from "../notificationsAylur/Notification"
 import { type Subscribable } from "astal/binding"
 import { Variable, bind, timeout } from "astal"
 import { show } from "../../utils/revealer"
-import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
-import { safeExecAsync } from "../../utils/manage"
+import { SLIDE_UP } from "../../utils/initvars"
+import { safeExecAsync } from "../../utils/exec"
 
 
 const percentageFloat = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getsum"])
@@ -132,22 +132,21 @@ class NotifiationMap implements Subscribable {
     }
 }
 
-function NotificationWidget() {
-    const notifs = new NotifiationMap()
-    return <centerbox vertical className="revealer-box notification-box" expand>
-        <scrollable vscroll={true} heightRequest={550} widthRequest={250} vexpand>
-            <box className="box" vertical expand noImplicitDestroy>
-                {bind(notifs)}
-            </box>
-        </scrollable>
-    </centerbox>
-}
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
+    const notifs = new NotifiationMap()
     return <revealer expand
-        setup={self => show(self, visible, SLIDE_UP, SLIDE_DOWN)}
-        revealChild={visible()}>
-        <NotificationWidget />
+        setup={self => show(self, visible)}
+        revealChild={visible()}
+        transitionType={SLIDE_UP}
+        transitionDuration={100}>
+        <centerbox vertical className="revealer-box notification-box" hexpand>
+            <scrollable vscroll={true} heightRequest={300} widthRequest={250}>
+                <box className="box" vertical expand noImplicitDestroy>
+                    {bind(notifs)}
+                </box>
+            </scrollable>
+        </centerbox>
     </revealer>
     
 }

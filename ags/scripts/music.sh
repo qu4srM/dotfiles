@@ -35,19 +35,43 @@ get_image() {
     curl -s -o "$folder/coverArt.jpg" "$url"
 }
 
-# Función para obtener la duración total de la pista
-get_length() {
-    echo "$metadata" | grep "mpris:length" | awk '{$1=""; $2=""; print $0}' | sed 's/^[ \t]*//'
+convert_time() {
+    local microseconds=$1
+    local seconds=$((microseconds / 1000000))
+    printf "%02d:%02d\n" $((seconds / 60)) $((seconds % 60))
 }
 
-# Función para obtener la posición actual de reproducción
+# Función para obtener la duración total de la pista (formato mm:ss)
+get_length() {
+    length=$(echo "$metadata" | grep "mpris:length" | awk '{$1=""; $2=""; print $0}' | sed 's/^[ \t]*//')
+    convert_time "$length"
+}
+get_length_raw() {
+    length=$(echo "$metadata" | grep "mpris:length" | awk '{$1=""; $2=""; print $0}' | sed 's/^[ \t]*//')
+    echo $((length / 1000000))
+}
+
+# Función para obtener la posición actual de reproducción (formato mm:ss)
 get_position() {
-    playerctl position
+    position=$(playerctl position)
+    micro_pos=$(echo "$position * 1000000" | bc | cut -d'.' -f1)
+    convert_time "$micro_pos"
+}
+get_position_raw() {
+    playerctl position | cut -d. -f1
 }
 
 # Función para pausar o reproducir la canción
 pause_or_play() {
     playerctl play-pause
+}
+get_icon_play () {
+    state=$(playerctl status)
+    if [[ $state == "Playing" ]]; then
+        echo "media-playback-pause-symbolic"
+    else
+        echo "media-playback-start-symbolic"
+    fi
 }
 
 # Función para detener la reproducción
@@ -64,18 +88,26 @@ set_previous() {
 set_next() {
     playerctl next
 }
+seek_position () {
+    new_pos="$2"
+    playerctl position "$new_pos"
+}
 
 # Ejecutar la función correspondiente al argumento
 case $1 in
     geticon) get_icon ;;
     getlength) get_length ;;
+    getlengthraw) get_length_raw ;;
     getposition) get_position ;;
+    getpositionraw) get_position_raw ;;
     getartist) get_artist ;;
     gettitle) get_title ;;
     getimage) get_image ;;
     playorpause) pause_or_play ;;
+    geticonplay) get_icon_play ;;
     previous) set_previous ;;
     next) set_next ;;
+    seek) seek_position "$@" ;;
     *)
         echo "Uso: $0 {geticon|getlength|getposition|getartist|gettitle|getimage|playorpause|previous|next}"
         exit 1

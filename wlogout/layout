@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "hyprlock",
+    "action" : "swaylock",
     "text" : "Lock",
     "keybind" : "l"
 }
@@ -9,7 +9,7 @@
     "action" : "systemctl hibernate",
     "text" : "Hibernate",
     "keybind" : "h"
-}
+},
 {
     "label" : "logout",
     "action" : "hyprctl dispatch exit 0",

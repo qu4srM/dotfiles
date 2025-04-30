@@ -4,8 +4,8 @@
 battery_info=$(acpi -b)
 
 # Extraer porcentaje de carga y estado
-percentage=$(echo "$battery_info" | awk '{print $4}' | cut -d ',' -f 1 | cut -d '%' -f 1)
-state=$(echo "$battery_info" | awk '{print $3}' | cut -d ',' -f 1)
+percentage=$(cat /sys/class/power_supply/BAT*/capacity)
+state=$(cat /sys/class/power_supply/BAT*/status)
 
 # Función para obtener el porcentaje de la batería
 get_percentage() {
@@ -14,14 +14,50 @@ get_percentage() {
 
 # Función para obtener el ícono de la batería según el nivel de carga
 get_icon() {
-    if [ "$percentage" -le 15 ]; then
-        echo "battery-discharging"
-    elif [ "$percentage" -ge 70 ]; then
-        echo "battery-level-max"
-    elif [ "$percentage" -gt 30 ] && [ "$percentage" -lt 70 ]; then
-        echo "battery-level-medium"
-    elif [ "$percentage" -gt 15 ] && [ "$percentage" -lt 30 ]; then
-        echo "battery-level-min"
+    if [ "$charging_status" = "Charging" ]; then
+        if [ "$percentage" -le 10 ]; then
+            echo "battery-level-10-charging-symbolic"
+        elif [ "$percentage" -le 20 ]; then
+            echo "battery-level-20-charging-symbolic"
+        elif [ "$percentage" -le 30 ]; then
+            echo "battery-level-30-charging-symbolic"
+        elif [ "$percentage" -le 40 ]; then
+            echo "battery-level-40-charging-symbolic"
+        elif [ "$percentage" -le 50 ]; then
+            echo "battery-level-50-charging-symbolic"
+        elif [ "$percentage" -le 60 ]; then
+            echo "battery-level-60-charging-symbolic"
+        elif [ "$percentage" -le 70 ]; then
+            echo "battery-level-70-charging-symbolic"
+        elif [ "$percentage" -le 80 ]; then
+            echo "battery-level-80-charging-symbolic"
+        elif [ "$percentage" -le 90 ]; then
+            echo "battery-level-90-charging-symbolic"
+        else
+            echo "battery-level-100-charged-symbolic"
+        fi
+    else
+        if [ "$percentage" -le 10 ]; then
+            echo "battery-level-10-symbolic"
+        elif [ "$percentage" -le 20 ]; then
+            echo "battery-level-20-symbolic"
+        elif [ "$percentage" -le 30 ]; then
+            echo "battery-level-30-symbolic"
+        elif [ "$percentage" -le 40 ]; then
+            echo "battery-level-40-symbolic"
+        elif [ "$percentage" -le 50 ]; then
+            echo "battery-level-50-symbolic"
+        elif [ "$percentage" -le 60 ]; then
+            echo "battery-level-60-symbolic"
+        elif [ "$percentage" -le 70 ]; then
+            echo "battery-level-70-symbolic"
+        elif [ "$percentage" -le 80 ]; then
+            echo "battery-level-80-symbolic"
+        elif [ "$percentage" -le 90 ]; then
+            echo "battery-level-90-symbolic"
+        else
+            echo "battery-level-100-symbolic"
+        fi
     fi
 }
 

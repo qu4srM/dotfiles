@@ -1,42 +1,49 @@
 import { App, Astal, Gdk, Gtk } from "astal/gtk3"
 import { Variable, bind } from "astal"
 import { interval,timeout } from "astal/time"
-import { safeExecAsync } from "../../utils/manage"
+import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
 import { TOP, LEFT} from "../../utils/initvars"
 import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
 import { IGNORE } from "../../utils/initvars"
+import { END, START } from "../../utils/initvars"
 
 export const mediaWindowName = "media"
 export const visibleMedia= Variable(false)
 
+
 import { title } from "../bar/BarTop"
-import { point } from "../bar/BarTop"
 import { artist } from "../bar/BarTop"
 import { iconApp } from "../bar/BarTop"
+function timeToSeconds(time: string): number {
+    const [min, sec] = time.trim().split(":").map(Number)
+    return min * 60 + sec
+}
 
+export const iconPlay = Variable("").poll(100, ["bash", "-c", "~/.config/ags/scripts/music.sh geticonplay"])
 export const lengthMusic = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlength"])
+export const lengthMusicRaw = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlengthraw"])
+export const positionRaw = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getpositionraw"])
 export const position = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getposition"])
 export const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
 export const url = Variable("./assets/img/coverArt.jpg")
 
-
-function lengthStrNormal(length: number) {
-    const min = Math.floor(length / 60)
-    const sec = Math.floor(length % 60)
-    const sec0 = sec < 10 ? "0" : ""
-    return `${min}:${sec0}${sec}`
-}
+export const lengthSeconds = Variable(0)
+export const positionSeconds = Variable(0)
 
 function MediaLabels() {
-    return <box className="media-box">
-        <label label={bind(title)} />
-        <label label={bind(point)} />
-        <label label={bind(artist)} />
-        <icon
-            className="media-icon"
-            icon={bind(iconApp)}
-        />
+    return <box className="media-box" vertical>
+        <centerbox>
+            <label label={bind(title)} halign={START}/>
+            <label label=" "/>
+            <icon halign={END}
+                className="media-icon"
+                icon={bind(iconApp)}
+            />
+        </centerbox>
+        <box>
+            <label label={bind(artist)} halign={START}/>
+        </box>
     </box>
 }
 
@@ -48,66 +55,71 @@ function CoverArt() {
 
 function Time() {
     return <centerbox>
-        <label label={bind(position).as(lengthStrNormal)} />
-        <slider 
-            visible="true"
-            value={bind(position).as(p => bind(lengthMusic) > 0
-                ? p / bind(lengthMusic) : 0)}
-            onValueChanged={(_, newValue) => {
-                // Ajuste la posición de la canción según el valor del slider
-                const newPosition = newValue * bind(lengthMusic)
-                safeExecAsync(["bash", "-c", `bash ~/.config/ags/scripts/music.sh seek ${newPosition}`])
+        <slider
+            value={bind(positionRaw)}
+            max={bind(lengthMusicRaw)}
+            onDragged={self => {
+                const newValue = Math.round(self.value)
+                safeExecAsync([
+                    "bash", "-c",
+                    `bash ~/.config/ags/scripts/music.sh seek ${newValue}`
+                ])
             }}
             widthRequest={150}  // Controlamos el tamaño del slider
             heightRequest={10}  // Alto del slider
         />
-        <label label={bind(lengthMusic).as(l => l > 0 ? lengthStrNormal(l) : "0:00")} />
     </centerbox>
 }
 
 function Control() {
-    return <centerbox className="control">
-        <button className="control-play" cursor="pointer" onClicked={
-            () => {
-                safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh previous"])
-            }
-        } >
-            <icon
-                className="control-play-icon"
-                icon="media-skip-backward-symbolic"
-            />
-        </button>
-        <button className="control-play" cursor="pointer" onClicked={
-            () => {
-                safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh playorpause"])
-            }
-        } >
-            <icon
-                className="control-play-icon"
-                icon="media-playback-start-symbolic"
-            />
-        </button>
-        <button className="control-play" cursor="pointer" onClicked={
-            () => {
-                safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh next"])
-            }
-        } >
-            <icon
-                className="control-play-icon"
-                icon="media-skip-forward-symbolic"
-            />
-        </button>
-    </centerbox>
+    return <box className="control">
+        <label label={bind(position)} />
+        <box>
+            <button className="control-play" cursor="pointer" onClicked={
+                () => {
+                    safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh previous"])
+                }
+            } >
+                <icon
+                    className="control-play-icon"
+                    icon="media-skip-backward-symbolic"
+                />
+            </button>
+            <button className="control-play" cursor="pointer" onClicked={
+                () => {
+                    safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh playorpause"])
+                }
+            } >
+                <icon
+                    className="control-play-icon"
+                    icon={bind(iconPlay)}
+                />
+            </button>
+            <button className="control-play" cursor="pointer" onClicked={
+                () => {
+                    safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh next"])
+                }
+            } >
+                <icon
+                    className="control-play-icon"
+                    icon="media-skip-forward-symbolic"
+                />
+            </button>
+        </box>
+        <label label={bind(lengthMusic)} />
+    </box>
 }
 
 function MediaBox () {
     return <centerbox className="revealer-box">
-        <box className="media-menu" vertical>
-            <MediaLabels />
+        <box>
             <CoverArt />
+        </box>
+        <centerbox className="media-menu" vertical>
+            <MediaLabels />
             <Time />
             <Control />
-        </box>
+        </centerbox>
     </centerbox>
 }
 
