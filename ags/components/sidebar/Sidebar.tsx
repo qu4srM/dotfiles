@@ -133,7 +133,9 @@ function QuickSettings() {
                 </centerbox>
             </box>
             <box className="btn-settings-box">
-                {/*
+            
+                {/*<SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" />
+            {visibleWifi() && <WifiConf config={visibleWifi} />}
                 <scrollable heightRequest={620} vscroll={true}>
                     <box orientation={1}> 
                         

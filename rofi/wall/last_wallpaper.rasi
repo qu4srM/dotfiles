@@ -1,7 +1,7 @@
 dummywall {
-  background-image: url("/home/qu4s4r/Wallpapers/wall-05.jpg", height);
+  background-image: url("/home/qu4s4r/Wallpapers/wall-15.jpg", height);
 }
 
 mode-switcher {
-  background-image: url("/home/qu4s4r/Wallpapers/wall-05.jpg", height);
+  background-image: url("/home/qu4s4r/Wallpapers/wall-15.jpg", height);
 }

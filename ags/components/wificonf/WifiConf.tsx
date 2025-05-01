@@ -28,19 +28,19 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                 <centerbox className="power">
                     <label label={bind(status)} halign={START}/>
                     <label label="" halign={CENTER}/>
-                    <button halign={END} onClicked={
-                        ()=> {
-                            if (value.get() == 0 && status.get() == "Off") {
-                                value.set(1)
+                    <switch 
+                        active={bind(value)} 
+                        onNotifyActive={self => {
+                            const isActive = self.active
+                            value.set(isActive ? 1 : 0)
+                            if (isActive) {
                                 safeExecAsync(["bash", "-c", "nmcli radio wifi on"])
                             } else {
-                                value.set(0)
                                 safeExecAsync(["bash", "-c", "nmcli radio wifi off"])
                             }
-                        }
-                    }>
-                        <slider value={bind(value)} widthRequest={50}/>
-                    </button>
+                        }} 
+                    />
+
                 </centerbox>
 
                 <box className="current" vertical>
