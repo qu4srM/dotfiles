@@ -3,14 +3,14 @@
 
 ![Dotfiles Banner](https://via.placeholder.com/1200x400.png?text=Dotfiles+de+Tu+Nombre)
 
-Configuraciones personales para entornos Unix/Linux. Incluye `.bashrc`, `.zshrc`, `.vimrc`, configuraciones de `tmux`, `git`, y más. Perfecto para configurar rápidamente un entorno de desarrollo limpio y productivo.
+Configuraciones personales para entornos Unix/Linux, utilizando hyprland como gestor de ventanas. Incluye `.zshrc`, `.p10krc`, y más. Perfecto para configurar rápidamente un entorno de desarrollo limpio y productivo.
 
 ---
 
 ## 📸 Capturas de Pantalla
 
-| Vista Principal | Configuración |
-|------------------|----------------|
+| Vista Principal |
+|------------------|
 | ![Pantalla 1](https://github.com/user-attachments/assets/1cb43aa5-3dde-493a-8abc-974d0555b716) |
 
 ---
@@ -24,11 +24,22 @@ Configuraciones personales para entornos Unix/Linux. Incluye `.bashrc`, `.zshrc`
 
 ---
 
-## 🧰 Requisitos
+## Dependencias
 
-- Unix-like OS (Linux, macOS)
-- Git
-- [stow](https://www.gnu.org/software/stow/) _(recomendado para gestionar los dotfiles)_
+### Arch Linux
+- Bun (Recomendado)
+
+```bash
+sudo pacman -S hyprland zsh hyprpicker bc acpi swww mplayer imagemagick wl-clipboard playerctl code rofi-wayland fastfetch kitty noto-fonts qt6-wayland qt6-base xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-wlr pavucontrol brightnessctl pamixer net-tools mpc papirus-icon-theme ttf-fira-code ttf-cascadia-code twolame dart-sass
+```
+
+### AUR
+
+```bash
+yay -S cava nerd-fonts aylurs-gtk-shell-git ttf-ms-win11-auto wlogout ttf-google-fonts-git swaylock-effects zsh-syntax-highlighting zsh-autosuggestions
+```
+
+
 
 ---
 
@@ -36,7 +47,7 @@ Configuraciones personales para entornos Unix/Linux. Incluye `.bashrc`, `.zshrc`
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/tuusuario/dotfiles.git ~/.dotfiles
+git clone https://github.com/Qu4s4rM/dotfiles.git ~/.dotfiles
 
 # 2. Entra al directorio
 cd ~/.dotfiles
@@ -59,7 +70,7 @@ cp .vimrc ~/
 
 ## ⚙️ Personalización
 
-Puedes editar los archivos dentro de `modules/` o `configs/` según tu estructura. Las configuraciones están separadas por tecnología para facilitar la modularidad.
+Puedes editar los archivos dentro de `home/` o `configs/` según tu estructura. Las configuraciones están separadas por tecnología para facilitar la modularidad.
 
 ---
 
@@ -84,13 +95,7 @@ Este script guarda los archivos modificados en `~/dotfiles_backup/`.
 
 ## 🤝 Contribuciones
 
-Siéntete libre de abrir un Issue o Pull Request si quieres compartir mejoras o agregar nuevas configuraciones.
-
-```bash
-git checkout -b mejora-configuracion
-git commit -m "Agrega mejoras a zshrc"
-git push origin mejora-configuracion
-```
+Dale like al repo .
 
 ---
 
@@ -129,8 +134,8 @@ THE DOTFILES.
 
 ## 📬 Contacto
 
-- 🐙 GitHub: [@tuusuario](https://github.com/tuusuario)
+- 🐙 GitHub: [@Qu4s4rM](https://github.com/Qu4s4rM)
 - 🌐 Web: [tuweb.dev](https://tuweb.dev)
 - ✉️ Email: tuemail@ejemplo.com
 
-> _Hecho con 💻 y ☕ por [Tu Nombre]_
+> _Hecho con 💻 y ☕ por Qu4s4r_
