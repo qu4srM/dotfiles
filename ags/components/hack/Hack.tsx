@@ -6,11 +6,12 @@ import { show } from "../../utils/revealer"
 import { TOP, LEFT, BOTTOM} from "../../utils/initvars"
 import { SLIDE_DOWN} from "../../utils/initvars"
 import { IGNORE } from "../../utils/initvars"
-import { END, START } from "../../utils/initvars"
+import { END, CENTER, START } from "../../utils/initvars"
 import { stateHTB, formattedDate, formattedTime } from "../bar/BarTop"
 
 export const hackWindowName = "hack"
 export const visibleHack= Variable(false)
+export const keymodeState = Variable<Astal.Keymode>(Astal.Keymode.NONE)
 export const notes = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh notes"])
 export const target = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh target"])
 
@@ -18,18 +19,37 @@ export const target = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scri
 const notesWrite = Variable("")
 
 function sendRequest() {
-    safeExecAsync(["bash", "-c", `echo "${notesWrite.get()} · ${formattedTime}. ${formattedDate}" >> $HOME/.config/ags/components/hack/notes.txt`])
+    safeExecAsync(["bash", "-c", `echo "${notesWrite.get()}. ${formattedTime} · ${formattedDate}" >> $HOME/.config/ags/components/hack/notes.txt`])
 }
 function clearNotes() {
     safeExecAsync(["bash", "-c", `echo "" > $HOME/.config/ags/components/hack/notes.txt`])
 }
-function OnRevealer ({ visible }: { visible: Variable<boolean> }) {   
+function OnRevealer ({ visible }: { visible: Variable<boolean> }) {  
+    const value = Variable(0) 
     return <revealer
         setup={self => show(self, visible)}
         revealChild={visibleHack()}
         transitionType={SLIDE_DOWN}
         transitionDuration={100}>
         <box orientation={1} className="revealer-box">
+            <centerbox className="btn-keymode">
+                <label label={bind(keymodeState).as(v =>
+                    v === Astal.Keymode.NONE
+                        ? "Off Keymode"
+                        : "On Keymode"
+                )} halign={START} />
+                <label label="" halign={CENTER}/>
+                <switch 
+                    halign={END} 
+                    active={bind(value)} 
+                    onNotifyActive={self => {
+                        console.log(self)
+                        const current = keymodeState.get();
+                        const next = current === 0 ? Astal.Keymode.ON_DEMAND : Astal.Keymode.NONE;
+                        keymodeState.set(next)
+                    }} 
+                />
+            </centerbox>
             <eventbox cursor="pointer" onClick={()=> {
                 safeExecAsync(["bash", "-c", `echo "${stateHTB.get()}" | wl-copy `])
             }}>
@@ -44,12 +64,14 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                 widthRequest={300}
                 halign={Gtk.Align.CENTER}
                 onChanged={e => notesWrite.set(e.text)} />
-            <button onClicked={sendRequest}>
-                Send Note
-            </button>
-            <button onClicked={clearNotes}>
-                Clear Notes
-            </button>
+            <box>
+                <button onClicked={sendRequest}>
+                    Send Note
+                </button>
+                <button onClicked={clearNotes}>
+                    Clear Notes
+                </button>
+            </box>
             <label label="Notes: " halign={Gtk.Align.START} />
             <scrollable widthRequest={300} heightRequest={100}>
                 <label label={bind(notes)} halign={Gtk.Align.START} />
@@ -71,7 +93,7 @@ export default function Hack(monitor: Gdk.Monitor) {
         gdkmonitor={monitor}
         exclusivity={IGNORE}
         layer={Astal.Layer.OVERLAY}
-        keymode={Astal.Keymode.ON_DEMAND}
+        keymode={bind(keymodeState)}
         anchor={TOP | LEFT}
         marginTop="38"
         marginLeft="190"

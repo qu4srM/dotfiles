@@ -41,19 +41,25 @@ get_name() {
 
 # Obtener el ícono correspondiente al nivel de señal Wi-Fi
 get_icon() {
+    # icons of papirus comments #
     if [ "$wifi_state" = "no" ]; then
-        echo "network-wireless-offline-symbolic"
+        # echo "network-wireless-offline-symbolic"
+        echo "wifi-none-symbolic"
     else
-        if [ "$wifi_signal" -le 20 ]; then
-            echo "network-wireless-signal-none-symbolic"
-        elif [ "$wifi_signal" -le 40 ]; then
-            echo "network-wireless-signal-weak-symbolic"
-        elif [ "$wifi_signal" -le 60 ]; then
-            echo "network-wireless-signal-ok-symbolic"
-        elif [ "$wifi_signal" -le 80 ]; then
-            echo "network-wireless-signal-good-symbolic"
+        if [ "$wifi_signal" -le 25 ]; then
+            #echo "network-wireless-signal-none-symbolic"
+            echo "wifi-level-min-symbolic"
+        elif [ "$wifi_signal" -le 50 ]; then
+            #echo "network-wireless-signal-weak-symbolic"
+            echo "wifi-level-2-symbolic"
+        elif [ "$wifi_signal" -le 75 ]; then
+            #echo "network-wireless-signal-ok-symbolic"
+            echo "wifi-level-3-symbolic"
+        #elif [ "$wifi_signal" -le 80 ]; then
+            #echo "network-wireless-signal-good-symbolic"
         else
-            echo "network-wireless-signal-excellent-symbolic"
+            #echo "network-wireless-signal-excellent-symbolic"
+            echo "wifi-level-max-symbolic"
         fi
     fi
 }

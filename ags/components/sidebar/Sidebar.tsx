@@ -140,7 +140,7 @@ function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon:
 // ------------------- Componente Principal -------------------
 
 function QuickSettings() {
-    const value = Variable(1)
+    const value = Variable(0)
     return <centerbox expand vertical className="revealer-box">
             <box vertical>
                 <box className="btn-help">
@@ -189,7 +189,6 @@ function QuickSettings() {
                                 keymodeState.set(next)
                             }} 
                         />
-    
                     </centerbox>
                     <box vertical>
                         <SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" cmd="~/.config/ags/scripts/network-info.sh listupdate" />

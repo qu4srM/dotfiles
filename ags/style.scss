@@ -2,7 +2,7 @@
 @use "./scss/colors.scss";
 @use "./scss/notification.scss";
 @use "./scss/sliders.scss";
-
+@use "./scss/hack.scss";
 
 $accent: #378DF7;
 $radius: 7px;
@@ -344,7 +344,7 @@ window.sidebar {
         border-radius: 50%;
         color: colors.$text-color;
         .menu-shortcuts-icon-arrow {
-            margin-left: 226px;
+            margin-left: 214px;
             color: colors.$text-color;
         }
     }
@@ -509,7 +509,7 @@ window.sidebar {
         border-radius: 50%;
         color: colors.$text-color;
         .menu-shortcuts-icon-arrow {
-            margin-left: 226px;
+            margin-left: 214px;
             color: colors.$text-color;
         }
     }
@@ -517,7 +517,7 @@ window.sidebar {
         margin-left: 40px;
         scale {
             all: unset;
-            min-width: 196px;
+            min-width: 180px;
             highlight {
                 all: unset;
                 min-height: 10px;
@@ -568,12 +568,12 @@ window.sidebar {
                 background: colors.$fg-panels;
                 border-radius: 15px;
                 min-width: 40px;
-                min-height: 20px;
+                min-height: 6px;
                 slider {
                     all: unset;
                     background: colors.$text-color;
-                    min-width: 10px;
-                    min-height: 10px;
+                    min-width: 6px;
+                    min-height: 6px;
                     border-radius: 50%;
                     border: none;
                 }

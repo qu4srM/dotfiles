@@ -26,7 +26,7 @@ export const formattedDate: string = `${dayName}, ${day}/${month}`
 // -------------Hyprland Vars---------------
 const hypr = Hyprland.get_default()
 export const workspaceNumber = bind(hypr, "focusedWorkspace").as(ws => ws.id.toString())
-export const nameWindowHypr = bind(hypr, "focusedClient").as(client => client?.class ?? "Unknown")
+export const nameWindowHypr = bind(hypr, "focusedClient").as(client => client?.class ?? "Desktop")
 
 // -------------Velocity Poll---------------
 export const POLL_FAST = 1000
@@ -35,7 +35,6 @@ export const POLL_SLOW = 10000
 export const POLL_MINS = 60000
 
 // -----------------Vars---------------------
-export const password = Variable("").poll(POLL_MEDIUM, ["bash", "-c", "cat ~/.config/ags/password.txt"])
 export const logo = "./assets/img/archlinux.png"
 export const artist = Variable("").poll(POLL_MEDIUM, ["bash", "-c", "~/.config/ags/scripts/music.sh getartist"])
 export const title = Variable("").poll(POLL_MEDIUM, ["bash", "-c", "~/.config/ags/scripts/music.sh gettitle"])
