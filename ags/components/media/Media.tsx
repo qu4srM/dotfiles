@@ -4,13 +4,12 @@ import { interval,timeout } from "astal/time"
 import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
 import { TOP, LEFT} from "../../utils/initvars"
-import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
+import { SLIDE_DOWN } from "../../utils/initvars"
 import { IGNORE } from "../../utils/initvars"
 import { END, START } from "../../utils/initvars"
 
 export const mediaWindowName = "media"
 export const visibleMedia= Variable(false)
-
 
 import { title } from "../bar/BarTop"
 import { artist } from "../bar/BarTop"
@@ -46,13 +45,11 @@ function MediaLabels() {
         </box>
     </box>
 }
-
 function CoverArt() {
     return <centerbox>
         <box className="cover-art" css={`background-image: url("${url.get()}")`} />
     </centerbox>
 }
-
 function Time() {
     return <centerbox>
         <slider
@@ -70,7 +67,6 @@ function Time() {
         />
     </centerbox>
 }
-
 function Control() {
     return <box className="control">
         <label label={bind(position)} />
@@ -109,7 +105,6 @@ function Control() {
         <label label={bind(lengthMusic)} />
     </box>
 }
-
 function MediaBox () {
     return <centerbox className="revealer-box">
         <box>
@@ -123,20 +118,15 @@ function MediaBox () {
     </centerbox>
 }
 
-
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {   
     return <revealer
         setup={self => show(self, visible)}
         revealChild={visibleMedia()}
-        transitionType={SLIDE_UP}
+        transitionType={SLIDE_DOWN}
         transitionDuration={100}>
         <MediaBox />
     </revealer>
-    
 }
-
-
-
 
 export default function Media(monitor: Gdk.Monitor) {
     if (!monitor) {

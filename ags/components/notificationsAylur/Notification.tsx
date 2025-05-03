@@ -117,10 +117,10 @@ export default function Notification(props: Props) {
                         ()=> {
                             if (visible.get() == false){
                                 visible.set(true)
-                                iconExpand.set("arrow-up")
+                                iconExpand.set("arrow-right-symbolic")
                             } else {
                                 visible.set(false)
-                                iconExpand.set("arrow-down")
+                                iconExpand.set("arrow-right-symbolic")
                             }
                         }
                     }>

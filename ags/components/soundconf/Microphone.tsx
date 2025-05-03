@@ -4,11 +4,12 @@ import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
 
 import { SLIDE_DOWN, START, CENTER, END} from "../../utils/initvars"
-export const outputAudio = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsinks"])
+
+
+export const microphone = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getmicrophone"])
 
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-
     return <revealer
         setup={self => {
             show(self, visible)
@@ -16,22 +17,22 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
         revealChild={visible()}
         transitionType={SLIDE_DOWN}
         transitionDuration={100}>
-        <box className="soundconf-box" orientation={1}> 
+        <box className="microphone-box" orientation={1}> 
             <box>
-                <label label="Audio Output: " />
-                <label label={bind(outputAudio)} />
+                <label label="Microphone: "/>
+                <label label={bind(microphone)} />
             </box>
             <button onClicked={()=> {
-                safeExecAsync(["bash", "-c", "$HOME/.config/ags/scripts/get-info.sh toggleoutputaudio"])
+                safeExecAsync(["bash", "-c", "$HOME/.config/ags/scripts/get-info.sh togglemicrophone"])
             }}>
-                Toggle Audio
+                Toggle Microphone
             </button>
         </box>
     </revealer>
     
 }
 
-export default function SoundConf ({ config }: { config: Variable<boolean> }) {
+export default function Microphone ({ config }: { config: Variable<boolean> }) {
     const visible = config
     return <OnRevealer visible={visible} />
 }

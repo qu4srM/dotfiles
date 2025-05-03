@@ -2,47 +2,43 @@ import { App, Astal, Gdk } from "astal/gtk3"
 import { Variable, bind } from "astal"
 import { interval,timeout } from "astal/time"
 import { exec } from "astal/process"
-import { TOP, RIGHT, BOTTOM, IGNORE } from "../../utils/initvars"
-import { SLIDE_RIGHT } from "../../utils/initvars"
+import { TOP, RIGHT, BOTTOM, IGNORE, START, CENTER, END } from "../../utils/initvars"
+import { SLIDE_LEFT } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
-import { START } from "../../utils/initvars"
 
 import SoundConf from "../soundconf/SoundConf"
 import WifiConf from "../wificonf/WifiConf"
 import NotificationConfig from "../notification/Notification"
 import KeybindsConfig from "../keybinds/Keybinds"
+import Microphone from "../soundconf/Microphone"
 //import BluetoothConf from "../bluetoothconf/BluetoothConf"
 
-import { password, logo, iconWifi, iconBluetooth } from "../bar/BarTop"
+import { logo, iconWifi, iconBluetooth } from "../bar/BarTop"
 import { show } from "../../utils/revealer"
 
 // ------------------- Estado -------------------
 
+export const keymodeState = Variable<Astal.Keymode>(Astal.Keymode.NONE)
 export const sidebarWindowName = "sidebar"
 export const visibleSideBar = Variable(false)
 
-export const activeSection = Variable<"notification" | "sound" | "keybind" | "wifi" | "bluetooth" | null>("notification")
-export const nameSideBar = Variable("Notification")
+export const capture = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumcapture"])
+export const volume = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumvolume"])
+export const brightness = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getbrightness"])
 
 export const uptimeMinutes = Variable("").poll(60000, ["bash", "-c", "awk '{print $1}' /proc/uptime | awk '{print int($1/60)}'"])
-
-const theme = exec(["bash", "-c", "cat ~/.config/ags/scss/theme_mode"])
-const initState = Variable(false)
-if (theme === "light") {
-    initState.set(false)
-} else if (theme === "dark") {
-    initState.set(true)
-}
 
 const visibleSound = Variable(false)
 const visibleNotification = Variable(true)
 const visibleWifi = Variable(false)
+const visibleKeybinds = Variable(false)
+const visibleMicrophone = Variable(false)
+
 // ------------------- Funciones -------------------
 
 function toggleVariable(variable: Variable<boolean>) {
     variable.set(!variable.get());
 }
-
 function QuickButton({ icon, cmd}: { icon: string, cmd : string}) {
     const classButton = Variable("normal")
     const toggleClass = () => {
@@ -70,7 +66,7 @@ function ButtonSet({ icon, onClick }: { icon: string, onClick?: () => void }) {
         </button>
     )
 }
-function SettingsButton({visible, icon, label, cmd }: {visible: any, icon: string, label: string, cmd : string }) {
+function SettingsButton({visible, icon, label, cmd}: {visible: any, icon: string, label: string, cmd: string}) {
     const iconArrow = Variable("arrow-right-symbolic")
     const toggleIcon = () => {
         const current = iconArrow.get()
@@ -81,27 +77,70 @@ function SettingsButton({visible, icon, label, cmd }: {visible: any, icon: strin
         iconArrow.set(next)
     }
     return (
-        <button
-            className="btn-quick-settings"
-            cursor="pointer"
-            onClicked={() => {
-                toggleIcon()
-                toggleVariable(visible)
-            }}
-            hexpand
-        >
-            <centerbox>
-                <icon className="menu-shortcuts-btn-icon" icon={icon} />
+        <overlay>
+            <button
+                className="btn-quick-settings"
+                cursor="pointer"
+                onClicked={() => {
+                    toggleIcon()
+                    toggleVariable(visible)
+                    safeExecAsync(["bash", "-c", cmd])
+                }}
+                hexpand
+            >
+                <box>
+                    <icon className="menu-shortcuts-btn-icon" icon={icon} />
+                    <icon className="menu-shortcuts-icon-arrow" icon={bind(iconArrow)} />
+                </box>
+            </button>
+            <box className="overlay-text" valign={CENTER} halign={CENTER}>
                 <label label={label}/>
-                <icon className="menu-shortcuts-icon-arrow" icon={bind(iconArrow)} />
-            </centerbox>
-        </button>
+            </box>
+        </overlay>
+    )
+}
+function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon: string,variable: any, label: string, cmd: string, tool: string}) {
+    const iconArrow = Variable("arrow-right-symbolic")
+    const toggleIcon = () => {
+        const current = iconArrow.get()
+        const next = current === "arrow-right-symbolic"
+            ? "arrow-down-symbolic"
+            : "arrow-right-symbolic"
+
+        iconArrow.set(next)
+    }
+    return (
+        <overlay>
+            <button
+                className="btn-slider-settings"
+                cursor="pointer"
+                onClicked={() => {
+                    toggleIcon()
+                    toggleVariable(visible)
+                }}
+                hexpand
+            >
+                <box>
+                    <icon className="menu-shortcuts-btn-icon" icon={icon} />
+                    <icon className="menu-shortcuts-icon-arrow" icon={bind(iconArrow)} />
+                </box>
+            </button>
+            <box className="slider" valign={CENTER} halign={START}>
+                <slider value={variable} widthRequest={100} onDragged={
+                    (self) => {
+                    const percent = Math.round(self.value * 100)
+                    safeExecAsync(["bash", "-c", `${tool} set ${cmd} ${percent}%`])
+                    }
+                }/>
+            </box>
+        </overlay>
     )
 }
 
 // ------------------- Componente Principal -------------------
 
 function QuickSettings() {
+    const value = Variable(1)
     return <centerbox expand vertical className="revealer-box">
             <box vertical>
                 <box className="btn-help">
@@ -118,7 +157,6 @@ function QuickSettings() {
                         />
                     ))}
                 </box>
-
                 <centerbox className="btn-quick-settings-box">
                     <box></box>
                     <box >
@@ -132,35 +170,55 @@ function QuickSettings() {
                     <box></box>
                 </centerbox>
             </box>
-            <box className="btn-settings-box">
-            
-                {/*<SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" />
-            {visibleWifi() && <WifiConf config={visibleWifi} />}
-                <scrollable heightRequest={620} vscroll={true}>
-                    <box orientation={1}> 
-                        
-                        <box vertical>
-                            <SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" />
-                            {visibleWifi() && <WifiConf config={visibleWifi} />}
-                        </box>
-                        <box vertical>
-                            <SettingsButton icon={bind(iconBluetooth)} label="Bluetooth" />
-                        </box>
-                        <box vertical>
-                            <SettingsButton visible={visibleSound} icon="org.gnome.Settings-sound-symbolic" label="Sound" />
-                            {visibleSound() && <SoundConf config={visibleSound} />}
-                        </box>
-                        <box vertical>
-                            <SettingsButton icon="org.gnome.Settings-keyboard-symbolic" label="Keyboard" />
-                        </box>
-                        <box vertical>
-                            <SettingsButton visible={visibleNotification} icon="chat-bubbles-symbolic" label="Notification" />
-                            {visibleNotification() && <NotificationConfig config={visibleNotification} />}
-                        </box>  
+            <scrollable heightRequest={610} vscroll={true}>
+                <box orientation={1}> 
+                    <centerbox className="btn-keymode">
+                        <label label={bind(keymodeState).as(v =>
+                            v === Astal.Keymode.NONE
+                                ? "Off Keymode"
+                                : "On Keymode"
+                        )} halign={START} />
+                        <label label="" halign={CENTER}/>
+                        <switch 
+                            halign={END} 
+                            active={bind(value)} 
+                            onNotifyActive={self => {
+                                console.log(self)
+                                const current = keymodeState.get();
+                                const next = current === 0 ? Astal.Keymode.ON_DEMAND : Astal.Keymode.NONE;
+                                keymodeState.set(next)
+                            }} 
+                        />
+    
+                    </centerbox>
+                    <box vertical>
+                        <SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" cmd="~/.config/ags/scripts/network-info.sh listupdate" />
+                        {visibleWifi() && <WifiConf config={visibleWifi} />}
                     </box>
-                </scrollable>
-                */}
-            </box>
+                    <box vertical>
+                        <SettingsButton icon={bind(iconBluetooth)} label="Bluetooth" />
+                    </box>
+                    <box vertical>
+                        <SliderButton visible={visibleMicrophone} icon="org.gnome.Settings-microphone-symbolic" variable={bind(capture)} cmd="Capture" tool="amixer"/>
+                        {visibleMicrophone() && <Microphone config={visibleMicrophone} />}
+                    </box>
+                    <box vertical>
+                        <SliderButton visible={visibleSound}  icon="org.gnome.Settings-sound-symbolic" variable={bind(volume)} cmd="Master" tool="amixer"/>
+                        {visibleSound() && <SoundConf config={visibleSound} />}
+                    </box>
+                    <box vertical>
+                        <SliderButton icon="display-brightness-symbolic" variable={bind(brightness)} cmd="" tool="brightnessctl"/>
+                    </box>
+                    <box vertical>
+                        <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keyboard" />
+                        {visibleKeybinds() && <KeybindsConfig config={visibleKeybinds} />}
+                    </box>
+                    <box vertical>
+                        <SettingsButton visible={visibleNotification} icon="chat-bubbles-symbolic" label="Notification" />
+                        {visibleNotification() && <NotificationConfig config={visibleNotification} />}
+                    </box> 
+                </box>
+            </scrollable>
         </centerbox>
     
 }
@@ -172,7 +230,7 @@ function OnRevealer({ visible }: { visible: Variable<boolean> }) {
         <revealer
             setup={self => show(self, visible)}
             revealChild={visibleSideBar()}
-            transitionType={SLIDE_RIGHT}
+            transitionType={SLIDE_LEFT}
             transitionDuration={100}>
             <QuickSettings />
         </revealer>
@@ -193,6 +251,7 @@ export default function SideBar(monitor: Gdk.Monitor) {
             name={sidebarWindowName}
             application={App}
             gdkmonitor={monitor}
+            keymode={bind(keymodeState)}
             exclusivity={IGNORE}
             layer={Astal.Layer.OVERLAY}
             anchor={TOP | RIGHT | BOTTOM}

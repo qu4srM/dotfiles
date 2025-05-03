@@ -97,16 +97,7 @@ export default function NotificationPopups(gdkmonitor: Gdk.Monitor) {
         className="NotificationPopups"
         gdkmonitor={gdkmonitor}
         exclusivity={Astal.Exclusivity.EXCLUSIVE}
-        anchor={TOP | RIGHT}
-        keymode={Astal.Keymode.ON_DEMAND}
-        onKeyPressEvent={(self, event: Gdk.Event) => {
-            console.log(event.get_keyval())
-            /*if (event.get_keyval()[1] === Gdk.KEY_XF86MonBrightnessUp) {
-                console.log(event)
-            } else {
-                console.log(event)
-            }*/
-        }}>
+        anchor={TOP | RIGHT}>
             
         <box vertical noImplicitDestroy>
             {bind(notifs)}

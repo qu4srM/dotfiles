@@ -26,6 +26,9 @@ case $1 in
     media)
         ags -i js request media
 	;;
+    hack)
+        ags -i js request hack
+    ;;
     quit)
         ags quit -i js
     ;;

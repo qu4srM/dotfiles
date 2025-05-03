@@ -4,7 +4,7 @@ import Notification from "../notificationsAylur/Notification"
 import { type Subscribable } from "astal/binding"
 import { Variable, bind, timeout } from "astal"
 import { show } from "../../utils/revealer"
-import { SLIDE_UP } from "../../utils/initvars"
+import { SLIDE_DOWN } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
 
 
@@ -135,17 +135,15 @@ class NotifiationMap implements Subscribable {
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     const notifs = new NotifiationMap()
-    return <revealer expand
+    return <revealer
         setup={self => show(self, visible)}
         revealChild={visible()}
-        transitionType={SLIDE_UP}
+        transitionType={SLIDE_DOWN}
         transitionDuration={100}>
-        <centerbox vertical className="revealer-box notification-box" hexpand>
-            <scrollable vscroll={true} heightRequest={300} widthRequest={250}>
-                <box className="box" vertical expand noImplicitDestroy>
-                    {bind(notifs)}
-                </box>
-            </scrollable>
+        <centerbox vertical className="notification-box" hexpand>
+            <box className="box" vertical hexpand noImplicitDestroy>
+                {bind(notifs)}
+            </box>
         </centerbox>
     </revealer>
     

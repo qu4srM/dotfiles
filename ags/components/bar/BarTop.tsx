@@ -16,12 +16,12 @@ const currentDate: Date = new Date()
 
 const hours: string = String(currentDate.getHours()).padStart(2, '0')
 const minutes: string = String(currentDate.getMinutes()).padStart(2, '0')
-const formattedTime: string = `${hours}:${minutes}`
+export const formattedTime: string = `${hours}:${minutes}`
 
 const dayName: string = currentDate.toLocaleDateString('en-US', { weekday: 'long' })
 const day: string = String(currentDate.getDate()).padStart(2, '0')
 const month: string = String(currentDate.getMonth() + 1).padStart(2, '0')
-const formattedDate: string = `${dayName}, ${day}/${month}`
+export const formattedDate: string = `${dayName}, ${day}/${month}`
 
 // -------------Hyprland Vars---------------
 const hypr = Hyprland.get_default()
@@ -46,6 +46,9 @@ export const iconBattery = Variable("").poll(POLL_MINS, ["bash", "-c", "~/.confi
 export const iconWifi = Variable("").poll(POLL_SLOW, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
 export const iconBluetooth = Variable("").poll(POLL_SLOW, ["bash", "-c", "~/.config/ags/scripts/bluetooth-info.sh geticon"])
 export const stateBattery = Variable().poll(POLL_MINS, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getstate"])
+export const stateHTB = Variable("").poll(POLL_FAST, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh status"])
+
+
 
 function Clock() {
     return <button  className="clock"  cursor="pointer">
@@ -122,7 +125,6 @@ function Menu() {
         <button className="menu-btn" cursor="pointer" onClicked={
             () => {
                 safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh sidebar"])
-                safeExecAsync(["bash", "-c", "~/.config/ags/scripts/network-info.sh listupdate"])
             }
         } >
             <box>
@@ -161,6 +163,17 @@ function Workspaces() {
         )}
     </box>
 }
+function Hack () {
+    return <box>
+        <button className="hack-btn" cursor="pointer" onClicked={
+            () => {
+                safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh hack"])
+            }
+        } >
+            <label label={bind(stateHTB)} />
+        </button>
+    </box>
+}
 export default function BarTop(monitor: Gdk.Monitor) {
     if (!monitor) {
         const display = Gdk.Display.get_default()
@@ -180,6 +193,7 @@ export default function BarTop(monitor: Gdk.Monitor) {
             <box hexpand halign={START}>
                 <AppLauncher />
                 <MediaFocus/>
+                <Hack />
             </box>
             <box>
                 <Workspaces />

@@ -1,0 +1,25 @@
+@use "./colors.scss";
+window.sidebar {
+    scrollable {
+        .frame {
+            border: 0px;
+        }
+        scrollbar {
+            all: unset;
+        }
+        trough {
+            all: unset;
+            background-color: transparent;
+        }
+        slider {
+            all: unset;
+        }
+    }
+    .items {
+        border-radius: 4px;
+    }
+    .items label.command {
+        background: colors.$fg-panels;
+        border-radius: 4px;
+    }
+}

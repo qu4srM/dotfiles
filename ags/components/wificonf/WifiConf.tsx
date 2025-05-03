@@ -2,17 +2,24 @@ import { App, Astal, Gdk, Gtk } from "astal/gtk3"
 import Variable from "astal/variable"
 import { bind } from "astal"
 import { safeExecAsync } from "../../utils/exec"
-import { SLIDE_UP, START, CENTER, END } from "../../utils/initvars"
+import { SLIDE_DOWN, START, CENTER, END } from "../../utils/initvars"
 import { networks } from "./networks"
 import { show } from "../../utils/revealer"
-
-
-//const passwordSudo = Variable("").poll(1000, ["bash", "-c", "cat ~/.config/ags/password.txt"])
 
 const iconWifi = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
 const status = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh status"])
 const name = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
 const networkstatus = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
+
+
+const net = Variable("")
+const passwdnet = Variable("")
+const passwd = Variable("")
+
+function connect() {
+    safeExecAsync(["bash", "-c", `echo "${passwd.get()}" | sudo -S nmcli dev wifi connect "${net.get()}" password "${passwdnet}"`])
+}
+
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     const value = Variable(1)
@@ -20,15 +27,15 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     return <revealer
         setup={self => show(self, visible)}
         revealChild={visible()}
-        transitionType={SLIDE_UP}
+        transitionType={SLIDE_DOWN}
         transitionDuration={100}>
         <box className="wificonf-box" vertical> 
             <box vertical>
-
                 <centerbox className="power">
                     <label label={bind(status)} halign={START}/>
                     <label label="" halign={CENTER}/>
                     <switch 
+                        halign={Gtk.Align.END} 
                         active={bind(value)} 
                         onNotifyActive={self => {
                             const isActive = self.active
@@ -42,7 +49,6 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                     />
 
                 </centerbox>
-
                 <box className="current" vertical>
                     <label label="Current network" halign={START}/>
                     <box>
@@ -53,49 +59,37 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                         </box>
                     </box>
                 </box>
-
-                {/*
-                <box className="nets" orientation={1} expand>
+                <box className="nets" orientation={1} hexpand>
                     <label label="Available networks" hexpand halign={Gtk.Align.START}/>
-                    
-                    <box orientation={1} expand>
-                        {  
-                            networks.map((i) => (
-                                <box className="items" vertical>
-                                    <box>
-                                        <icon icon={bind(iconWifi)} />
-                                        <button onClick={
-                                        () => {}}>
-                                            <label label={i.name} maxWidthChars={16} wrap/>  
-                                        </button>
-                                    </box>
-                                    <revealer
-                                    revealChild={true}>
-                                        <box className="items-info-box" vertical expand> 
-                                            <centerbox vertical hexpand>
-                                                <label label="Password" hexpand halign={Gtk.Align.START}/>
-                                                <entry placeHolderText="Enter password" hexpand halign={Gtk.Align.START} onActivate={(self)=> {
-                                                    //password.set(self.text)
-                                                }}/>
-                                            </centerbox>
-                                            <button hexpand onClick={
-                                                ()=> {
-                                                    //execAsync(["bash", "-c", `echo "${passwordSudo.get()}" | sudo -S nmcli dev wifi connect "${i.name}" password "${password.get()}"`])
-                                                    
-                                                }
-                                            }>
-                                                Connect
-                                            </button>
-                                        </box>
-                                    </revealer>
-                                </box>   
-                            ))
-                            
-                        }
+                    {networks.map((i) => {
+                        return (<box>
+                            <icon icon={bind(iconWifi)} />
+                            <label label={i.name} maxWidthChars={24} wrap />
+                        </box>
+                        )
+                    })}
+                </box>
+                <box className="connect" orientation={1} hexpand>
+                    <label label="Connect to network" halign={START}/>
+                    <box orientation={1}>
+                        <entry 
+                            placeholder-text="Enter Network" 
+                            halign={Gtk.Align.CENTER}
+                            onChanged={e => net.set(e.text)} />
+                        <entry 
+                            placeholder-text="Enter Password" 
+                            halign={Gtk.Align.CENTER}
+                            onChanged={e => passwdnet.set(e.text)} />
+                        <entry 
+                            placeholder-text="Enter Password System"      
+                            halign={Gtk.Align.CENTER}
+                            onChanged={e => passwd.set(e.text)} />
                     </box>
+                    <button cursor="pointer" onClicked={connect}>
+                        Connect
+                    </button>
                     
                 </box>
-                */}
             </box>
         </box>
     </revealer>

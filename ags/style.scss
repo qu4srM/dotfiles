@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "./scss/colors.scss";
 @use "./scss/notification.scss";
-@use "./scss/keybinds.scss";
+@use "./scss/sliders.scss";
 
 
 $accent: #378DF7;
@@ -131,6 +131,8 @@ window.bar {
         margin: 0px 6px;
     }
 }*/
+
+
 window.bar {
     background-color: colors.$bg;
 
@@ -238,6 +240,14 @@ window.bar {
     .menu-box .menu-btn .menu-btn-icon.medium {
         margin: 0px 6px;
     }
+    .hack-btn {
+        all: unset;
+        color: colors.$text-color;
+        margin: 4px 4px;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        padding: 2px 4px 2px 4px;
+    }
 }
 window.corner-screen {
     background: transparent;
@@ -330,12 +340,16 @@ window.sidebar {
     }
     .btn-quick-settings{
         all: unset;
-        padding: 10px;
+        padding: 20px 10px;
         border-radius: 50%;
         color: colors.$text-color;
         .menu-shortcuts-icon-arrow {
+            margin-left: 226px;
             color: colors.$text-color;
         }
+    }
+    .overlay-text {
+        color: colors.$text-color;  
     }
     .normal {
         all: unset;
@@ -359,13 +373,37 @@ window.sidebar {
             background: #414141;
         }
         button:active {
-            background: #505050;
+            background: colors.$color-btn-work;
         }
+    }
+    .btn-keymode {
+        padding: 14px 10px;
+        background: colors.$bg-panels;
+        border-radius: 20px;
+        margin-bottom: 10px;
+        switch {
+            all: unset;
+            background: colors.$fg-panels;
+            border-radius: 15px;
+            min-width: 40px;
+            min-height: 20px;
+            slider {
+                all: unset;
+                background: colors.$text-color;
+                min-width: 10px;
+                min-height: 10px;
+                border-radius: 50%;
+                border: none;
+            }
+            &:checked {
+                background-color: #378DF7;
+            }
+        }
+        
     }
     .notification-box {
         all: unset;
         border-radius: 14px;
-        border: 0px;
         .frame {
             border: 0px;
         }
@@ -465,56 +503,91 @@ window.sidebar {
         }
     }
     }
+    .btn-slider-settings {
+        all: unset;
+        padding: 20px 10px;
+        border-radius: 50%;
+        color: colors.$text-color;
+        .menu-shortcuts-icon-arrow {
+            margin-left: 226px;
+            color: colors.$text-color;
+        }
+    }
+    .slider {
+        margin-left: 40px;
+        scale {
+            all: unset;
+            min-width: 196px;
+            highlight {
+                all: unset;
+                min-height: 10px;
+                background-color: colors.$text-color;
+                border-radius: 10px;
+            }
+            trough {
+                all: unset;
+                min-height: 10px;
+                background-color: colors.$fg-panels;
+                border-radius: 10px;
+            }
+            slider {
+                all: unset;
+            }
+        }
+    }
     .soundconf-box {
         all: unset;
-        border-radius: 14px;
-        //padding: 10px;  
     }
     .keybindconf-box {
         all: unset;
-        border-radius: 14px;
+    }
+    .microphone-box {
+        all: unset;
+        
+        &:first-child>box {
+            margin-left: 40px;
+        }   
+        box {
+            label{
+                color: colors.$text-color;
+            }
+        }    
+
     }
     .wificonf-box {
         all: unset;
         border-radius: 14px;
         centerbox.power {
-            padding: 0px 10px;
+            padding: 14px 10px;
             background: colors.$bg-panels;
-            border-radius: 10px;
+            border-radius: 20px;
             margin-bottom: 10px;
             font-weight: bold;
-            button {
+            switch {
                 all: unset;
-                scale {
-                    trough {
-                        all: unset;
-                        background: gray;
-                        border-radius: 10px;
-                        min-height: 14px;
-                
-                        highlight {
-                            all: unset;
-                            background: green;
-                            border-radius: 10px;
-                            min-height: 16px;
-                        }
-                        slider {
-                            all: unset;
-                            background: #fff;
-                            min-height: 16px;
-                            min-width: 16px;
-                            border-radius: 50%;
-                            margin: 0px 2px;
-                        }
-                    }  
+                background: colors.$fg-panels;
+                border-radius: 15px;
+                min-width: 40px;
+                min-height: 20px;
+                slider {
+                    all: unset;
+                    background: colors.$text-color;
+                    min-width: 10px;
+                    min-height: 10px;
+                    border-radius: 50%;
+                    border: none;
+                }
+                &:checked {
+                    background-color: #378DF7;
                 }
             }
+            
         }
         .current {
             label {
                 margin-left: 16px;
                 font-size: 14px;
-                color: #505050;
+                color: colors.$color-btn-work;
             }
             box {
                 margin: 10px 0px;
@@ -522,7 +595,7 @@ window.sidebar {
                 border-radius: 20px;
                 icon {
                     all: unset;
-                    margin: 0px 0px 0px 10px;
+                    margin: 0px 0px 0px 40px;
                     font-size: 30px;
                 }
                 .label-1 {
@@ -530,85 +603,65 @@ window.sidebar {
                     font-size: 16px;
                 }
                 .label-2 {
-                    color: #505050;
+                    color: colors.$color-btn-work;
                     font-size: 14px;
                 }
             }
-        }/*
+        }
         .nets {
             label {
                 margin-left: 16px;
                 font-size: 14px;
-                color: #505050;
+                color: colors.$color-btn-work;
             }
             box {
                 margin: 10px 0px 0px;
+                padding: 10px;
                 background: colors.$bg-panels;
                 border-radius: 20px;
-                box {
-                    icon {
-                        all: unset;
-                        margin: 0px 0px 0px 0px;
-                        font-size: 30px;
-                    }
-                    button {
-                        all: unset;
-                        label {
-                            color: #ffffff;
-                            font-size: 16px;
-                        }
-                    }
-                }
-            
-            .items-info-box {
-                all: unset;
-                margin: 0px;
-                centerbox{
-                    margin: 10px 0px;
-                    padding: 10px 0px;
-                    border-radius: 20px;
-                    background: colors.$bg;
-                    label {
-                        margin-left: 12px;
-                        font-size: 14px;
-                        color: #505050;
-                    }
-                    entry {
-                        all: unset;
-                        font-size: 14px;
-                        border-bottom: 1px solid #fff;
-                    }
+                icon {
+                    all: unset;
                 }
                 button {
-                    margin: 0px 30px;
-                    padding: 10px 0px;
-                    background: #378DF7;
-                    border-radius: 20px;
+                    all: unset;
+                    label {
+                        color: colors.$text-color;
+                        font-size: 16px;
+                    }
                 }
-                button:hover {
-                    opacity: 0.8;
-                }
-
-            }
-            
-            }
-            
-        }*/
-        .items {
-            background: #000000;
-            margin: 5px;
-            padding: 10px;
-            border-radius: 4px;
+            } 
         }
-        .items label.command {
-            background: #3b1f28;
-            padding: 5px;
-            border-radius: 4px;
-            margin-left: 100px;
+        .connect {
+            label {
+                margin: 10px 0px 10px 16px;
+                font-size: 14px;
+                color: colors.$color-btn-work;
+            }
+            box {
+                padding: 20px;
+                background-color: colors.$bg-panels;
+                border-radius: 20px;
+                entry {
+                    all: unset;
+                    min-width: 200px;
+                    font-size: 14px;
+                    border-bottom: 1px solid #414141;
+                    padding: 10px;
+                }
+            }
+            button {
+                all: unset;
+                margin: 10px 40px;
+                color: white;
+                background: #378DF7;
+                border-radius: 14px;
+                transition: all 300ms;
+            }
+            button:hover {
+                background: #8db1dd;
+            }
         }
     }
-    
-    
 }
 
 .revealer-box{

@@ -1,0 +1,90 @@
+import { App, Astal, Gdk, Gtk } from "astal/gtk3"
+import { Variable, bind } from "astal"
+import { interval,timeout } from "astal/time"
+import { safeExecAsync } from "../../utils/exec"
+import { show } from "../../utils/revealer"
+import { TOP, LEFT, BOTTOM} from "../../utils/initvars"
+import { SLIDE_DOWN} from "../../utils/initvars"
+import { IGNORE } from "../../utils/initvars"
+import { END, START } from "../../utils/initvars"
+import { stateHTB, formattedDate, formattedTime } from "../bar/BarTop"
+
+export const hackWindowName = "hack"
+export const visibleHack= Variable(false)
+export const notes = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh notes"])
+export const target = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh target"])
+
+
+const notesWrite = Variable("")
+
+function sendRequest() {
+    safeExecAsync(["bash", "-c", `echo "${notesWrite.get()} · ${formattedTime}. ${formattedDate}" >> $HOME/.config/ags/components/hack/notes.txt`])
+}
+function clearNotes() {
+    safeExecAsync(["bash", "-c", `echo "" > $HOME/.config/ags/components/hack/notes.txt`])
+}
+function OnRevealer ({ visible }: { visible: Variable<boolean> }) {   
+    return <revealer
+        setup={self => show(self, visible)}
+        revealChild={visibleHack()}
+        transitionType={SLIDE_DOWN}
+        transitionDuration={100}>
+        <box orientation={1} className="revealer-box">
+            <eventbox cursor="pointer" onClick={()=> {
+                safeExecAsync(["bash", "-c", `echo "${stateHTB.get()}" | wl-copy `])
+            }}>
+                <label label={bind(stateHTB).as(v => `My IP: ${v}`)} halign={Gtk.Align.START} />
+            </eventbox>
+            <eventbox cursor="pointer" onClick={()=> {
+                safeExecAsync(["bash", "-c", `echo "${target.get()}" | wl-copy `])
+            }}>
+                <label label={bind(target).as(v => `IP Machine: ${v}`)} halign={Gtk.Align.START} />
+            </eventbox>
+            <entry placeholder-text="Enter Notes" 
+                widthRequest={300}
+                halign={Gtk.Align.CENTER}
+                onChanged={e => notesWrite.set(e.text)} />
+            <button onClicked={sendRequest}>
+                Send Note
+            </button>
+            <button onClicked={clearNotes}>
+                Clear Notes
+            </button>
+            <label label="Notes: " halign={Gtk.Align.START} />
+            <scrollable widthRequest={300} heightRequest={100}>
+                <label label={bind(notes)} halign={Gtk.Align.START} />
+            </scrollable>
+        </box>
+    </revealer>
+    
+}
+
+export default function Hack(monitor: Gdk.Monitor) {
+    if (!monitor) {
+        const display = Gdk.Display.get_default()
+        monitor = display?.get_primary_monitor()
+    }
+    return <window
+        className={hackWindowName}
+        name={hackWindowName}
+        application={App}
+        gdkmonitor={monitor}
+        exclusivity={IGNORE}
+        layer={Astal.Layer.OVERLAY}
+        keymode={Astal.Keymode.ON_DEMAND}
+        anchor={TOP | LEFT}
+        marginTop="38"
+        marginLeft="190"
+        >
+        <eventbox onHoverLost={
+            ()=> {
+                safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh hack"])
+            }
+        }>
+            <centerbox>
+                <OnRevealer visible={visibleHack} />
+            </centerbox>
+        </eventbox>
+        
+    </window>
+}

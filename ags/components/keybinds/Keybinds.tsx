@@ -3,24 +3,20 @@ import Variable from "astal/variable"
 import { list } from "./list"
 import { show } from "../../utils/revealer"
 
-import { SLIDE_UP, SLIDE_DOWN } from "../../utils/initvars"
+import { SLIDE_DOWN } from "../../utils/initvars"
 
 
 function OnKeybinds() {
     return (
-        <box className="keybindconf-box" vertical heightRequest={550}>
-            <scrollable vexpand heightRequest={100} vscroll={true}>
-                <box orientation={1}>
-                    {
-                        list.map(i => (
-                            <centerbox className="items">
-                                <label label={i.name} hexpand halign={Gtk.Align.START}/>
-                                <label className="command" label={i.command} hexpand halign={Gtk.Align.END}/>
-                            </centerbox>   
-                        ))
-                    }
-                </box>
-            </scrollable>
+        <box className="keybindconf-box" vertical>
+            {
+                list.map(i => (
+                    <box className="items" vertical>
+                        <label label={i.name} hexpand halign={Gtk.Align.START}/>
+                        <label className="command" label={i.command} hexpand halign={Gtk.Align.START}/>
+                    </box>   
+                ))
+            }
         </box>
     )
 }
@@ -28,8 +24,12 @@ function OnKeybinds() {
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     
     return <revealer
-        setup={self => show(self, visible, SLIDE_UP, SLIDE_DOWN)}
-        revealChild={visible()}>
+        setup={self => {
+            show(self, visible)
+        }}
+        revealChild={visible()}
+        transitionType={SLIDE_DOWN}
+        transitionDuration={100}>
         <OnKeybinds />
     </revealer>
     
