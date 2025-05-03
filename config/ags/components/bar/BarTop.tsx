@@ -78,7 +78,7 @@ function createButton(iconName: string, onClickCommand: string) {
 function MenuShortcuts() {
     return (
         <box className="menu-shortcuts">
-            {createButton("scanner-symbolic", "whoami")}
+            {createButton("scanner-symbolic", "~/.config/ags/launch.sh screenshot")}
             {createButton("picker-symbolic", "hyprpicker -f hex | cat | wl-copy")}
             {createButton("input-keyboard-symbolic", "whoami")}
         </box>

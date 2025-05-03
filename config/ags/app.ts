@@ -26,6 +26,9 @@ import { mediaWindowName, visibleMedia } from "./components/media/Media"
 import Hack from "./components/hack/Hack"
 import { hackWindowName, visibleHack } from "./components/hack/Hack"
 
+import ScreenShot from "./components/screenshot/Screenshot"
+import { screenshotWindowName, visibleScreenshot } from "./components/screenshot/Screenshot"
+
 import { OnVolume } from "./components/osd/VolumeOsd"
 import { OnUpdate } from "./components/update/Update"
 
@@ -47,6 +50,7 @@ App.start({
         SideBar(null)
         Media(null)
         Hack(null)
+        ScreenShot(null)
         
         OSD(null)
         //Osd()
@@ -63,6 +67,9 @@ App.start({
         } else if (request === "hack"){
             ToggleWindow(hackWindowName, visibleHack)
             res("hack toggled")
+        }  else if (request === "screenshot"){
+            ToggleWindow(screenshotWindowName, visibleScreenshot)
+            res("screenshot toggled")
         }
     },
 })

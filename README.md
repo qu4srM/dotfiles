@@ -32,7 +32,7 @@ Configuraciones personales para entornos Unix/Linux, utilizando hyprland como ge
 ### Arch Linux
 
 ```bash
-sudo pacman -S hyprland zsh hyprpicker bc acpi swww mplayer imagemagick wl-clipboard playerctl code rofi-wayland fastfetch kitty noto-fonts qt6-wayland qt6-base xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-wlr pavucontrol brightnessctl pamixer net-tools mpc papirus-icon-theme ttf-fira-code ttf-cascadia-code twolame dart-sass
+sudo pacman -S hyprland zsh hyprpicker bc acpi swww mplayer imagemagick wl-clipboard playerctl code rofi-wayland fastfetch kitty noto-fonts qt6-wayland qt6-base xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-wlr pavucontrol brightnessctl pamixer net-tools mpc papirus-icon-theme ttf-fira-code ttf-cascadia-code twolame dart-sass grim slurp
 ```
 
 ### AUR

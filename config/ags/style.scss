@@ -220,15 +220,14 @@ window.bar {
     .menu-box {
         all: unset;
         margin: 4px 10px 4px 0px;
-        border-radius: 10px;
-        padding: 0px 10px;
         transition: all 300ms;
     }
     .menu-box .menu-btn {
         all: unset;
-        padding: 0px 4px;
+        padding: 0px 10px;
         margin: 0px 2px;
         font-size: 14px;
+        border-radius: 10px;
     }
     .menu-box .menu-btn:hover {
         background: colors.$bg-widgets;
@@ -790,6 +789,32 @@ window.volume {
                 all: unset;
             }
         }
+    }
+}
+
+window.screenshot {
+    button {
+        all: unset;
+        color: colors.$text-color;
+        margin: 10px 10px;
+        background: colors.$bg-widgets;
+        border-radius: 10px;
+        padding: 20px;
+        box {
+            all: unset;
+            .icon {
+                font-size: 30px;
+            }
+        }
+    }
+    button:hover {
+        background-color: colors.$fg-widgets;
+    }
+    &:first-child {
+        margin: 0px 20px;
+    }
+    &:last-child {
+        margin: 0px 20px;
     }
 }
 

@@ -209,7 +209,7 @@ function QuickSettings() {
                         <SliderButton icon="display-brightness-symbolic" variable={bind(brightness)} cmd="" tool="brightnessctl"/>
                     </box>
                     <box vertical>
-                        <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keyboard" />
+                        <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keybinds" />
                         {visibleKeybinds() && <KeybindsConfig config={visibleKeybinds} />}
                     </box>
                     <box vertical>

@@ -29,6 +29,9 @@ case $1 in
     hack)
         ags -i js request hack
     ;;
+    screenshot)
+        ags -i js request screenshot
+    ;;
     quit)
         ags quit -i js
     ;;
