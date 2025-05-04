@@ -1,9 +1,18 @@
-
 # 🛠️ Dotfiles de Qu4s4r
 
 ![Dotfiles Banner](https://via.placeholder.com/1200x400.png?text=Dotfiles+de+Tu+Nombre)
 
-Configuraciones personales para entornos Unix/Linux, utilizando hyprland como gestor de ventanas. Incluye `.zshrc`, `.p10krc`, y más. Perfecto para configurar rápidamente un entorno de desarrollo limpio y productivo.
+<p align="center">
+  <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
+</p>
+
+Estos son mis dotfiles, espero que les guste, utilicé hyprland como gestor de ventanas. Incluye `.zshrc`, `.p10krc`, y más. Perfecto para configurar rápidamente un entorno de desarrollo limpio y productivo.
+
+> [!NOTE]
+> Aún faltan algunas cosas, pero ya se puede usar
+
+> [!IMPORTANT]
+> Recomendable para Arch Linux
 
 ---
 
@@ -11,14 +20,25 @@ Configuraciones personales para entornos Unix/Linux, utilizando hyprland como ge
 
 | Vista Principal |
 |------------------|
-| ![Pantalla 1](https://github.com/user-attachments/assets/1cb43aa5-3dde-493a-8abc-974d0555b716) |
+| ![Home](https://github.com/user-attachments/assets/32d49ac5-fe70-49f2-a654-065b06d6f43c) |
+
+| Terminal | Widgets |
+|------------------|------------------|
+|![Terminal](https://github.com/user-attachments/assets/66dcd6ff-4875-49b8-a924-5c9f0716cf77) | ![Widgets](https://github.com/user-attachments/assets/8fc29fef-777f-4bbd-897e-faac502b52ab)|
+
+| Wallpaper Selector (rofi) | Run Application (rofi) |
+|------------------|------------------|
+|![wallselector](https://github.com/user-attachments/assets/920db824-802e-414d-8c86-dc2475e29423) | ![run](https://github.com/user-attachments/assets/add43b93-6a75-4505-8eab-10b85891a16e) |
+
+> [!IMPORTANT]
+> Lo demás está en desarrollo, wlogout y swaylock, pero se pueden usar sin ningún problema
 
 ---
 
 ## 📦 Contenido
 
-- 🐚 Shell: `.bashrc`, `.zshrc`
-- 📝 Editor: `.vimrc`, configuraciones de VSCode
+- 🐚 Shell: `.p10k.zsh`, `.zshrc`
+- 📝 Editor: VSCode
 - 🔧 Terminal: `kitty`
 - 📁 Scripts de instalación y respaldo
 
@@ -26,13 +46,13 @@ Configuraciones personales para entornos Unix/Linux, utilizando hyprland como ge
 
 ## Dependencias
 
-- Bun (Recomendado)
-- Powerlevel10k
+- Bun (Recomendado desde su github)
+- Powerlevel10k (desde su github)
 
 ### Arch Linux
 
 ```bash
-sudo pacman -S hyprland zsh hyprpicker bc acpi swww mplayer imagemagick wl-clipboard playerctl code rofi-wayland fastfetch kitty noto-fonts qt6-wayland qt6-base xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-wlr pavucontrol brightnessctl pamixer net-tools mpc papirus-icon-theme ttf-fira-code ttf-cascadia-code twolame dart-sass grim slurp
+sudo pacman -S hyprland grim slurp zsh hyprpicker bc acpi swww mplayer imagemagick wl-clipboard playerctl code rofi-wayland fastfetch kitty noto-fonts qt6-wayland qt6-base xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-wlr pavucontrol brightnessctl pamixer net-tools mpc papirus-icon-theme ttf-fira-code ttf-cascadia-code twolame dart-sass grim slurp
 ```
 
 ### AUR
@@ -41,63 +61,43 @@ sudo pacman -S hyprland zsh hyprpicker bc acpi swww mplayer imagemagick wl-clipb
 yay -S cava nerd-fonts aylurs-gtk-shell-git ttf-ms-win11-auto wlogout ttf-google-fonts-git swaylock-effects zsh-syntax-highlighting zsh-autosuggestions
 ```
 
-
-
 ---
 
 ## 🚀 Instalación
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/Qu4s4rM/dotfiles.git ~/.dotfiles
+git clone https://github.com/Qu4s4rM/dotfiles.git
 
 # 2. Entra al directorio
-cd ~/.dotfiles
+cd dotfiles
 
-# 3. Usa stow para aplicar configuraciones
-stow bash
-stow vim
-stow zsh
-stow tmux
-```
+# 3. Asigna permisos de ejecución al script
+chmod +x install.sh
 
-O bien, puedes copiar los archivos manualmente si no usas `stow`.
+# 4. Ejecuta el script
+./install.sh
 
-```bash
-cp .bashrc ~/
-cp .vimrc ~/
+# 5. Elimina el repositorio clonado
+cd ..
+rm -rf dotfiles
 ```
 
 ---
 
 ## ⚙️ Personalización
 
-Puedes editar los archivos dentro de `home/` o `configs/` según tu estructura. Las configuraciones están separadas por tecnología para facilitar la modularidad.
+Está en desarrollo la forma de personalizarlo al antojo, se pueden modificar los archivos dentro de `home/` o `configs/` según lo que tu quieras.
 
 ---
 
 ## 🔁 Respaldo
 
-```bash
-# Script para hacer backup de tu configuración actual
-./backup.sh
-```
-
-Este script guarda los archivos modificados en `~/dotfiles_backup/`.
-
----
-
-## 📸 Vista Previa
-
-| Terminal + Vim | Tmux |
-|----------------|------|
-| ![Terminal](https://via.placeholder.com/400x200.png?text=Terminal+%2B+Vim) | ![Tmux](https://via.placeholder.com/400x200.png?text=Tmux) |
-
----
+Este script guarda los archivos que tenias anteriormente en `~/dotfiles_backup/`.
 
 ## 🤝 Contribuciones
 
-Dale like al repo .
+Dale like al repositorio.
 
 ---
 
@@ -105,7 +105,8 @@ Dale like al repo .
 
 MIT License. Puedes usar, copiar, modificar y compartir libremente.
 
-> ⚠️ **Nota:** Estos dotfiles están pensados para uso personal. Úsalos bajo tu propio riesgo.  
+> [!CAUTION]
+> Estos dotfiles están pensados para uso personal. Úsalos bajo tu propio riesgo.
 > Es recomendable revisar cada archivo antes de aplicar en tu sistema.
 
 ```

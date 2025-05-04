@@ -82,7 +82,24 @@ get_network_status() {
 
 # Actualizar lista de redes Wi-Fi en formato JSON
 list_update() {
-    nmcli -t -f active,ssid,signal dev wifi | grep "^no" | head -n 6 | awk -F: 'BEGIN { print "export var networks = [" } { print "{\"id\":"NR",\"name\":\""$2"\",\"signal\":"$3"}," } END { print "]" }' > ~/.config/ags/components/wificonf/networks.js
+    {
+    echo "export var networks = ["
+    nmcli -t -f active,bssid,ssid,signal dev wifi | grep "^no" | head -n 6 | \
+    awk -F':' '
+        BEGIN { id = 1 }
+        {
+        bssid = $2 ":" $3 ":" $4 ":" $5 ":" $6 ":" $7
+        gsub(/\\:/, ":", bssid)  # <- aquí quitamos los backslashes
+        ssid = $8
+        for (i=9; i<NF; i++) ssid = ssid ":" $i
+        signal = $NF
+        gsub(/"/, "\\\"", ssid)
+        print "  {\"id\":" id ",\"name\":\"" ssid "\",\"bssid\":\"" bssid "\",\"signal\":" signal "},"
+        id++
+        }
+    ' | sed '$ s/,$//'
+    echo "]"
+    } > ~/.config/ags/components/wificonf/networks.js
 }
 
 # Ejecutar la función según el parámetro pasado

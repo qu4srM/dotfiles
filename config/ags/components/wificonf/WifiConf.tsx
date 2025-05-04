@@ -8,8 +8,8 @@ import { show } from "../../utils/revealer"
 
 const iconWifi = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
 const status = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh status"])
-const name = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
-const networkstatus = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
+const name = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
+const networkstatus = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
 
 
 const net = Variable("")
@@ -17,7 +17,7 @@ const passwdnet = Variable("")
 const passwd = Variable("")
 
 function connect() {
-    safeExecAsync(["bash", "-c", `echo "${passwd.get()}" | sudo -S nmcli dev wifi connect "${net.get()}" password "${passwdnet}"`])
+    safeExecAsync(["bash", "-c", `echo "${passwd.get()}" | sudo -S nmcli dev wifi connect "${net.get()}" password "${passwdnet.get()}"`])
 }
 
 
@@ -62,10 +62,14 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                 <box className="nets" orientation={1} hexpand>
                     <label label="Available networks" hexpand halign={Gtk.Align.START}/>
                     {networks.map((i) => {
-                        return (<box>
-                            <icon icon={bind(iconWifi)} />
-                            <label label={i.name} maxWidthChars={24} wrap />
-                        </box>
+                        return (<button cursor="pointer" onClicked={()=> {
+                            safeExecAsync(["bash", "-c", `echo -n ${i.bssid} | wl-copy `])
+                        }}>
+                            <box>
+                                <icon icon={bind(iconWifi)} />
+                                <label label={i.name} maxWidthChars={24} wrap />
+                            </box>
+                        </button>
                         )
                     })}
                 </box>
@@ -73,7 +77,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                     <label label="Connect to network" halign={START}/>
                     <box orientation={1}>
                         <entry 
-                            placeholder-text="Enter Network" 
+                            placeholder-text="Enter BSSID" 
                             halign={Gtk.Align.CENTER}
                             onChanged={e => net.set(e.text)} />
                         <entry 
@@ -88,7 +92,6 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                     <button cursor="pointer" onClicked={connect}>
                         Connect
                     </button>
-                    
                 </box>
             </box>
         </box>

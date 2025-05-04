@@ -613,22 +613,22 @@ window.sidebar {
                 font-size: 14px;
                 color: colors.$color-btn-work;
             }
-            box {
-                margin: 10px 0px 0px;
-                padding: 10px;
-                background: colors.$bg-panels;
-                border-radius: 20px;
-                icon {
-                    all: unset;
-                }
-                button {
-                    all: unset;
+            button {
+                all: unset;
+                box {
+                    margin: 10px 0px 0px;
+                    padding: 10px;
+                    background: colors.$bg-panels;
+                    border-radius: 20px;
+                    icon {
+                        all: unset;
+                    }
                     label {
                         color: colors.$text-color;
                         font-size: 16px;
                     }
-                }
-            } 
+                } 
+            }
         }
         .connect {
             label {
