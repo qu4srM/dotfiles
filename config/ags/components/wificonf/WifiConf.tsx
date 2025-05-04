@@ -14,10 +14,9 @@ const networkstatus = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scri
 
 const net = Variable("")
 const passwdnet = Variable("")
-const passwd = Variable("")
 
 function connect() {
-    safeExecAsync(["bash", "-c", `echo "${passwd.get()}" | sudo -S nmcli dev wifi connect "${net.get()}" password "${passwdnet.get()}"`])
+    safeExecAsync(["bash", "-c", `nmcli dev wifi connect "${net.get()}" password "${passwdnet.get()}"`])
 }
 
 
@@ -84,10 +83,6 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                             placeholder-text="Enter Password" 
                             halign={Gtk.Align.CENTER}
                             onChanged={e => passwdnet.set(e.text)} />
-                        <entry 
-                            placeholder-text="Enter Password System"      
-                            halign={Gtk.Align.CENTER}
-                            onChanged={e => passwd.set(e.text)} />
                     </box>
                     <button cursor="pointer" onClicked={connect}>
                         Connect
