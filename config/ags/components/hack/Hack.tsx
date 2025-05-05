@@ -97,6 +97,11 @@ export default function Hack(monitor: Gdk.Monitor) {
         anchor={TOP | LEFT}
         marginTop="38"
         marginLeft="190"
+        setup={self => {
+            if (!visibleHack.get()) {
+                self.hide()
+            }
+        }}
         >
         <eventbox onHoverLost={
             ()=> {

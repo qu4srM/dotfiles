@@ -19,16 +19,17 @@ function timeToSeconds(time: string): number {
     return min * 60 + sec
 }
 
-export const iconPlay = Variable("").poll(100, ["bash", "-c", "~/.config/ags/scripts/music.sh geticonplay"])
+export const iconPlay = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/music.sh geticonplay"])
 export const lengthMusic = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlength"])
 export const lengthMusicRaw = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlengthraw"])
 export const positionRaw = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getpositionraw"])
 export const position = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getposition"])
 export const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
-export const url = Variable("./assets/img/coverArt.jpg")
 
 export const lengthSeconds = Variable(0)
 export const positionSeconds = Variable(0)
+
+console.log(image.get())
 
 function MediaLabels() {
     return <box className="media-box" vertical>
@@ -47,7 +48,7 @@ function MediaLabels() {
 }
 function CoverArt() {
     return <centerbox>
-        <box className="cover-art" css={`background-image: url("${url.get()}")`} />
+        <box className="cover-art" css={`background-image: url("./assets/img/coverArt.jpg")`} />
     </centerbox>
 }
 function Time() {
@@ -73,7 +74,7 @@ function Control() {
         <box>
             <button className="control-play" cursor="pointer" onClicked={
                 () => {
-                    safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh previous"])
+                    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh previous"])
                 }
             } >
                 <icon
@@ -83,7 +84,7 @@ function Control() {
             </button>
             <button className="control-play" cursor="pointer" onClicked={
                 () => {
-                    safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh playorpause"])
+                    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh playorpause"])
                 }
             } >
                 <icon
@@ -93,7 +94,7 @@ function Control() {
             </button>
             <button className="control-play" cursor="pointer" onClicked={
                 () => {
-                    safeExecAsync(["bash", "-c", "bash ~/.config/ags/scripts/music.sh next"])
+                    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh next"])
                 }
             } >
                 <icon
@@ -143,6 +144,11 @@ export default function Media(monitor: Gdk.Monitor) {
         anchor={TOP | LEFT}
         marginTop="38"
         marginLeft="6"
+        setup={self => {
+            if (!visibleMedia.get()) {
+                self.hide()
+            }
+        }}
         >
         <eventbox onHoverLost={
             ()=> {

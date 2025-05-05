@@ -41,15 +41,6 @@ case $1 in
     stopvol)
         ags quit -i volume
     ;;
-    launchmusic)
-    launch_music
-	;;
-    sidebarstatus)
-        cat ~/.config/ags/cache/sidebar.txt 
-    ;;
-    launchwifi)
-    launch_wifi
-    ;;
     launchwlogout)
     bash ~/.config/wlogout/launch.sh
     ;;

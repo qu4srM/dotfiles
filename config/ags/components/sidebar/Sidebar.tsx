@@ -257,6 +257,11 @@ export default function SideBar(monitor: Gdk.Monitor) {
             marginTop="38"
             marginRight="6"
             marginBottom="6"
+            setup={self => {
+                if (!visibleSideBar.get()) {
+                    self.hide()
+                }
+            }}
         >
             <eventbox onHoverLost={() => {
                 safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh sidebar"])
