@@ -258,9 +258,6 @@ window.barleft {
             font-size: 20px;
         }
     }
-    .app-launcher-btn:hover {
-        background: #378DF7;
-    }
     .workspaces {
         background: #1f272e;
         margin: 0px 5px 10px;
@@ -306,15 +303,9 @@ window.barleft {
             color: #d98b75;
         }
     }
-    .sidebar-btn:hover {
-        background: #378DF7;
-    }
     .media-btn {
         all: unset;
         margin: 10px 0px;
-    }
-    .media-btn:hover {
-        background: #378DF7;
     }
     .hack-btn {
         all: unset;
@@ -322,9 +313,6 @@ window.barleft {
         icon {
             color: #9fef00;
         }
-    }
-    .hack-btn:hover {
-        background: #378DF7;
     }
 }
 window.corner-screen {
