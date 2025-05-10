@@ -259,7 +259,7 @@ window.barleft {
         }
     }
     .workspaces {
-        background: #1f272e; //#1f272e
+        background: colors.$bg-widgets; //#1f272e
         margin: 0px 0px 10px;
         border-radius: 4px;
         margin: 0px 4px;
@@ -285,16 +285,18 @@ window.barleft {
         
     }
     .info {
-        background: #1f272e;
+        background: colors.$bg-widgets;
         margin: 0px 0px 10px;
         border-radius: 4px;
         padding: 4px 4px;
         icon {
             margin: 4px 0px;
+            color: colors.$text-color;
         }
         label {
             font-family: monospace;
             font-weight: bold;
+            color: colors.$text-color;
         }
     }
     .sidebar-btn {
