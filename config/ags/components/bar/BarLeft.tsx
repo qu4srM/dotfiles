@@ -35,7 +35,7 @@ function AppLauncher() {
 }
 function Workspaces() {
 
-    return <box className="workspaces" orientation={1}>
+    return <box className="workspaces" halign={CENTER} orientation={1}>
         {bind(hypr, "workspaces").as(wss => wss
             .filter(ws => !(ws.id >= -99 && ws.id <= -2)) // filter out special workspaces
             .sort((a, b) => a.id - b.id)
@@ -61,7 +61,7 @@ function Hack () {
     </button>
 }
 function Info() {
-    return <box className="info" orientation={1}>
+    return <box className="info" halign={CENTER} orientation={1}>
         <icon icon={bind(iconBattery)} halign={CENTER} />
         <label label={hours} halign={CENTER}/>
         <label label={minutes} halign={CENTER}/>
