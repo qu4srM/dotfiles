@@ -2,7 +2,7 @@ import { App, Astal, Gdk } from "astal/gtk3"
 import { Variable, bind } from "astal"
 import { interval,timeout } from "astal/time"
 import { exec } from "astal/process"
-import { TOP, RIGHT, BOTTOM, IGNORE, START, CENTER, END } from "../../utils/initvars"
+import { TOP, RIGHT, EXCLUSIVE, LEFT, BOTTOM, IGNORE, START, CENTER, END } from "../../utils/initvars"
 import { SLIDE_LEFT } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
 
@@ -209,11 +209,11 @@ function QuickSettings() {
                         <SliderButton icon="display-brightness-symbolic" variable={bind(brightness)} cmd="" tool="brightnessctl"/>
                     </box>
                     <box vertical>
-                        <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keybinds" />
+                        <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keybinds" cmd="" />
                         {visibleKeybinds() && <KeybindsConfig config={visibleKeybinds} />}
                     </box>
                     <box vertical>
-                        <SettingsButton visible={visibleNotification} icon="chat-bubbles-symbolic" label="Notification" />
+                        <SettingsButton visible={visibleNotification} icon="chat-bubbles-symbolic" label="Notification" cmd="" />
                         {visibleNotification() && <NotificationConfig config={visibleNotification} />}
                     </box> 
                 </box>
@@ -251,11 +251,12 @@ export default function SideBar(monitor: Gdk.Monitor) {
             application={App}
             gdkmonitor={monitor}
             keymode={bind(keymodeState)}
-            exclusivity={IGNORE}
-            layer={Astal.Layer.OVERLAY}
-            anchor={TOP | RIGHT | BOTTOM}
-            marginTop="38"
-            marginRight="6"
+            exclusivity={EXCLUSIVE} // Only LEFTBAR
+            //layer={Astal.Layer.OVERLAY} # TOPBAR
+            //anchor={TOP | RIGHT | BOTTOM} # TOPBAR
+            anchor={TOP | LEFT | BOTTOM}
+            marginTop="6"
+            marginLeft="6"
             marginBottom="6"
             setup={self => {
                 if (!visibleSideBar.get()) {

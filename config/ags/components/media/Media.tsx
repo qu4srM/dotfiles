@@ -3,8 +3,8 @@ import { Variable, bind } from "astal"
 import { interval,timeout } from "astal/time"
 import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
-import { TOP, LEFT} from "../../utils/initvars"
-import { SLIDE_DOWN } from "../../utils/initvars"
+import { BOTTOM, LEFT} from "../../utils/initvars"
+import { SLIDE_RIGHT} from "../../utils/initvars"
 import { IGNORE } from "../../utils/initvars"
 import { END, START } from "../../utils/initvars"
 
@@ -14,23 +14,38 @@ export const visibleMedia= Variable(false)
 import { title } from "../bar/BarTop"
 import { artist } from "../bar/BarTop"
 import { iconApp } from "../bar/BarTop"
-function timeToSeconds(time: string): number {
-    const [min, sec] = time.trim().split(":").map(Number)
-    return min * 60 + sec
-}
 
-export const iconPlay = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/music.sh geticonplay"])
-export const lengthMusic = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlength"])
-export const lengthMusicRaw = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getlengthraw"])
-export const positionRaw = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getpositionraw"])
-export const position = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getposition"])
+export const lengthMusic = Variable("")
+export const lengthMusicRaw = Variable(0)
+export const position = Variable("")
+export const positionRaw = Variable(0)
+export const iconPlay = Variable("")
 export const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
+export const url = Variable("./assets/img/coverArt.jpg")
 
-export const lengthSeconds = Variable(0)
-export const positionSeconds = Variable(0)
+let lastTitle = ""
+let lastLengthRaw = 0
 
-console.log(image.get())
-
+interval(2000, () => {
+    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getposition"]).then(val => position.set(val.trim()))
+    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getpositionraw"]).then(val => positionRaw.set(Number(val.trim())))
+    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh geticonplay"]).then(val => iconPlay.set(val.trim()))
+    safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getlengthraw"]).then(val => {
+        const lenRaw = Number(val.trim())
+        if (lenRaw !== lastLengthRaw) {
+            lastLengthRaw = lenRaw
+            lengthMusicRaw.set(lenRaw)
+            safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getlength"]).then(val => lengthMusic.set(val.trim()))
+        }
+    })
+    /*
+    try {
+        safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]).then(() => image.set("./assets/img/coverArt.jpg"))
+    } catch (err) {
+        console.error("Error en ejecución de getimage:", err)
+    }*/
+    
+})
 function MediaLabels() {
     return <box className="media-box" vertical>
         <centerbox>
@@ -48,7 +63,7 @@ function MediaLabels() {
 }
 function CoverArt() {
     return <centerbox>
-        <box className="cover-art" css={`background-image: url("./assets/img/coverArt.jpg")`} />
+        <box className="cover-art" css={`background-image: url("${url.get()}")`} />
     </centerbox>
 }
 function Time() {
@@ -123,7 +138,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     return <revealer
         setup={self => show(self, visible)}
         revealChild={visibleMedia()}
-        transitionType={SLIDE_DOWN}
+        transitionType={SLIDE_RIGHT}
         transitionDuration={100}>
         <MediaBox />
     </revealer>
@@ -139,10 +154,9 @@ export default function Media(monitor: Gdk.Monitor) {
         name={mediaWindowName}
         application={App}
         gdkmonitor={monitor}
-        exclusivity={IGNORE}
         layer={Astal.Layer.OVERLAY}
-        anchor={TOP | LEFT}
-        marginTop="38"
+        anchor={BOTTOM | LEFT}
+        marginBottom="6"
         marginLeft="6"
         setup={self => {
             if (!visibleMedia.get()) {

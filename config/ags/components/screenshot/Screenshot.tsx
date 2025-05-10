@@ -1,19 +1,12 @@
 import { App, Astal, Gdk, Gtk } from "astal/gtk3"
 import { Variable, bind } from "astal"
-import { interval,timeout } from "astal/time"
 import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
 import { TOP, LEFT, RIGHT,BOTTOM} from "../../utils/initvars"
-import { SLIDE_DOWN} from "../../utils/initvars"
-import { IGNORE } from "../../utils/initvars"
 import { END, CENTER, START } from "../../utils/initvars"
-import { stateHTB, formattedDate, formattedTime } from "../bar/BarTop"
 
 export const screenshotWindowName = "screenshot"
 export const visibleScreenshot= Variable(false)
-export const notes = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh notes"])
-export const target = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh target"])
-
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {  
     return <revealer
@@ -64,11 +57,15 @@ export default function ScreenShot(monitor: Gdk.Monitor) {
         name={screenshotWindowName}
         application={App}
         gdkmonitor={monitor}
-        exclusivity={IGNORE}
-        keymode={Astal.Keymode.NONE}
+        //keymode={Astal.Keymode.NONE}
         layer={Astal.Layer.OVERLAY}
         anchor={TOP}
-        marginTop="300"
+        marginTop="200"
+        setup={self => {
+            if (!visibleScreenshot.get()) {
+                self.hide()
+            }
+        }}
         >
         <eventbox onHoverLost={
             ()=> {

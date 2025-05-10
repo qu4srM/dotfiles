@@ -4,7 +4,7 @@ import { interval,timeout } from "astal/time"
 import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
 import { TOP, LEFT, BOTTOM} from "../../utils/initvars"
-import { SLIDE_DOWN} from "../../utils/initvars"
+import { SLIDE_RIGHT} from "../../utils/initvars"
 import { IGNORE } from "../../utils/initvars"
 import { END, CENTER, START } from "../../utils/initvars"
 import { stateHTB, formattedDate, formattedTime } from "../bar/BarTop"
@@ -29,7 +29,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
     return <revealer
         setup={self => show(self, visible)}
         revealChild={visibleHack()}
-        transitionType={SLIDE_DOWN}
+        transitionType={SLIDE_RIGHT}
         transitionDuration={100}>
         <box orientation={1} className="revealer-box">
             <centerbox className="btn-keymode">
@@ -91,12 +91,11 @@ export default function Hack(monitor: Gdk.Monitor) {
         name={hackWindowName}
         application={App}
         gdkmonitor={monitor}
-        exclusivity={IGNORE}
         layer={Astal.Layer.OVERLAY}
         keymode={bind(keymodeState)}
         anchor={TOP | LEFT}
-        marginTop="38"
-        marginLeft="190"
+        marginTop="6"
+        marginLeft="6"
         setup={self => {
             if (!visibleHack.get()) {
                 self.hide()

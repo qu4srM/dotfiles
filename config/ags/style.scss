@@ -248,6 +248,85 @@ window.bar {
         padding: 2px 4px 2px 4px;
     }
 }
+window.barleft {
+    background-color: colors.$bg;
+    border-radius: 20px;
+    .app-launcher-btn {
+        all: unset;
+        margin: 10px 0px;
+        icon {
+            font-size: 20px;
+        }
+    }
+    .app-launcher-btn:hover {
+        background: #378DF7;
+    }
+    .workspaces {
+        background: #1f272e;
+        margin: 0px 5px 10px;
+        border-radius: 4px;
+        padding: 4px 0px;
+        button {
+            all: unset;
+            icon {
+                margin: 0px;
+                color: #424a51;
+                font-size: 22px;
+            }
+        }
+        button.focused {
+            icon {
+                color: #d98b75;
+            }
+        }
+        button:hover {
+            icon{
+                color: colors.$text-color
+            }
+        }
+        
+    }
+    .info {
+        background: #1f272e;
+        margin: 0px 5px 10px;
+        border-radius: 4px;
+        padding: 4px 4px;
+        icon {
+            margin: 4px 0px;
+        }
+        label {
+            font-family: monospace;
+            font-weight: bold;
+        }
+    }
+    .sidebar-btn {
+        all: unset;
+        icon {
+            font-size: 20px;
+            color: #d98b75;
+        }
+    }
+    .sidebar-btn:hover {
+        background: #378DF7;
+    }
+    .media-btn {
+        all: unset;
+        margin: 10px 0px;
+    }
+    .media-btn:hover {
+        background: #378DF7;
+    }
+    .hack-btn {
+        all: unset;
+        margin: 10px 0px;
+        icon {
+            color: #9fef00;
+        }
+    }
+    .hack-btn:hover {
+        background: #378DF7;
+    }
+}
 window.corner-screen {
     background: transparent;
     icon {

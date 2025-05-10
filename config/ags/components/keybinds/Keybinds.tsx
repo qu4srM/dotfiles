@@ -10,13 +10,16 @@ function OnKeybinds() {
     return (
         <box className="keybindconf-box" vertical>
             {
-                list.map(i => (
-                    <box className="items" vertical>
-                        <label label={i.name} hexpand halign={Gtk.Align.START}/>
-                        <label className="command" label={i.command} hexpand halign={Gtk.Align.START}/>
-                    </box>   
-                ))
+                list.map((i)=> {
+                    return (
+                        <box className="items" vertical>
+                            <label label={i.name} hexpand halign={Gtk.Align.START}/>
+                            <label className="command" label={i.command} hexpand halign={Gtk.Align.START}/>
+                        </box>  
+                    )
+                })
             }
+
         </box>
     )
 }
