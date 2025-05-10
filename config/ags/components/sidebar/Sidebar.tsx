@@ -170,7 +170,7 @@ function QuickSettings() {
                     <box></box>
                 </centerbox>
             </box>
-            <scrollable heightRequest={610} vscroll={true}>
+            <scrollable heightRequest={640} vscroll={true}>
                 <box orientation={1}> 
                     <centerbox className="btn-keymode">
                         <label label={bind(keymodeState).as(v =>

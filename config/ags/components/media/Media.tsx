@@ -78,7 +78,7 @@ function Time() {
                     `bash ~/.config/ags/scripts/music.sh seek ${newValue}`
                 ])
             }}
-            widthRequest={150}  // Controlamos el tamaño del slider
+            widthRequest={100}  // Controlamos el tamaño del slider
             heightRequest={10}  // Alto del slider
         />
     </centerbox>

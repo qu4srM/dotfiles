@@ -45,7 +45,9 @@ function Workspaces() {
                         ws === fw ? "focused" : "")}
                     onClicked={() => ws.focus()}
                     cursor="pointer">
-                    <icon icon="circle-symbolic" />
+                    <icon icon={bind(hypr, "focusedWorkspace").as(fw => 
+                        ws === fw ? "pacm-symbolic" : "circle-symbolic"
+                    )} />
                 </button>
             ))
         )}
@@ -62,9 +64,9 @@ function Hack () {
 }
 function Info() {
     return <box className="info" halign={CENTER} orientation={1}>
-        <icon icon={bind(iconBattery)} halign={CENTER} />
-        <label label={hours} halign={CENTER}/>
-        <label label={minutes} halign={CENTER}/>
+        <icon icon={bind(iconBattery)} />
+        <label label={hours}/>
+        <label label={minutes}/>
     </box>
 }
 function Sidebar () {

@@ -262,7 +262,8 @@ window.barleft {
         background: #1f272e;
         margin: 0px 0px 10px;
         border-radius: 4px;
-        padding: 4px 2px;
+        margin: 0px 4px;
+        padding: 4px 4px;
         button {
             all: unset;
             icon {
@@ -272,6 +273,7 @@ window.barleft {
         }
         button.focused {
             icon {
+                font-size: 14px;
                 color: #d98b75;
             }
         }
@@ -284,9 +286,9 @@ window.barleft {
     }
     .info {
         background: #1f272e;
-        margin: 0px 5px 10px;
+        margin: 0px 0px 10px;
         border-radius: 4px;
-        padding: 4px 2px;
+        padding: 4px 4px;
         icon {
             margin: 4px 0px;
         }
