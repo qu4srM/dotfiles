@@ -138,14 +138,14 @@ window.bar {
 
     .workspaces {
         margin: 4px 0px;
-        background: colors.$bg-widgets;
+        background: colors.$bg-widgets; //#242522
         border-radius: 10px;
         padding: 0px 4px;
     }
     .workspaces button {
         all: unset;
         margin: 2px 0px;
-        color: colors.$color-btn-work;
+        color: colors.$color-btn-work; //#505050
         border-radius: 50%;
         padding: 0px 6px;
     }
@@ -259,7 +259,7 @@ window.barleft {
         }
     }
     .workspaces {
-        background: #1f272e;
+        background: #1f272e; //#1f272e
         margin: 0px 0px 10px;
         border-radius: 4px;
         margin: 0px 4px;
@@ -448,6 +448,7 @@ window.sidebar {
         background: colors.$bg-panels;
         border-radius: 20px;
         margin-bottom: 10px;
+        color: colors.$text-color;
         switch {
             all: unset;
             background: colors.$fg-panels;
@@ -751,7 +752,9 @@ window.media{
                 font-size: 18px;
             }
         }
-    
+        label {
+            color: colors.$text-color;
+        }
         box {
             label {
                 font-size: 12px;
@@ -792,6 +795,9 @@ window.media{
         background-position: center;
     }
     .control{
+        label {
+            color: colors.$text-color;
+        }
         box {
             margin: 0px 10px;
             button {
