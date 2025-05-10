@@ -1,4 +1,5 @@
 import { App } from "astal/gtk3"
+import { Variable, GLib, bind } from "astal"
 import style from "./style.scss"
 
 //import Bar from "./components/bar/Bar"
@@ -34,7 +35,7 @@ import { screenshotWindowName, visibleScreenshot } from "./components/screenshot
 //import { OnVolume } from "./components/osd/VolumeOsd"
 //import { OnUpdate } from "./components/update/Update"
 
-
+const activeBar = Variable("barleft")
 
 // --------Icons---------
 App.add_icons("./assets")
@@ -45,10 +46,14 @@ App.start({
     instanceName: "js",
     iconTheme: "Papirus",
     main: () => {
-        BarLeft(null)
-        
-        //CornerScreenTop(null)
-        //CornerScreenBottom(null)
+        //BarLeft(null)
+        if (activeBar.get() === "barleft") {
+            BarLeft(null)
+        } else if (activeBar.get() === "bartop") {
+            BarTop(null)
+            CornerScreenBottom(null)
+            CornerScreenTop(null)
+        }
         
         SideBar(null)
         Media(null)

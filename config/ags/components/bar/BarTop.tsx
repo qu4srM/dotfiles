@@ -89,7 +89,7 @@ function AppLauncher() {
         <label className="app-launcher-label" halign={Gtk.Align.START}  label={bind(nameWindowHypr)} />
         <button className="app-launcher-btn" halign={Gtk.Align.START} cursor="pointer" onClicked={
             () => {
-                safeExecAsync(["bash", "-c", "bash ~/.config/rofi/launcher/launch.sh"])
+                safeExecAsync(["bash", "-c", "~/.config/rofi/launcher/launch.sh"])
             }
         } >
             <box>

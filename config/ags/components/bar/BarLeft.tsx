@@ -27,7 +27,7 @@ export const minutes: string = String(currentDate.getMinutes()).padStart(2, '0')
 function AppLauncher() {
     return <button className="app-launcher-btn" halign={CENTER} cursor="pointer" onClicked={
         () => {
-            safeExecAsync(["bash", "-c", "bash ~/.config/rofi/launcher/launch.sh"])
+            safeExecAsync(["bash", "-c", "~/.config/rofi/launcher/launch.sh"])
         }
     } >
         <icon icon="redhat" />
@@ -59,7 +59,7 @@ function Hack () {
             safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh hack"])
         }
     } >
-        <icon icon="hackthebox" />
+        <icon icon="hackthebox-symbolic" />
     </button>
 }
 function Info() {
