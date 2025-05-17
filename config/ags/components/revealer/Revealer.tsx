@@ -4,23 +4,6 @@ import Variable from "astal/variable"
 import { bind } from "astal"
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
-    /*
-    function show (self) {
-        let count = 0
-        if (self.revealChild === true) {
-            visible.set(false)
-            console.log("Hay errores")
-        } else {
-            visible.set(true)
-            count++
-            timeout(10000, () => {
-                count--
-                if (count === 0) visible.set(true)
-                console.log("Sirviendo")
-            })
-        }
-    } */
-    
     return <revealer
         //setup={self => show(self)}
         setup={self => timeout(500, () => {

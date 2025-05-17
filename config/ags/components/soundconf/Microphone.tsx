@@ -3,10 +3,10 @@ import { bind } from "astal"
 import { safeExecAsync } from "../../utils/exec"
 import { show } from "../../utils/revealer"
 
-import { SLIDE_DOWN, START, CENTER, END} from "../../utils/initvars"
+import { SLIDE_DOWN, START, CENTER, END, countSeconds} from "../../utils/initvars"
 
 
-export const microphone = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getmicrophone"])
+export const microphone = Variable("").poll(countSeconds(1), ["bash", "-c", "~/.config/ags/scripts/get-info.sh getmicrophone"])
 
 
 function OnRevealer ({ visible }: { visible: Variable<boolean> }) {

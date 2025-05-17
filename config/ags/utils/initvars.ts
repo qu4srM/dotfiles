@@ -1,6 +1,11 @@
 import { Variable} from "astal"
 import { Astal, Gtk} from "astal/gtk3"
 
+// POLLS
+
+export const countSeconds = (n) => n * 1000
+export const countMinutes = (n) => n * 60000
+export const countHours = (n) => n * 60 * 60000
 
 // Windows
 export const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor

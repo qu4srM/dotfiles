@@ -2,7 +2,7 @@ import { App, Astal, Gdk } from "astal/gtk3"
 import { Variable, bind } from "astal"
 import { interval,timeout } from "astal/time"
 import { exec } from "astal/process"
-import { TOP, RIGHT, EXCLUSIVE, LEFT, BOTTOM, IGNORE, START, CENTER, END } from "../../utils/initvars"
+import { TOP, RIGHT, EXCLUSIVE, LEFT, BOTTOM, IGNORE, START, CENTER, END, countMinutes, countSeconds } from "../../utils/initvars"
 import { SLIDE_LEFT } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
 
@@ -22,11 +22,11 @@ export const keymodeState = Variable<Astal.Keymode>(Astal.Keymode.NONE)
 export const sidebarWindowName = "sidebar"
 export const visibleSideBar = Variable(false)
 
-export const capture = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumcapture"])
-export const volume = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumvolume"])
-export const brightness = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/get-info.sh getbrightness"])
+export const capture = Variable("").poll(countSeconds(1), ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumcapture"])
+export const volume = Variable("").poll(countSeconds(1), ["bash", "-c", "~/.config/ags/scripts/get-info.sh getsumvolume"])
+export const brightness = Variable("").poll(countSeconds(1), ["bash", "-c", "~/.config/ags/scripts/get-info.sh getbrightness"])
 
-export const uptimeMinutes = Variable("").poll(60000, ["bash", "-c", "awk '{print $1}' /proc/uptime | awk '{print int($1/60)}'"])
+export const uptimeMinutes = Variable("").poll(countMinutes(1), ["bash", "-c", "awk '{print $1}' /proc/uptime | awk '{print int($1/60)}'"])
 
 const visibleSound = Variable(false)
 const visibleNotification = Variable(true)
@@ -110,7 +110,7 @@ function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon:
         iconArrow.set(next)
     }
     return (
-        <overlay>
+        <overlay hexpand>
             <button
                 className="btn-slider-settings"
                 cursor="pointer"
@@ -125,7 +125,7 @@ function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon:
                     <icon className="menu-shortcuts-icon-arrow" icon={bind(iconArrow)} />
                 </box>
             </button>
-            <box className="slider" valign={CENTER} halign={START}>
+            <box className="slider" valign={CENTER} halign={START} hexpand>
                 <slider value={variable} widthRequest={100} onDragged={
                     (self) => {
                     const percent = Math.round(self.value * 100)
@@ -146,9 +146,9 @@ function QuickSettings() {
                 <box className="btn-help">
                     <label label={bind(uptimeMinutes).as(uptime => `Uptime: ${uptime} mins`)} />
                     {[
-                        "org.gnome.Settings-symbolic",
-                        "uninterruptible-power-supply-symbolic",
                         logo,
+                        "shutdown-symbolic",
+                        "settings2-symbolic"
                     ].map((icon, idx) => (
                         <ButtonSet
                             key={`help-${idx}`}
@@ -157,18 +157,6 @@ function QuickSettings() {
                         />
                     ))}
                 </box>
-                <centerbox className="btn-quick-settings-box">
-                    <box></box>
-                    <box >
-                        <QuickButton icon={bind(iconWifi)}/>
-                        <QuickButton icon={bind(iconWifi)} />
-                        <QuickButton icon={bind(iconWifi)} />
-                        <QuickButton icon={bind(iconWifi)} />
-                        <QuickButton icon="moon-symbolic" cmd="~/.config/ags/scripts/toggle_theme.sh" />
-                        <QuickButton icon="orientation-landscape-symbolic" cmd="~/.config/rofi/wall/launch.sh" />
-                    </box>
-                    <box></box>
-                </centerbox>
             </box>
             <scrollable heightRequest={640} vscroll={true}>
                 <box orientation={1}> 
@@ -218,6 +206,18 @@ function QuickSettings() {
                     </box> 
                 </box>
             </scrollable>
+            <centerbox className="btn-quick-settings-box">
+                <box></box>
+                <box >
+                    <QuickButton icon={bind(iconWifi)} cmd={`nmcli radio wifi | grep -q "enabled" && nmcli radio wifi off || nmcli radio wifi on`} />
+                    <QuickButton icon={bind(iconBluetooth)} cmd={`bluetoothctl show | grep "Powered: yes" && bluetoothctl power off || bluetoothctl power on`}/>
+                    <QuickButton icon="airplane-symbolic" cmd="astal-notifd -t" />
+                    <QuickButton icon="dnd-symbolic" cmd="astal-notifd -t" />
+                    <QuickButton icon="moon-symbolic" cmd="~/.config/ags/scripts/toggle_theme.sh" />
+                    <QuickButton icon="toggle-wall-symbolic" cmd="~/.config/rofi/wall/launch.sh" />
+                </box>
+                <box></box>
+            </centerbox>
         </centerbox>
     
 }

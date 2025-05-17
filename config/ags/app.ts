@@ -11,11 +11,11 @@ import OSD from "./components/osd/OSD"
 /*
 import Time from "./components/clock/Time"
 */
-//import NotificationPopups from "./components/notificationsAylur/NotificationPopups"
+import NotificationPopups from "./components/notificationsAylur/NotificationPopups"
 import { ToggleWindow } from "./utils/windows"
 
 // -------Alerts-----
-import { visibleVol } from "./utils/initvars"
+//import { visibleVol } from "./utils/initvars"
 
 // --------Panels---------
 
@@ -46,7 +46,6 @@ App.start({
     instanceName: "js",
     iconTheme: "Papirus",
     main: () => {
-        //BarLeft(null)
         if (activeBar.get() === "barleft") {
             BarLeft(null)
         } else if (activeBar.get() === "bartop") {
@@ -63,7 +62,7 @@ App.start({
         //OSD(null)
         //Osd()
         //Time()
-        //NotificationPopups()
+        NotificationPopups()
     },
     requestHandler(request, res) {
         if (request === "sidebar"){

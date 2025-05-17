@@ -5,8 +5,6 @@ import { interval,timeout } from "astal/time"
 import { sidebarWindowName } from "../components/sidebar/Sidebar"
 import { visibleSideBar } from "../components/sidebar/Sidebar"
 
-
-// Arreglar para manehjar er
 export function ToggleWindow(windowName: string, visible: Variable<boolean>) {
     const window = App.get_windows().find(w => w.name === windowName)
 
@@ -18,14 +16,11 @@ export function ToggleWindow(windowName: string, visible: Variable<boolean>) {
     const currentlyVisible = visible.get()
 
     if (!currentlyVisible) {
-        print("Mostrar ventana")
         window.show()
-        visible.set(true) // el Revealer se activa
+        visible.set(true)
     } else {
-        print("Ocultar ventana")
-        visible.set(false) // el Revealer se cierra con animación
+        visible.set(false)
 
-        // Esperar a que la animación del Revealer termine antes de ocultar la ventana
         timeout(200, () => {
             window.hide()
         })

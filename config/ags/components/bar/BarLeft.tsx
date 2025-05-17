@@ -4,6 +4,7 @@ import { Astal, Gtk, Gdk } from "astal/gtk3"
 import { interval,timeout } from "astal/time"
 import Hyprland from "gi://AstalHyprland"
 import { LEFT, RIGHT, TOP, BOTTOM, EXCLUSIVE, START, CENTER, END } from "../../utils/initvars"
+import { countMinutes, countSeconds } from "../../utils/initvars"
 
 // ----------Utils-----------
 import { safeExecAsync } from "../../utils/exec"
@@ -13,15 +14,14 @@ const hypr = Hyprland.get_default()
 //import CalendarConfig from "../calendar/Calendar"
 export const barleftWindowName = "barleft"
 
-export const percentageBattery = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getpercentage"])
-export const iconApp = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh geticon"])
-export const iconBattery = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh geticon"])
+export const percentageBattery = Variable("").poll(countMinutes(1), ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getpercentage"])
+export const iconApp = Variable("").poll(countSeconds(10), ["bash", "-c", "~/.config/ags/scripts/music.sh geticon"])
+export const iconBattery = Variable("").poll(countMinutes(1), ["bash", "-c", "~/.config/ags/scripts/battery-info.sh geticon"])
 
-// ---------------------Time-------------------
-const currentDate: Date = new Date()
+export const hours = Variable("").poll(countMinutes(1), ["bash", "-c", `date +"%H"`])
+export const minutes = Variable("").poll(countMinutes(1), ["bash", "-c", `date +"%M"`])
 
-export const hours: string = String(currentDate.getHours()).padStart(2, '0')
-export const minutes: string = String(currentDate.getMinutes()).padStart(2, '0')
+
 
 
 function AppLauncher() {
@@ -30,7 +30,7 @@ function AppLauncher() {
             safeExecAsync(["bash", "-c", "~/.config/rofi/launcher/launch.sh"])
         }
     } >
-        <icon icon="redhat" />
+        <icon icon="redhat" tooltipText="Lanzador de aplicaciones" />
     </button>
 }
 function Workspaces() {
@@ -64,9 +64,9 @@ function Hack () {
 }
 function Info() {
     return <box className="info" halign={CENTER} orientation={1}>
-        <icon icon={bind(iconBattery)} />
-        <label label={hours}/>
-        <label label={minutes}/>
+        <icon icon={bind(iconBattery)} tooltipText={bind(percentageBattery).as(b => `La bateria es: ${b}%`)} />
+        <label label={bind(hours)}/>
+        <label label={bind(minutes)}/>
     </box>
 }
 function Sidebar () {

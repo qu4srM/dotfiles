@@ -1,4 +1,4 @@
-import { GLib } from "astal"
+import { Variable, GLib, bind } from "astal"
 import { Gtk, Astal } from "astal/gtk3"
 import { type EventBox } from "astal/gtk3/widget"
 import Notifd from "gi://AstalNotifd"
@@ -36,7 +36,6 @@ export default function Notification(props: Props) {
     const { START, CENTER, END } = Gtk.Align
     const {SLIDE_DOWN, SLIDE_TOP} = Gtk.RevealerTransitionType
     const visible = Variable(false)
-    const iconExpand = Variable("arrow-down")
 
     function show(self) {
         if (visible === true) {
@@ -47,12 +46,22 @@ export default function Notification(props: Props) {
             self.transitionType = SLIDE_DOWN
         }
     }
+    const iconArrow = Variable("arrow-right-symbolic")
+    const toggleIcon = () => {
+        const current = iconArrow.get()
+        const next = current === "arrow-right-symbolic"
+            ? "arrow-down-symbolic"
+            : "arrow-right-symbolic"
+
+        iconArrow.set(next)
+        visible.set(current === "arrow-right-symbolic")
+    }
 
     return <eventbox
         className={`Notification ${urgency(n)}`}
         setup={setup}
         onHoverLost={onHoverLost}>
-        <box vertical>{/*
+        <box vertical>
             <box className="header">
                 {(n.appIcon || n.desktopEntry) && <icon
                     className="app-icon"
@@ -71,11 +80,11 @@ export default function Notification(props: Props) {
                     halign={END}
                     label={time(n.time)}
                 />
-                <button onClicked={() => n.dismiss()}>
+                <button cursor="pointer" onClicked={() => n.dismiss()}>
                     <icon icon="window-close-symbolic" />
                 </button>
             </box>
-            <Gtk.Separator visible />*/}
+            <Gtk.Separator visible />
             <box className="content">
                 {n.image && fileExists(n.image) && <box
                     valign={START}
@@ -88,7 +97,7 @@ export default function Notification(props: Props) {
                     className="icon-image">
                     <icon icon={n.image} expand halign={CENTER} valign={CENTER} />
                 </box>}
-                <box vertical>
+                <box vertical hexpand>
                     <label
                         className="summary"
                         halign={START}
@@ -113,18 +122,12 @@ export default function Notification(props: Props) {
                     </revealer>
                 </box>
                 <box>
-                    <button className="btn-expand" onClick={
+                    <button cursor="pointer" className="btn-expand" onClick={
                         ()=> {
-                            if (visible.get() == false){
-                                visible.set(true)
-                                iconExpand.set("arrow-right-symbolic")
-                            } else {
-                                visible.set(false)
-                                iconExpand.set("arrow-right-symbolic")
-                            }
+                            toggleIcon()
                         }
                     }>
-                        <icon icon={iconExpand.get()} />
+                        <icon icon={bind(iconArrow)} />
                     </button>
                 </box>
             </box>

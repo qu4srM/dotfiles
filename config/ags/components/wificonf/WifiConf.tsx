@@ -2,14 +2,14 @@ import { App, Astal, Gdk, Gtk } from "astal/gtk3"
 import Variable from "astal/variable"
 import { bind } from "astal"
 import { safeExecAsync } from "../../utils/exec"
-import { SLIDE_DOWN, START, CENTER, END } from "../../utils/initvars"
+import { SLIDE_DOWN, START, CENTER, END, countSeconds } from "../../utils/initvars"
 import { networks } from "./networks"
 import { show } from "../../utils/revealer"
 
-const iconWifi = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
-const status = Variable("").poll(10000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh status"])
-const name = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
-const networkstatus = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
+const iconWifi = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
+const status = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/network-info.sh status"])
+const name = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/network-info.sh getname"])
+const networkstatus = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/network-info.sh networkstatus"])
 
 
 const net = Variable("")
@@ -30,24 +30,6 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
         transitionDuration={100}>
         <box className="wificonf-box" vertical> 
             <box vertical>
-                <centerbox className="power">
-                    <label label={bind(status)} halign={START}/>
-                    <label label="" halign={CENTER}/>
-                    <switch 
-                        halign={Gtk.Align.END} 
-                        active={bind(value)} 
-                        onNotifyActive={self => {
-                            const isActive = self.active
-                            value.set(isActive ? 1 : 0)
-                            if (isActive) {
-                                safeExecAsync(["bash", "-c", "nmcli radio wifi on"])
-                            } else {
-                                safeExecAsync(["bash", "-c", "nmcli radio wifi off"])
-                            }
-                        }} 
-                    />
-
-                </centerbox>
                 <box className="current" vertical>
                     <label label="Current network" halign={START}/>
                     <box>

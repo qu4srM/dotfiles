@@ -1,4 +1,5 @@
 @use "sass:string";
+@use "./colors.scss";
 
 @function gtkalpha($c, $a) {
     @return string.unquote("alpha(#{$c},#{$a})");
@@ -75,9 +76,13 @@ eventbox.Notification {
         }
 
         button {
-            padding: .2rem;
-            min-width: 0px;
-            min-height: 0px;
+            all: unset;
+            margin: 5px 0px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #378DF7;
         }
     }
 
@@ -112,10 +117,10 @@ eventbox.Notification {
     }
     .btn-expand {
         all: unset;
-        margin-left: 30px;
+        margin: 0px 5px 0px 10px;
     }
     .btn-expand:hover {
-        background: blue;
+        color: colors.$text-color;
     }
 
 

@@ -6,9 +6,7 @@ import { Variable, bind, timeout } from "astal"
 import { show } from "../../utils/revealer"
 import { SLIDE_DOWN } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
-
-
-const percentageFloat = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getsum"])
+import { percentageFloat } from "../bar/BarTop"
 
 // see comment below in constructor
 const TIMEOUT_DELAY = 5000/*

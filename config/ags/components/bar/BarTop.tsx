@@ -4,6 +4,7 @@ import { Astal, Gtk, Gdk } from "astal/gtk3"
 import { interval,timeout } from "astal/time"
 import Hyprland from "gi://AstalHyprland"
 import { LEFT, RIGHT, TOP, EXCLUSIVE, START, CENTER, END } from "../../utils/initvars"
+import { countMinutes, countSeconds, countHours } from "../../utils/initvars"
 
 // ----------Utils-----------
 import { safeExecAsync } from "../../utils/exec"
@@ -11,50 +12,37 @@ import { safeExecAsync } from "../../utils/exec"
 // ----------------import function-------
 //import CalendarConfig from "../calendar/Calendar"
 
-// ---------------------Time-------------------
-const currentDate: Date = new Date()
-
-const hours: string = String(currentDate.getHours()).padStart(2, '0')
-const minutes: string = String(currentDate.getMinutes()).padStart(2, '0')
-export const formattedTime: string = `${hours}:${minutes}`
-
-const dayName: string = currentDate.toLocaleDateString('en-US', { weekday: 'long' })
-const day: string = String(currentDate.getDate()).padStart(2, '0')
-const month: string = String(currentDate.getMonth() + 1).padStart(2, '0')
-export const formattedDate: string = `${dayName}, ${day}/${month}`
 
 // -------------Hyprland Vars---------------
 const hypr = Hyprland.get_default()
 export const workspaceNumber = bind(hypr, "focusedWorkspace").as(ws => ws.id.toString())
 export const nameWindowHypr = bind(hypr, "focusedClient").as(client => client?.class ?? "Desktop")
 
-// -------------Velocity Poll---------------
-export const POLL_FAST = 1000
-export const POLL_MEDIUM = 5000
-export const POLL_SLOW = 10000
-export const POLL_MINS = 60000
 
 // -----------------Vars---------------------
+export const time = Variable("").poll(countMinutes(1), ["bash", "-c", `date +"%H:%M"`])
+export const dateAll = Variable("").poll(countHours(10), ["bash", "-c", `date +"%A, %d/%m/%4Y"`])
+
 export const logo = "./assets/img/archlinux.png"
-export const artist = Variable("").poll(POLL_MEDIUM, ["bash", "-c", "~/.config/ags/scripts/music.sh getartist"])
-export const title = Variable("").poll(POLL_MEDIUM, ["bash", "-c", "~/.config/ags/scripts/music.sh gettitle"])
-export const iconApp = Variable("").poll(POLL_MEDIUM, ["bash", "-c", "~/.config/ags/scripts/music.sh geticon"])
-export const percentageFloat = Variable("").poll(POLL_MINS, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getsum"])
-export const percentageBattery = Variable("").poll(POLL_MINS, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getpercentage"])
-export const iconBattery = Variable("").poll(POLL_MINS, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh geticon"])
-export const iconWifi = Variable("").poll(POLL_SLOW, ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
-export const iconBluetooth = Variable("").poll(POLL_SLOW, ["bash", "-c", "~/.config/ags/scripts/bluetooth-info.sh geticon"])
-export const stateBattery = Variable().poll(POLL_MINS, ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getstate"])
-export const stateHTB = Variable("").poll(POLL_FAST, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh status"])
+export const artist = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/music.sh getartist"])
+export const title = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/music.sh gettitle"])
+export const iconApp = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/music.sh geticon"])
+export const percentageFloat = Variable("").poll(countMinutes(1), ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getsum"])
+export const percentageBattery = Variable("").poll(countMinutes(1), ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getpercentage"])
+export const iconBattery = Variable("").poll(countMinutes(1), ["bash", "-c", "~/.config/ags/scripts/battery-info.sh geticon"])
+export const iconWifi = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/network-info.sh geticon"])
+export const iconBluetooth = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/bluetooth-info.sh geticon"])
+export const stateBattery = Variable().poll(countMinutes(1), ["bash", "-c", "~/.config/ags/scripts/battery-info.sh getstate"])
+export const stateHTB = Variable("").poll(countSeconds(1), ["bash", "-c", "~/.config/ags/scripts/htb-status.sh status"])
 
 
 
 function Clock() {
     return <button  className="clock"  cursor="pointer">
         <box>
-            <label className="clock-time" label={formattedTime} />
+            <label className="clock-time" label={bind(time)} />
             <label className="clock-point" label=" · " />
-            <label className="clock-calendar" label={formattedDate} />
+            <label className="clock-calendar" label={bind(dateAll)} />
         </box>
     </button>
 }

@@ -20,8 +20,7 @@ export const lengthMusicRaw = Variable(0)
 export const position = Variable("")
 export const positionRaw = Variable(0)
 export const iconPlay = Variable("")
-export const image = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]) // NO DELETE
-export const url = Variable("./assets/img/coverArt.jpg")
+export const image = Variable("")
 
 let lastTitle = ""
 let lastLengthRaw = 0
@@ -38,13 +37,10 @@ interval(2000, () => {
             safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getlength"]).then(val => lengthMusic.set(val.trim()))
         }
     })
-    /*
-    try {
-        safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]).then(() => image.set("./assets/img/coverArt.jpg"))
-    } catch (err) {
-        console.error("Error en ejecución de getimage:", err)
-    }*/
-    
+    if (title.get() != lastTitle) {
+        lastTitle = title.get()
+        safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh getimage"]).then(val => image.set(val.trim()))
+    }
 })
 function MediaLabels() {
     return <box className="media-box" vertical>
@@ -62,8 +58,8 @@ function MediaLabels() {
     </box>
 }
 function CoverArt() {
-    return <centerbox>
-        <box className="cover-art" css={`background-image: url("${url.get()}")`} />
+    return <centerbox className="cover-art">
+        <box css={bind(image).as(v => `background-image: url('${v}');`)}/>
     </centerbox>
 }
 function Time() {

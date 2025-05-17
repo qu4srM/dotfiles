@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <!-- Monitor -->
+  <rect x="8" y="12" width="48" height="36" rx="4" ry="4" stroke="none" stroke-width="3" fill="none"/>
+  
+  <!-- Base del monitor -->
+  <rect x="28" y="50" width="8" height="6" rx="1" ry="1" fill="none"/>
+  <rect x="22" y="56" width="20" height="4" rx="2" ry="2" fill="none"/>
+  
+  <!-- Flecha curva izquierda -->
+  <path d="M24 18 A10 10 0 0 0 14 28" stroke="#378DF7" stroke-width="2" fill="none"/>
+  <path d="M14 28 L12 23" stroke="#378DF7" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Flecha curva derecha -->
+  <path d="M40 42 A10 10 0 0 0 50 32" stroke="#378DF7" stroke-width="2" fill="none"/>
+  <path d="M50 32 L52 37" stroke="#378DF7" stroke-width="2" stroke-linecap="round"/>
+</svg>

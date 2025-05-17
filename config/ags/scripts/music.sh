@@ -7,7 +7,7 @@ metadata=$(playerctl metadata)
 state=$(playerctl status)
 
 # Directorio de imágenes
-folder="$HOME/.config/ags/assets/img"
+folder="$HOME/.config/ags/assets/img/coverart"
 
 # Función para obtener el ícono del reproductor
 get_icon() {
@@ -32,7 +32,15 @@ get_title() {
 # Función para obtener la imagen del álbum
 get_image() {
     url=$(echo "$metadata" | grep 'artUrl' | awk '{print $3}')
-    curl -s -o "$folder/coverArt.jpg" "$url"
+    if [[ -n "$url" ]]; then
+        find "$folder" -type f -name 'image_*.jpg' -delete
+        timestamp=$(date +%s)
+        filename="image_${timestamp}.jpg"
+        filepath="$folder/$filename"
+        curl -s -o "$filepath" "$url" > /dev/null 2>&1
+        echo "file://$filepath"
+    fi
+
 }
 
 convert_time() {

@@ -6,20 +6,20 @@ import { show } from "../../utils/revealer"
 import { TOP, LEFT, BOTTOM} from "../../utils/initvars"
 import { SLIDE_RIGHT} from "../../utils/initvars"
 import { IGNORE } from "../../utils/initvars"
-import { END, CENTER, START } from "../../utils/initvars"
-import { stateHTB, formattedDate, formattedTime } from "../bar/BarTop"
+import { END, CENTER, START, countSeconds } from "../../utils/initvars"
+import { stateHTB, time, dateAll } from "../bar/BarTop"
 
 export const hackWindowName = "hack"
 export const visibleHack= Variable(false)
 export const keymodeState = Variable<Astal.Keymode>(Astal.Keymode.NONE)
-export const notes = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh notes"])
-export const target = Variable("").poll(1000, ["bash", "-c", "~/.config/ags/scripts/htb-status.sh target"])
+export const notes = Variable("").poll(countSeconds(2), ["bash", "-c", "~/.config/ags/scripts/htb-status.sh notes"])
+export const target = Variable("").poll(countSeconds(5), ["bash", "-c", "~/.config/ags/scripts/htb-status.sh target"])
 
 
 const notesWrite = Variable("")
 
 function sendRequest() {
-    safeExecAsync(["bash", "-c", `echo "${notesWrite.get()}. ${formattedTime} · ${formattedDate}" >> $HOME/.config/ags/components/hack/notes.txt`])
+    safeExecAsync(["bash", "-c", `echo "${notesWrite.get()}. ${time.get()} · ${dateAll.get()}" >> $HOME/.config/ags/components/hack/notes.txt`])
 }
 function clearNotes() {
     safeExecAsync(["bash", "-c", `echo "" > $HOME/.config/ags/components/hack/notes.txt`])

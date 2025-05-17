@@ -132,6 +132,9 @@ window.bar {
     }
 }*/
 
+* {
+    font-family: "Ubuntu Nerd Font";
+}
 
 window.bar {
     background-color: colors.$bg;
@@ -294,7 +297,6 @@ window.barleft {
             color: colors.$text-color;
         }
         label {
-            font-family: monospace;
             font-weight: bold;
             color: colors.$text-color;
         }
@@ -395,7 +397,14 @@ window.sidebar {
     .btn-help {
         label {
             color: colors.$text-color;
-            margin-right: 50px;
+            margin-right: 72px;
+        }
+        button {
+            padding: 12px 12px;
+            icon {
+                color: colors.$text-color;
+                font-size: 20px;
+            }
         }
         button:hover {
             background: #378DF7;
@@ -403,6 +412,11 @@ window.sidebar {
     }
     .btn-quick-settings-box {
         border-radius: 20px;
+        padding: 12px 0px 0px;
+        button {
+            margin: 0px 4px;
+            background-color: colors.$bg-panels;
+        }
         button:hover {
             background: #378DF7;
         }
@@ -413,7 +427,7 @@ window.sidebar {
         border-radius: 50%;
         color: colors.$text-color;
         .menu-shortcuts-icon-arrow {
-            margin-left: 214px;
+            margin-left: 255px;
             color: colors.$text-color;
         }
     }
@@ -422,7 +436,7 @@ window.sidebar {
     }
     .normal {
         all: unset;
-        padding: 10px;
+        padding: 10px 10px;
         border-radius: 50%;
         color: colors.$text-color;
     }
@@ -518,6 +532,20 @@ window.sidebar {
         &.normal>box {
             background: green;
         }
+        .header {
+            .time {
+                margin-right: 5px;
+            }
+            button {
+                all: unset;
+                margin: 5px 0px;
+                padding: 5px;
+                border-radius: 4px;
+            }
+            button:hover {
+                background: #378DF7;
+            }
+        }
         
         
     
@@ -549,7 +577,7 @@ window.sidebar {
         }
         .btn-expand {
             all: unset;
-            margin-left: 20px;
+            margin: 0px 5px 0px 10px;
         }
         .btn-expand:hover {
             color: colors.$text-color;
@@ -579,7 +607,7 @@ window.sidebar {
         border-radius: 50%;
         color: colors.$text-color;
         .menu-shortcuts-icon-arrow {
-            margin-left: 214px;
+            margin-left: 255px;
             color: colors.$text-color;
         }
     }
@@ -587,7 +615,7 @@ window.sidebar {
         margin-left: 40px;
         scale {
             all: unset;
-            min-width: 180px;
+            min-width: 225px;
             highlight {
                 all: unset;
                 min-height: 10px;
@@ -722,12 +750,13 @@ window.sidebar {
             button {
                 all: unset;
                 margin: 10px 40px;
-                color: white;
+                color: #ffffff;
                 background: #378DF7;
                 border-radius: 14px;
                 transition: all 300ms;
             }
             button:hover {
+                color: #ffffff;
                 background: #8db1dd;
             }
         }
@@ -737,7 +766,7 @@ window.sidebar {
 .revealer-box{
     background: colors.$bg;
     border-radius: 20px;
-    border: 1px solid #1A1B19;
+    //border: 1px solid #1A1B19;
     padding: 10px;
 }
 
@@ -789,12 +818,13 @@ window.media{
         }
     }
     .cover-art {
-        border-radius: 14px;
-        padding: 20px;
-        min-width: 80px;
-        min-height: 80px;
-        background-size: cover;
-        background-position: center;
+        box {
+            border-radius: 14px;
+            min-width: 100px;
+            min-height: 100px;
+            background-size: cover;
+            background-position: center;
+        }
     }
     .control{
         label {
