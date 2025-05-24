@@ -91,6 +91,7 @@ echo "🎉 ¡Instalación completada con éxito!"
 echo "📁 Dotfiles copiados y configuraciones aplicadas."
 echo "🔐 Scripts marcados como ejecutables donde fue necesario."
 echo "🗂️ Archivos originales respaldados en: $BACKUP_DIR"
-echo "💡 Si usas una nueva terminal, reiníciala para aplicar los cambios."
 echo "✨ Gracias por usar los dotfiles de Qu4s4rM ✨"
+echo "💡 Ahora salimos de hyprland"
+hyprctl dispatch exit
 echo "--------------------------------------------------------"

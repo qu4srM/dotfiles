@@ -33,11 +33,7 @@ wall_selection=$(find "${wall_dir}"  -maxdepth 1  -type f \( -iname "*.jpg" -o -
 [[ -n "$wall_selection" ]] || exit 1
 swww img ${wall_dir}/${wall_selection} -t any --transition-duration 1
 cat > "${HOME}/.config/rofi/wall/last_wallpaper.rasi" <<EOF
-dummywall {
-  background-image: url("${wall_dir}/${wall_selection}", height);
-}
-
-mode-switcher {
+imagebox {
   background-image: url("${wall_dir}/${wall_selection}", height);
 }
 EOF

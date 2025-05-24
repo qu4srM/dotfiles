@@ -3,7 +3,7 @@
     main-fg:            #ffffff;
     main-br:            #cba6f7ff;
     main-ex:            #f5e0dcff;
-    select-bg:          #3b3d38;
+    select-bg:          #378DF7;
     select-fg:          #262724;
     separatorcolor:     transparent;
     border-color:       transparent;

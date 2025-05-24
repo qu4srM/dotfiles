@@ -42,10 +42,10 @@ mainbox {
 
 listview {
     enabled:                     true;
-    columns:                     6;
-    lines:                       2;
-    spacing:                     50px;
-    padding:                     20px 30px;
+    columns:                     5;
+    lines:                       1;
+    spacing:                     10px;
+    padding:                     10px;
     cycle:                       true;
     dynamic:                     false;
     scrollbar:                   false;
@@ -55,7 +55,6 @@ listview {
     fixed-columns:               true;
     cursor:                      "default";
     background-color:            transparent;
-    text-color:                  @main-fg;
 }
 
 //----- Elements -----//
@@ -64,11 +63,10 @@ element {
     enabled:                     true;
     orientation:                 horizontal;
     spacing:                     0px;
-    padding:                     0px;
-    border-radius:               20px;
+    padding:                     6px;
+    border-radius:               15px;
     cursor:                      pointer;
     background-color:            transparent;
-    text-color:                  @main-fg;
 }
 
 @media(max-aspect-ratio: 1.8) {
@@ -79,22 +77,15 @@ element {
 
 element selected.normal {
     background-color:            @select-bg;
-    text-color:                  @select-fg;
 }
 
 element-icon {
-    size:                        33%;
+    size:                        30%;
     cursor:                      inherit;
-    border-radius:               0px;
+    border-radius:               10px;
     background-color:            transparent;
-    text-color:                  inherit;
 }
 
 element-text {
-    vertical-align:              0.5;
-    horizontal-align:            0.5;
-    padding:                     20px;
-    cursor:                      inherit;
-    background-color:            transparent;
-    text-color:                  inherit;
+    enabled:                     false;
 }
