@@ -237,7 +237,7 @@ function QuickSettings() {
                 <box >
                     <QuickButton icon={bind(iconWifi)} cmd={`nmcli radio wifi | grep -q "enabled" && nmcli radio wifi off || nmcli radio wifi on`} />
                     <QuickButton icon={bind(iconBluetooth)} cmd={`bluetoothctl show | grep "Powered: yes" && bluetoothctl power off || bluetoothctl power on`}/>
-                    <QuickButton icon="scanner-symbolic" cmd="~/.config/ags/launch.sh screenshot" />
+                    <QuickButton icon="cut-screenshot-symbolic" cmd="~/.config/ags/launch.sh screenshot" />
                     <QuickButton icon="dnd-symbolic" cmd="astal-notifd -t" />
                     <QuickButton icon="moon-symbolic" cmd="~/.config/ags/scripts/toggle_theme.sh" />
                     <QuickButton icon="toggle-wall-symbolic" cmd="~/.config/rofi/wall/launch.sh" />

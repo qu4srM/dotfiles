@@ -29,7 +29,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                     safeExecAsync(["bash", "-c", "~/.config/ags/scripts/screenshot.sh monitor"])
                 }}>
                     <box orientation={1}>
-                        <label className="icon" label="" />
+                        <label className="icon" label="󰹑" />
                         <label label="Monitor" />
                     </box>
                 </button>
@@ -37,7 +37,7 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
                     safeExecAsync(["bash", "-c", "~/.config/ags/scripts/screenshot.sh area"])
                 }}>
                     <box orientation={1}>
-                        <label className="icon" label="" />
+                        <label className="icon" label="" />
                         <label label="Area" />
                     </box>
                 </button>
