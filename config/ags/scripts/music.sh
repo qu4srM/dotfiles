@@ -31,16 +31,23 @@ get_title() {
 
 # Función para obtener la imagen del álbum
 get_image() {
-    url=$(echo "$metadata" | grep 'artUrl' | awk '{print $3}')
+    local url
+    url=$(echo "$metadata" | grep 'artUrl' | awk '{print $3}' | tr -d '\r\n"')
     if [[ -n "$url" ]]; then
+        mkdir -p "$folder"
         find "$folder" -type f -name 'image_*.jpg' -delete
         timestamp=$(date +%s)
         filename="image_${timestamp}.jpg"
         filepath="$folder/$filename"
-        curl -s -o "$filepath" "$url" > /dev/null 2>&1
-        echo "file://$filepath"
+        curl -sL -o "$filepath" "$url"
+        if [[ -s "$filepath" ]]; then
+            echo "file://$filepath"
+        else
+            echo "Error: imagen descargada está vacía o falló." >&2
+        fi
+    else
+        echo "Error: no se pudo extraer URL de artUrl" >&2
     fi
-
 }
 
 convert_time() {

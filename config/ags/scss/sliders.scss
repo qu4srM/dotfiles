@@ -15,11 +15,18 @@ window.sidebar {
             all: unset;
         }
     }
+    .keybindconf-box {
+        scrollable {
+            background: colors.$bg-widgets;
+        }
+    }
     .items {
-        border-radius: 4px;
+        color: colors.$text-color;
+        background: colors.$bg-widgets;
     }
     .items label.command {
-        background: colors.$fg-panels;
+        color: colors.$text-color;
+        background: colors.$bg;
         border-radius: 4px;
     }
 }

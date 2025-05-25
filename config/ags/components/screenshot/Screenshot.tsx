@@ -60,7 +60,7 @@ export default function ScreenShot(monitor: Gdk.Monitor) {
         //keymode={Astal.Keymode.NONE}
         layer={Astal.Layer.OVERLAY}
         anchor={TOP}
-        marginTop="200"
+        marginTop="250"
         setup={self => {
             if (!visibleScreenshot.get()) {
                 self.hide()

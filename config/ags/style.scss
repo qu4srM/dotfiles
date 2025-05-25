@@ -721,6 +721,7 @@ window.sidebar {
                     all: unset;
                     margin: 0px 0px 0px 40px;
                     font-size: 30px;
+                    color: colors.$text-color;
                 }
                 .label-1 {
                     color: #378DF7;
@@ -747,6 +748,7 @@ window.sidebar {
                     border-radius: 20px;
                     icon {
                         all: unset;
+                        color: colors.$text-color;
                     }
                     label {
                         color: colors.$text-color;
@@ -792,7 +794,6 @@ window.sidebar {
 .revealer-box{
     background: colors.$bg;
     border-radius: 8px;
-    //border: 1px solid #1A1B19;
     padding: 10px;
 }
 
@@ -852,7 +853,7 @@ window.media{
         label {
             color: colors.$text-color;
         }
-        box {
+        centerbox {
             margin: 0px 10px;
             button {
                 all: unset;

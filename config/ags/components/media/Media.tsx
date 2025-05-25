@@ -80,9 +80,9 @@ function Time() {
     </centerbox>
 }
 function Control() {
-    return <box className="control">
+    return <centerbox className="control" hexpand>
         <label label={bind(position)} />
-        <box>
+        <centerbox>
             <button className="control-play" cursor="pointer" onClicked={
                 () => {
                     safeExecAsync(["bash", "-c", "~/.config/ags/scripts/music.sh previous"])
@@ -113,9 +113,9 @@ function Control() {
                     icon="media-skip-forward-symbolic"
                 />
             </button>
-        </box>
+        </centerbox>
         <label label={bind(lengthMusic)} />
-    </box>
+    </centerbox>
 }
 function MediaBox () {
     return <centerbox className="revealer-box">

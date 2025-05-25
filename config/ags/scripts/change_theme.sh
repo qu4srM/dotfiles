@@ -23,11 +23,11 @@ DARK_FG_PANELS="#262724"
 DARK_TEXT_COLOR="#D1D1D1"  # Color de texto en modo oscuro
 
 # Colores predefinidos para el modo claro
-LIGHT_BG="#e7e7e7"
+LIGHT_BG="#d8d6d6"
 LIGHT_BG_BLUR="#f0f0f0bb"
 LIGHT_BG_WIDGETS="#ffffff"
 LIGHT_FG_WIDGETS="#cccccc"
-LIGHT_BTN_WORK="#cccccc"
+LIGHT_BTN_WORK="#707070"
 LIGHT_BG_PANELS="#ffffff"
 LIGHT_FG_PANELS="#bdbdbd"
 LIGHT_TEXT_COLOR="#333333"  # Color de texto en modo claro

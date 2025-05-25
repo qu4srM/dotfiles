@@ -22,7 +22,7 @@ export var list = [
     {
         "id": 5,
         "name": "Full Screen",
-        "command": "Windows + F1",
+        "command": "F1",
     },
     {
         "id": 6,
