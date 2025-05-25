@@ -36,24 +36,36 @@ function AppLauncher() {
     </button>
 }
 function Workspaces() {
-
     return <box className="workspaces" halign={CENTER} orientation={1}>
-        {bind(hypr, "workspaces").as(wss => wss
-            .filter(ws => !(ws.id >= -99 && ws.id <= -2)) // filter out special workspaces
-            .sort((a, b) => a.id - b.id)
-            .map(ws => (
-                <button
-                    className={bind(hypr, "focusedWorkspace").as(fw =>
-                        ws === fw ? "focused" : "")}
-                    onClicked={() => ws.focus()}
-                    cursor="pointer">
-                    <icon icon={bind(hypr, "focusedWorkspace").as(fw => 
-                        ws === fw ? "pacm-symbolic" : "circle-symbolic"
-                    )} />
-                </button>
-            ))
-        )}
-    </box>
+  {bind(hypr, "workspaces").as(wss =>
+    wss
+      .filter(ws => !(ws.id >= -99 && ws.id <= -2)) // ignorar especiales
+      .sort((a, b) => a.id - b.id)
+      .map(ws => (
+        <button
+            className={bind(hypr, "focusedWorkspace").as(fw => {
+                if (ws === fw) return "focused";
+                else if ((ws.clients?.length ?? 0) > 0) return "active";
+                else return "";
+            })}
+            onClicked={() => ws.focus()}
+            cursor="pointer"
+            >
+            <icon
+                icon={bind(hypr, "focusedWorkspace").as(fw =>
+                ws === fw
+                    ? "pacm-symbolic"
+                    : (ws.clients?.length ?? 0) > 0
+                    ? "ghost-symbolic"
+                    : "circle-symbolic"
+                )}
+            />
+        </button>
+
+      ))
+  )}
+</box>
+
 }
 function Hack () {
     return <button className="hack-btn" halign={CENTER} cursor="pointer" onClicked={

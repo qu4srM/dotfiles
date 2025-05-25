@@ -288,13 +288,18 @@ window.barleft {
         }
         button.focused {
             icon {
-                font-size: 14px;
+                font-size: 20px;
                 color: #d98b75;
             }
         }
         button:hover {
             icon{
                 color: colors.$text-color
+            }
+        }
+        button.active {
+            icon {
+                color: #378DF7;
             }
         }
         
