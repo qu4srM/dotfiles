@@ -250,10 +250,22 @@ window.bar {
         border-radius: 10px;
         padding: 2px 4px 2px 4px;
     }
+    .togglebar-btn {
+        all: unset;
+        margin: 4px 14px 4px 0px;
+        padding: 2px 4px 2px 4px;
+        border-radius: 50%;
+        icon {
+            color: colors.$text-color;
+        }
+    }
+    .togglebar-btn:hover {
+        background: colors.$bg-widgets;
+    }
 }
 window.barleft {
     background-color: colors.$bg;
-    border-radius: 20px;
+    border-radius: 8px;
     .app-launcher-btn {
         all: unset;
         margin: 10px 0px;
@@ -310,13 +322,27 @@ window.barleft {
     }
     .media-btn {
         all: unset;
-        margin: 10px 0px;
+        margin: 10px 0px 0px;
     }
     .hack-btn {
         all: unset;
         margin: 10px 0px;
         icon {
             color: #9fef00;
+        }
+    }
+    .togglebar-btn {
+        all: unset;
+        margin: 10px 0px;
+        icon {
+            color: colors.$text-color;
+        }
+    }
+    .picker-btn {
+        all: unset;
+        margin: 10px 0px;
+        icon {
+            color: colors.$text-color;
         }
     }
 }
@@ -765,7 +791,7 @@ window.sidebar {
 
 .revealer-box{
     background: colors.$bg;
-    border-radius: 20px;
+    border-radius: 8px;
     //border: 1px solid #1A1B19;
     padding: 10px;
 }
@@ -773,10 +799,6 @@ window.sidebar {
 window.media{
     all: unset;
     background-color: transparent;
-    .revealer-box {
-        background: colors.$bg;
-        border-radius: 20px;
-    }
     .media-box {
         centerbox {
             icon {

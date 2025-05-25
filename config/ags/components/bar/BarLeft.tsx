@@ -8,6 +8,8 @@ import { countMinutes, countSeconds } from "../../utils/initvars"
 
 // ----------Utils-----------
 import { safeExecAsync } from "../../utils/exec"
+import { activeBar } from "../../utils/initvars"
+
 const hypr = Hyprland.get_default()
 
 // ----------------import function-------
@@ -87,6 +89,24 @@ function Media () {
         <icon icon={bind(iconApp)} />
     </button>
 }
+function ToggleBar () {
+    return <button className="togglebar-btn" halign={CENTER} cursor="pointer" onClicked={
+        () => {
+            safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh bartop"])
+        }
+    } >
+        <icon icon="bar-top-symbolic" />
+    </button>
+}
+function Picker () {
+    return <button className="picker-btn" halign={CENTER} cursor="pointer" onClicked={
+        () => {
+            safeExecAsync(["bash", "-c", "hyprpicker -f hex | cat | wl-copy"])
+        }
+    } >
+        <icon icon="picker-symbolic" />
+    </button>
+}
 
 export default function BarLeft(monitor: Gdk.Monitor) {
     if (!monitor) {
@@ -101,9 +121,9 @@ export default function BarLeft(monitor: Gdk.Monitor) {
         gdkmonitor={monitor}
         exclusivity={EXCLUSIVE}
         anchor={TOP | LEFT | BOTTOM}
-        marginTop="6"
-        marginLeft="6"
-        marginBottom="6"
+        marginTop="14"
+        marginLeft="14"
+        marginBottom="14"
         >
             
         <centerbox orientation={1}>
@@ -114,10 +134,12 @@ export default function BarLeft(monitor: Gdk.Monitor) {
             <box>
             </box>
             <box hexpand halign={CENTER} valign={END} orientation={1}>
+                <Picker />
                 <Hack />
                 <Info />
                 <Sidebar />
                 <Media />
+                <ToggleBar />
             </box>
         </centerbox>
     </window>

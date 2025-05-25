@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 
-FILEVOL="$HOME/.cache/vol-ags.lock"
-FILEMUSIC="$HOME/.cache/music-ags.lock"
-FILEWIFI="$HOME/.cache/wifi-ags.lock"
-FILESIDEBAR="$HOME/.cache/sidebar-ags.lock"
+FILEBAR="$HOME/.cache/togglebar-ags.lock"
 
-function launch_vol {
-    if [[ ! -f "$FILEVOL" ]]; then
-        touch "$FILEVOL"
-        ags --bus-name volume -c ~/.config/ags/configVol.js
-    elif [[ -f "$FILEVOL" ]]; then
-        ags -q --bus-name volume -c ~/.config/ags/configVol.js
-        rm -rf "$FILEVOL"
-    fi
+init () {
+    ags quit -i js
+    sleep 5 &
+    ags run ~/.config/ags/app.ts request bartop
 }
+
 case $1 in
     launch)
-        ags quit -i js
-        sleep 5 &
-        ags run ~/.config/ags/app.ts
+        init
+    ;;
+    barleft)
+        sed -i 's/export const activeBar = Variable("bartop")/export const activeBar = Variable("barleft")/' ~/.config/ags/utils/initvars.ts
+        init
+    ;;
+    bartop)
+        sed -i 's/export const activeBar = Variable("barleft")/export const activeBar = Variable("bartop")/' ~/.config/ags/utils/initvars.ts
+        init
     ;;
     sidebar)
         ags -i js request sidebar

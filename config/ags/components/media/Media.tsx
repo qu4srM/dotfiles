@@ -152,8 +152,8 @@ export default function Media(monitor: Gdk.Monitor) {
         gdkmonitor={monitor}
         layer={Astal.Layer.OVERLAY}
         anchor={BOTTOM | LEFT}
-        marginBottom="6"
-        marginLeft="6"
+        marginBottom="14"
+        marginLeft="14"
         setup={self => {
             if (!visibleMedia.get()) {
                 self.hide()

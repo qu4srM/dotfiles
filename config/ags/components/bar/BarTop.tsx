@@ -161,6 +161,15 @@ function Hack () {
         </button>
     </box>
 }
+function ToggleBar () {
+    return <button className="togglebar-btn" halign={CENTER} cursor="pointer" onClicked={
+        () => {
+            safeExecAsync(["bash", "-c", "~/.config/ags/launch.sh barleft"])
+        }
+    } >
+        <icon icon="bar-left-symbolic" />
+    </button>
+}
 export default function BarTop(monitor: Gdk.Monitor) {
     if (!monitor) {
         const display = Gdk.Display.get_default()
@@ -190,6 +199,7 @@ export default function BarTop(monitor: Gdk.Monitor) {
                 <MenuShortcuts />
                 <BatteryHealth />
                 <Menu />
+                <ToggleBar />
             </box>
         </centerbox>
     </window>

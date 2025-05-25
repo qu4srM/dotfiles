@@ -60,6 +60,12 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
             }}>
                 <label label={bind(target).as(v => `IP Machine: ${v}`)} halign={Gtk.Align.START} />
             </eventbox>
+            <entry placeholder-text="Enter Target" 
+                widthRequest={300}
+                halign={Gtk.Align.CENTER}
+                onChanged={e => 
+                    safeExecAsync(["bash", "-c", `echo "${e.text}" > $HOME/.config/ags/scripts/target`])   
+                } />
             <entry placeholder-text="Enter Notes" 
                 widthRequest={300}
                 halign={Gtk.Align.CENTER}
@@ -94,8 +100,8 @@ export default function Hack(monitor: Gdk.Monitor) {
         layer={Astal.Layer.OVERLAY}
         keymode={bind(keymodeState)}
         anchor={TOP | LEFT}
-        marginTop="6"
-        marginLeft="6"
+        marginTop="14"
+        marginLeft="14"
         setup={self => {
             if (!visibleHack.get()) {
                 self.hide()

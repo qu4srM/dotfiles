@@ -1,6 +1,7 @@
 import { App } from "astal/gtk3"
 import { Variable, GLib, bind } from "astal"
 import style from "./style.scss"
+import { activeBar } from "./utils/initvars"
 
 //import Bar from "./components/bar/Bar"
 import BarTop from "./components/bar/BarTop"
@@ -35,7 +36,6 @@ import { screenshotWindowName, visibleScreenshot } from "./components/screenshot
 //import { OnVolume } from "./components/osd/VolumeOsd"
 //import { OnUpdate } from "./components/update/Update"
 
-const activeBar = Variable("barleft")
 
 // --------Icons---------
 App.add_icons("./assets")

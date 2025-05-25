@@ -2,9 +2,10 @@ import { App, Astal, Gdk } from "astal/gtk3"
 import { Variable, bind } from "astal"
 import { interval,timeout } from "astal/time"
 import { exec } from "astal/process"
-import { TOP, RIGHT, EXCLUSIVE, LEFT, BOTTOM, IGNORE, START, CENTER, END, countMinutes, countSeconds } from "../../utils/initvars"
-import { SLIDE_LEFT } from "../../utils/initvars"
+import { TOP, RIGHT, EXCLUSIVE, LEFT, BOTTOM, IGNORE, START, CENTER, END, countMinutes, countSeconds, NORMAL } from "../../utils/initvars"
+import { SLIDE_LEFT, SLIDE_RIGHT } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
+import { activeBar } from "../../utils/initvars"
 
 import SoundConf from "../soundconf/SoundConf"
 import WifiConf from "../wificonf/WifiConf"
@@ -15,7 +16,6 @@ import Microphone from "../soundconf/Microphone"
 
 import { logo, iconWifi, iconBluetooth } from "../bar/BarTop"
 import { show } from "../../utils/revealer"
-
 // ------------------- Estado -------------------
 
 export const keymodeState = Variable<Astal.Keymode>(Astal.Keymode.NONE)
@@ -33,6 +33,32 @@ const visibleNotification = Variable(true)
 const visibleWifi = Variable(false)
 const visibleKeybinds = Variable(false)
 const visibleMicrophone = Variable(false)
+
+const anchor = Variable()
+const exclusivity = Variable()
+const layer = Variable()
+const left = Variable("")
+const right = Variable("")
+const size = Variable()
+const slide = Variable()
+
+if (activeBar.get() === "bartop") {
+    anchor.set(TOP | RIGHT | BOTTOM)
+    exclusivity.set(NORMAL)
+    layer.set(Astal.Layer.OVERLAY)
+    left.set("0")
+    right.set("14")
+    size.set(600)
+    slide.set(SLIDE_LEFT)
+} else if (activeBar.get() === "barleft") {
+    anchor.set(TOP | LEFT | BOTTOM)
+    exclusivity.set(EXCLUSIVE)
+    layer.set(Astal.Layer.TOP)
+    left.set("14")
+    right.set("0")
+    size.set(630)
+    slide.set(SLIDE_RIGHT)
+}
 
 // ------------------- Funciones -------------------
 
@@ -158,7 +184,7 @@ function QuickSettings() {
                     ))}
                 </box>
             </box>
-            <scrollable heightRequest={640} vscroll={true}>
+            <scrollable heightRequest={size.get()} vscroll={true}>
                 <box orientation={1}> 
                     <centerbox className="btn-keymode">
                         <label label={bind(keymodeState).as(v =>
@@ -211,7 +237,7 @@ function QuickSettings() {
                 <box >
                     <QuickButton icon={bind(iconWifi)} cmd={`nmcli radio wifi | grep -q "enabled" && nmcli radio wifi off || nmcli radio wifi on`} />
                     <QuickButton icon={bind(iconBluetooth)} cmd={`bluetoothctl show | grep "Powered: yes" && bluetoothctl power off || bluetoothctl power on`}/>
-                    <QuickButton icon="airplane-symbolic" cmd="astal-notifd -t" />
+                    <QuickButton icon="scanner-symbolic" cmd="~/.config/ags/launch.sh screenshot" />
                     <QuickButton icon="dnd-symbolic" cmd="astal-notifd -t" />
                     <QuickButton icon="moon-symbolic" cmd="~/.config/ags/scripts/toggle_theme.sh" />
                     <QuickButton icon="toggle-wall-symbolic" cmd="~/.config/rofi/wall/launch.sh" />
@@ -229,7 +255,7 @@ function OnRevealer({ visible }: { visible: Variable<boolean> }) {
         <revealer
             setup={self => show(self, visible)}
             revealChild={visibleSideBar()}
-            transitionType={SLIDE_LEFT}
+            transitionType={slide.get()}
             transitionDuration={100}>
             <QuickSettings />
         </revealer>
@@ -251,13 +277,15 @@ export default function SideBar(monitor: Gdk.Monitor) {
             application={App}
             gdkmonitor={monitor}
             keymode={bind(keymodeState)}
-            exclusivity={EXCLUSIVE} // Only LEFTBAR
+            exclusivity={exclusivity.get()} // Only LEFTBAR
             //layer={Astal.Layer.OVERLAY} # TOPBAR
+            layer={layer.get()}
             //anchor={TOP | RIGHT | BOTTOM} # TOPBAR
-            anchor={TOP | LEFT | BOTTOM}
-            marginTop="6"
-            marginLeft="6"
-            marginBottom="6"
+            anchor={anchor.get()}
+            marginTop="14"
+            marginLeft={left.get()}
+            marginRight={right.get()}
+            marginBottom="14"
             setup={self => {
                 if (!visibleSideBar.get()) {
                     self.hide()
