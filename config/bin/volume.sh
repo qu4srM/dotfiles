@@ -22,11 +22,11 @@ is_mute() {
 case "$1" in
     up)
         amixer set Master on > /dev/null
-        amixer sset Master 1%+ > /dev/null
+        amixer sset Master 5%+ > /dev/null
         ;;
     down)
         amixer set Master on > /dev/null
-        amixer sset Master 1%- > /dev/null
+        amixer sset Master 5%- > /dev/null
         ;;
     toggle)
         amixer set Master toggle > /dev/null

@@ -23,7 +23,14 @@ export const iconBattery = Variable("").poll(countMinutes(1), ["bash", "-c", "~/
 export const hours = Variable("").poll(countMinutes(1), ["bash", "-c", `date +"%H"`])
 export const minutes = Variable("").poll(countMinutes(1), ["bash", "-c", `date +"%M"`])
 
+const colors = ['#FF5555', '#F1FA8C', '#50FA7B', '#8BE9FD', '#BD93F9'];
+const currentColor = Variable(colors[0]);
 
+let i = 0;
+setInterval(() => {
+  i = (i + 1) % colors.length;
+  currentColor.set(colors[i]);
+}, 1000);
 
 
 function AppLauncher() {
@@ -119,6 +126,7 @@ function Picker () {
         <icon icon="picker-symbolic" />
     </button>
 }
+
 
 export default function BarLeft(monitor: Gdk.Monitor) {
     if (!monitor) {

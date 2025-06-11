@@ -5,7 +5,7 @@ FILEBAR="$HOME/.cache/togglebar-ags.lock"
 init () {
     ags quit -i js
     sleep 5 &
-    ags run ~/.config/ags/app.ts request bartop
+    ags run ~/.config/ags/app.ts
 }
 
 case $1 in

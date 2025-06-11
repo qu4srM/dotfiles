@@ -82,25 +82,43 @@ get_network_status() {
 
 # Actualizar lista de redes Wi-Fi en formato JSON
 list_update() {
-    {
-    echo "export var networks = ["
+{
+    echo "import { Variable } from 'astal';"
+    echo "export const networks = Variable(["
+
     nmcli -t -f active,bssid,ssid,signal dev wifi | grep "^no" | head -n 6 | \
     awk -F':' '
         BEGIN { id = 1 }
         {
-        bssid = $2 ":" $3 ":" $4 ":" $5 ":" $6 ":" $7
-        gsub(/\\:/, ":", bssid)  # <- aquí quitamos los backslashes
-        ssid = $8
-        for (i=9; i<NF; i++) ssid = ssid ":" $i
-        signal = $NF
-        gsub(/"/, "\\\"", ssid)
-        print "  {\"id\":" id ",\"name\":\"" ssid "\",\"bssid\":\"" bssid "\",\"signal\":" signal "},"
-        id++
+            # BSSID siempre son 6 campos
+            bssid = $2 ":" $3 ":" $4 ":" $5 ":" $6 ":" $7
+
+            # Último campo es la señal
+            signal = $(NF)
+
+            # Reconstruir SSID desde el campo 8 hasta NF-1
+            ssid = $8
+            for (i = 9; i < NF; i++) ssid = ssid ":" $i
+
+            # Escapar comillas dobles
+            gsub(/"/, "\\\"", ssid)
+
+            # Limpiar espacios
+            gsub(/^[ \t]+|[ \t]+$/, "", ssid)
+
+            print "  { id:" id ", name:\"" ssid "\", bssid:\"" bssid "\", signal:" signal " },"
+            id++
         }
     ' | sed '$ s/,$//'
-    echo "]"
-    } > ~/.config/ags/components/wificonf/networks.js
+
+    echo "]);"
+} > ~/.config/ags/components/network/networks.js
+
+# Quitar escapes innecesarios de ":"
+sed -i 's/\\:/:/g' ~/.config/ags/components/network/networks.js
 }
+
+
 
 # Ejecutar la función según el parámetro pasado
 case $1 in

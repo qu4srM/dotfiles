@@ -1,18 +1,19 @@
 import { App, Astal, Gdk } from "astal/gtk3"
 import { Variable, bind } from "astal"
-import { interval,timeout } from "astal/time"
+import { interval, timeout } from "astal/time"
 import { exec } from "astal/process"
 import { TOP, RIGHT, EXCLUSIVE, LEFT, BOTTOM, IGNORE, START, CENTER, END, countMinutes, countSeconds, NORMAL } from "../../utils/initvars"
 import { SLIDE_LEFT, SLIDE_RIGHT } from "../../utils/initvars"
 import { safeExecAsync } from "../../utils/exec"
 import { activeBar } from "../../utils/initvars"
+import { changeColor } from "../network/Wifi"
 
 import SoundConf from "../soundconf/SoundConf"
-import WifiConf from "../wificonf/WifiConf"
+import Wifi from "../network/Wifi"
 import NotificationConfig from "../notification/Notification"
 import KeybindsConfig from "../keybinds/Keybinds"
 import Microphone from "../soundconf/Microphone"
-//import BluetoothConf from "../bluetoothconf/BluetoothConf"
+import Bluetooth from "../bluetooth/Bluetooth"
 
 import { logo, iconWifi, iconBluetooth } from "../bar/BarTop"
 import { show } from "../../utils/revealer"
@@ -33,6 +34,7 @@ const visibleNotification = Variable(true)
 const visibleWifi = Variable(false)
 const visibleKeybinds = Variable(false)
 const visibleMicrophone = Variable(false)
+const visibleBluetooth = Variable(false)
 
 const anchor = Variable()
 const exclusivity = Variable()
@@ -59,20 +61,30 @@ if (activeBar.get() === "bartop") {
     size.set(630)
     slide.set(SLIDE_RIGHT)
 }
+const gradients = [
+    'linear-gradient(180deg, rgba(42, 123, 155, 0) 90%, rgb(72, 235, 181) 92%)',
+    'linear-gradient(180deg, rgba(42, 123, 155, 0) 90%, rgb(72, 235, 80) 92%)',
+];
+const currentGradient = Variable(gradients[0]);
+let n = 0
+interval(1000, () => {
+    n = (n + 1) % gradients.length;
+    currentGradient.set(gradients[n]);
+})
 
 // ------------------- Funciones -------------------
 
 function toggleVariable(variable: Variable<boolean>) {
     variable.set(!variable.get());
 }
-function QuickButton({ icon, cmd}: { icon: string, cmd : string}) {
+function QuickButton({ icon, cmd }: { icon: string, cmd: string }) {
     const classButton = Variable("normal")
     const toggleClass = () => {
         const current = classButton.get()
         const next = current === "normal"
             ? "active"
             : "normal"
-    
+
         classButton.set(next)
     }
     return (
@@ -81,7 +93,7 @@ function QuickButton({ icon, cmd}: { icon: string, cmd : string}) {
                 safeExecAsync(["bash", "-c", cmd])
                 toggleClass()
             }}>
-            <icon icon={icon}  />
+            <icon icon={icon} />
         </button>
     )
 }
@@ -92,7 +104,7 @@ function ButtonSet({ icon, onClick }: { icon: string, onClick?: () => void }) {
         </button>
     )
 }
-function SettingsButton({visible, icon, label, cmd}: {visible: any, icon: string, label: string, cmd: string}) {
+function SettingsButton({ visible, icon, label, cmd, style }: { visible: any, icon: string, label: string, cmd: string, style: any }) {
     const iconArrow = Variable("arrow-right-symbolic")
     const toggleIcon = () => {
         const current = iconArrow.get()
@@ -105,6 +117,7 @@ function SettingsButton({visible, icon, label, cmd}: {visible: any, icon: string
     return (
         <overlay>
             <button
+                css={style}
                 className="btn-quick-settings"
                 cursor="pointer"
                 onClicked={() => {
@@ -120,12 +133,12 @@ function SettingsButton({visible, icon, label, cmd}: {visible: any, icon: string
                 </box>
             </button>
             <box className="overlay-text" valign={CENTER} halign={CENTER}>
-                <label label={label}/>
+                <label label={label} />
             </box>
         </overlay>
     )
 }
-function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon: string,variable: any, label: string, cmd: string, tool: string}) {
+function SliderButton({ visible, icon, variable, cmd, tool }: { visible: any, icon: string, variable: any, cmd: string, tool: string }) {
     const iconArrow = Variable("arrow-right-symbolic")
     const toggleIcon = () => {
         const current = iconArrow.get()
@@ -154,10 +167,10 @@ function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon:
             <box className="slider" valign={CENTER} halign={START} hexpand>
                 <slider value={variable} widthRequest={100} onDragged={
                     (self) => {
-                    const percent = Math.round(self.value * 100)
-                    safeExecAsync(["bash", "-c", `${tool} set ${cmd} ${percent}%`])
+                        const percent = Math.round(self.value * 100)
+                        safeExecAsync(["bash", "-c", `${tool} set ${cmd} ${percent}%`])
                     }
-                }/>
+                } />
             </box>
         </overlay>
     )
@@ -168,84 +181,85 @@ function SliderButton({visible, icon, variable, cmd, tool}: {visible: any, icon:
 function QuickSettings() {
     const value = Variable(0)
     return <centerbox expand vertical className="revealer-box">
-            <box vertical>
-                <box className="btn-help">
-                    <label label={bind(uptimeMinutes).as(uptime => `Uptime: ${uptime} mins`)} />
-                    {[
-                        logo,
-                        "shutdown-symbolic",
-                        "settings2-symbolic"
-                    ].map((icon, idx) => (
-                        <ButtonSet
-                            key={`help-${idx}`}
-                            icon={icon}
-                            onClick={() => safeExecAsync(["bash", "-c", "wlogout"])}
-                        />
-                    ))}
+        <box vertical>
+            <box className="btn-help">
+                <label label={bind(uptimeMinutes).as(uptime => `Uptime: ${uptime} mins`)} />
+                {[
+                    logo,
+                    "shutdown-symbolic",
+                    "settings2-symbolic"
+                ].map((icon, idx) => (
+                    <ButtonSet
+                        key={`help-${idx}`}
+                        icon={icon}
+                        onClick={() => safeExecAsync(["bash", "-c", "wlogout"])}
+                    />
+                ))}
+            </box>
+        </box>
+        <scrollable heightRequest={size.get()} vscroll={true}>
+            <box orientation={1}>
+                <centerbox className="btn-keymode">
+                    <label label={bind(keymodeState).as(v =>
+                        v === Astal.Keymode.NONE
+                            ? "Off Keymode"
+                            : "On Keymode"
+                    )} halign={START} />
+                    <label label="" halign={CENTER} />
+                    <switch
+                        halign={END}
+                        active={bind(value)}
+                        onNotifyActive={self => {
+                            console.log(self)
+                            const current = keymodeState.get();
+                            const next = current === 0 ? Astal.Keymode.ON_DEMAND : Astal.Keymode.NONE;
+                            keymodeState.set(next)
+                        }}
+                    />
+                </centerbox>
+                <box vertical>
+                    <SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" cmd="" style={bind(currentGradient).as(g => changeColor.get() ? `background: ${g};` : `background: transparent;`)} />
+                    {visibleWifi() && <Wifi config={visibleWifi} />}
+                </box>
+                <box vertical>
+                    <SettingsButton visible={visibleBluetooth} icon={bind(iconBluetooth)} label="Bluetooth" cmd="" style={``} />
+                    {visibleBluetooth() && <Bluetooth config={visibleBluetooth} />}
+                </box>
+                <box vertical>
+                    <SliderButton visible={visibleMicrophone} icon="org.gnome.Settings-microphone-symbolic" variable={bind(capture)} cmd="Capture" tool="amixer" />
+                    {visibleMicrophone() && <Microphone config={visibleMicrophone} />}
+                </box>
+                <box vertical>
+                    <SliderButton visible={visibleSound} icon="org.gnome.Settings-sound-symbolic" variable={bind(volume)} cmd="Master" tool="amixer" />
+                    {visibleSound() && <SoundConf config={visibleSound} />}
+                </box>
+                <box vertical>
+                    <SliderButton visible={visibleSound} icon="display-brightness-symbolic" variable={bind(brightness)} cmd="" tool="brightnessctl" />
+                </box>
+                <box vertical>
+                    <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keybinds" cmd="" style={``} />
+                    {visibleKeybinds() && <KeybindsConfig config={visibleKeybinds} />}
+                </box>
+                <box vertical>
+                    <SettingsButton visible={visibleNotification} icon="chat-bubbles-symbolic" label="Notification" cmd="" style={``} />
+                    {visibleNotification() && <NotificationConfig config={visibleNotification} />}
                 </box>
             </box>
-            <scrollable heightRequest={size.get()} vscroll={true}>
-                <box orientation={1}> 
-                    <centerbox className="btn-keymode">
-                        <label label={bind(keymodeState).as(v =>
-                            v === Astal.Keymode.NONE
-                                ? "Off Keymode"
-                                : "On Keymode"
-                        )} halign={START} />
-                        <label label="" halign={CENTER}/>
-                        <switch 
-                            halign={END} 
-                            active={bind(value)} 
-                            onNotifyActive={self => {
-                                console.log(self)
-                                const current = keymodeState.get();
-                                const next = current === 0 ? Astal.Keymode.ON_DEMAND : Astal.Keymode.NONE;
-                                keymodeState.set(next)
-                            }} 
-                        />
-                    </centerbox>
-                    <box vertical>
-                        <SettingsButton visible={visibleWifi} icon={bind(iconWifi)} label="Wi-Fi" cmd="~/.config/ags/scripts/network-info.sh listupdate" />
-                        {visibleWifi() && <WifiConf config={visibleWifi} />}
-                    </box>
-                    <box vertical>
-                        <SettingsButton icon={bind(iconBluetooth)} label="Bluetooth" />
-                    </box>
-                    <box vertical>
-                        <SliderButton visible={visibleMicrophone} icon="org.gnome.Settings-microphone-symbolic" variable={bind(capture)} cmd="Capture" tool="amixer"/>
-                        {visibleMicrophone() && <Microphone config={visibleMicrophone} />}
-                    </box>
-                    <box vertical>
-                        <SliderButton visible={visibleSound}  icon="org.gnome.Settings-sound-symbolic" variable={bind(volume)} cmd="Master" tool="amixer"/>
-                        {visibleSound() && <SoundConf config={visibleSound} />}
-                    </box>
-                    <box vertical>
-                        <SliderButton icon="display-brightness-symbolic" variable={bind(brightness)} cmd="" tool="brightnessctl"/>
-                    </box>
-                    <box vertical>
-                        <SettingsButton visible={visibleKeybinds} icon="org.gnome.Settings-keyboard-symbolic" label="Keybinds" cmd="" />
-                        {visibleKeybinds() && <KeybindsConfig config={visibleKeybinds} />}
-                    </box>
-                    <box vertical>
-                        <SettingsButton visible={visibleNotification} icon="chat-bubbles-symbolic" label="Notification" cmd="" />
-                        {visibleNotification() && <NotificationConfig config={visibleNotification} />}
-                    </box> 
-                </box>
-            </scrollable>
-            <centerbox className="btn-quick-settings-box">
-                <box></box>
-                <box >
-                    <QuickButton icon={bind(iconWifi)} cmd={`nmcli radio wifi | grep -q "enabled" && nmcli radio wifi off || nmcli radio wifi on`} />
-                    <QuickButton icon={bind(iconBluetooth)} cmd={`bluetoothctl show | grep "Powered: yes" && bluetoothctl power off || bluetoothctl power on`}/>
-                    <QuickButton icon="cut-screenshot-symbolic" cmd="~/.config/ags/launch.sh screenshot" />
-                    <QuickButton icon="dnd-symbolic" cmd="astal-notifd -t" />
-                    <QuickButton icon="moon-symbolic" cmd="~/.config/ags/scripts/toggle_theme.sh" />
-                    <QuickButton icon="toggle-wall-symbolic" cmd="~/.config/rofi/wall/launch.sh" />
-                </box>
-                <box></box>
-            </centerbox>
+        </scrollable>
+        <centerbox className="btn-quick-settings-box">
+            <box></box>
+            <box >
+                <QuickButton icon={bind(iconWifi)} cmd={`nmcli radio wifi | grep -q "enabled" && nmcli radio wifi off || nmcli radio wifi on`} />
+                <QuickButton icon={bind(iconBluetooth)} cmd={`bluetoothctl show | grep "Powered: yes" && bluetoothctl power off || bluetoothctl power on`} />
+                <QuickButton icon="cut-screenshot-symbolic" cmd="~/.config/ags/launch.sh screenshot" />
+                <QuickButton icon="dnd-symbolic" cmd="astal-notifd -t" />
+                <QuickButton icon="moon-symbolic" cmd="~/.config/ags/scripts/toggle_theme.sh" />
+                <QuickButton icon="toggle-wall-symbolic" cmd="~/.config/rofi/wall/launch.sh" />
+            </box>
+            <box></box>
         </centerbox>
-    
+    </centerbox>
+
 }
 
 // ------------------- Revealer -------------------

@@ -144,7 +144,19 @@ window.bar {
         background: colors.$bg-widgets; //#242522
         border-radius: 10px;
         padding: 0px 4px;
+        /*
+        button:nth-child(1)  { color: #ff6b6b; }
+        button:nth-child(2)  { color: #f0a202; }
+        button:nth-child(3)  { color: #ffe66d; }
+        button:nth-child(4)  { color: #8bd448; }
+        button:nth-child(5)  { color: #4ecdc4; }
+        button:nth-child(6)  { color: #1aafd0; }
+        button:nth-child(7)  { color: #5c7aff; }
+        button:nth-child(8)  { color: #b86bff; }
+        button:nth-child(9)  { color: #ff6fff; }
+        button:nth-child(10) { color: #ff4f81; }*/
     }
+
     .workspaces button {
         all: unset;
         margin: 2px 0px;
@@ -152,10 +164,12 @@ window.bar {
         border-radius: 50%;
         padding: 0px 6px;
     }
+
     .workspaces button.focused {
         color: colors.$bg;
         background: #BECAB7;
     }
+
     .workspaces button:hover {
         color: colors.$text-color;
     }
@@ -169,24 +183,30 @@ window.bar {
         padding: 0px 4px;
         color: colors.$text-color;
     }
+
     .clock .clock-point {
         font-size: 20px;
     }
+
     .clock .clock-calendar {
         font-size: 14px;
     }
+
     .app-launcher-box {
         padding: 0px 20px;
     }
+
     .app-launcher-box .app-launcher-btn {
         all: unset;
         color: colors.$text-color;
         font-size: 14px;
     }
+
     .app-launcher-box .app-launcher-label {
         color: #414141;
         font-size: 12px;
     }
+
     .media-btn {
         all: unset;
         color: colors.$text-color;
@@ -196,15 +216,18 @@ window.bar {
         border-radius: 10px;
         padding: 2px 4px 2px 10px;
     }
+
     .media-btn .media-icon {
         margin: 0px 5px;
     }
+
     .menu-shortcuts {
         margin: 4px 0px;
         background: colors.$bg-widgets;
         border-radius: 10px;
         padding: 2px 4px;
     }
+
     .menu-shortcuts .menu-shortcuts-btn {
         all: unset;
         border-radius: 50%;
@@ -212,6 +235,7 @@ window.bar {
         padding: 0px 4px;
         margin: 0px 2px;
     }
+
     .battery-box {
         margin: 4px 4px;
         background: colors.$bg-widgets;
@@ -219,12 +243,13 @@ window.bar {
         border-radius: 10px;
         padding: 2px 4px;
     }
-    
+
     .menu-box {
         all: unset;
         margin: 4px 10px 4px 0px;
         transition: all 300ms;
     }
+
     .menu-box .menu-btn {
         all: unset;
         padding: 0px 10px;
@@ -232,16 +257,20 @@ window.bar {
         font-size: 14px;
         border-radius: 10px;
     }
+
     .menu-box .menu-btn:hover {
         background: colors.$bg-widgets;
     }
+
     .menu-box .menu-btn icon {
         color: colors.$text-color;
         font-size: 14px;
     }
+
     .menu-box .menu-btn .menu-btn-icon.medium {
         margin: 0px 6px;
     }
+
     .hack-btn {
         all: unset;
         color: colors.$text-color;
@@ -250,109 +279,136 @@ window.bar {
         border-radius: 10px;
         padding: 2px 4px 2px 4px;
     }
+
     .togglebar-btn {
         all: unset;
         margin: 4px 14px 4px 0px;
         padding: 2px 4px 2px 4px;
         border-radius: 50%;
+
         icon {
             color: colors.$text-color;
         }
     }
+
     .togglebar-btn:hover {
         background: colors.$bg-widgets;
     }
 }
+
 window.barleft {
     background-color: colors.$bg;
     border-radius: 8px;
+
     .app-launcher-btn {
         all: unset;
         margin: 10px 0px;
+
         icon {
             font-size: 20px;
         }
     }
+
     .workspaces {
         background: colors.$bg-widgets; //#1f272e
         margin: 0px 0px 10px;
         border-radius: 4px;
         margin: 0px 4px;
         padding: 4px 4px;
+
         button {
             all: unset;
+
             icon {
                 color: #424a51;
                 font-size: 20px;
             }
         }
+
         button.focused {
             icon {
                 font-size: 20px;
                 color: #d98b75;
             }
         }
+
         button:hover {
-            icon{
+            icon {
                 color: colors.$text-color
             }
         }
+
         button.active {
             icon {
                 color: #378DF7;
             }
         }
-        
+
+
     }
+
     .info {
         background: colors.$bg-widgets;
         margin: 0px 0px 10px;
         border-radius: 4px;
         padding: 4px 4px;
+
         icon {
             margin: 4px 0px;
             color: colors.$text-color;
         }
+
         label {
             font-weight: bold;
             color: colors.$text-color;
         }
     }
+
     .sidebar-btn {
         all: unset;
+
         icon {
             font-size: 20px;
             color: #d98b75;
         }
     }
+
     .media-btn {
         all: unset;
         margin: 10px 0px 0px;
     }
+
     .hack-btn {
         all: unset;
         margin: 10px 0px;
+
         icon {
             color: #9fef00;
         }
     }
+
     .togglebar-btn {
         all: unset;
         margin: 10px 0px;
+
         icon {
             color: colors.$text-color;
         }
     }
+
     .picker-btn {
         all: unset;
         margin: 10px 0px;
+
         icon {
             color: colors.$text-color;
         }
     }
 }
+
 window.corner-screen {
     background: transparent;
+
     icon {
         font-size: 20px;
         color: colors.$bg;
@@ -368,7 +424,7 @@ window.OSD {
         background-color: #111111;
         padding: 8px 8px;
         margin: 10px;
-        box-shadow: 3px 3px 7px 0px rgba(0,0,0,.4);
+        box-shadow: 3px 3px 7px 0px rgba(0, 0, 0, .4);
     }
 
     icon {
@@ -389,6 +445,7 @@ window.OSD {
         }
     }
 }
+
 window.osd {
     background: transparent;
 }
@@ -396,24 +453,29 @@ window.osd {
 window.time {
     all: unset;
     background-color: transparent;
-    
+
     .name-day {
         font-size: 60px;
         font-weight: bold;
     }
+
     .date-time {
         font-size: 20px;
         font-weight: bold;
         padding: 0px 20px;
     }
+
     .date-time .year {
         margin-left: 10px;
     }
+
     .date-time-hours {
         padding: 0px 60px;
         margin: 10px;
-        
-        .hour, .min, .sec {
+
+        .hour,
+        .min,
+        .sec {
             font-size: 18px;
             font-weight: bold;
             /*border: 2px solid rgba(0,255,153,1);*/
@@ -430,47 +492,68 @@ window.sidebar {
             color: colors.$text-color;
             margin-right: 72px;
         }
+
         button {
             padding: 12px 12px;
+
             icon {
                 color: colors.$text-color;
                 font-size: 20px;
             }
         }
+
         button:hover {
             background: #378DF7;
         }
     }
+
     .btn-quick-settings-box {
         border-radius: 20px;
         padding: 12px 0px 0px;
+
         button {
             margin: 0px 4px;
             background-color: colors.$bg-panels;
         }
+
         button:hover {
             background: #378DF7;
         }
     }
-    .btn-quick-settings{
+
+    .btn-quick-settings {
         all: unset;
         padding: 20px 10px;
-        border-radius: 50%;
+        border-radius: 8px;
         color: colors.$text-color;
+        transition: all 300ms;
+
+        icon {
+            transition: all 300ms;
+        }
+
         .menu-shortcuts-icon-arrow {
-            margin-left: 255px;
+            margin-left: 272px;
             color: colors.$text-color;
+            transition: all 300ms;
         }
     }
+
     .overlay-text {
-        color: colors.$text-color;  
+        color: colors.$text-color;
+
+        label {
+            transition: all 300ms;
+        }
     }
+
     .normal {
         all: unset;
         padding: 10px 10px;
         border-radius: 50%;
         color: colors.$text-color;
     }
+
     .active {
         all: unset;
         padding: 10px;
@@ -478,30 +561,37 @@ window.sidebar {
         color: colors.$text-color;
         background: #378DF7;
     }
+
     .btn-settings-box {
         margin-top: 10px;
+
         .btn-quick-settings {
             border-radius: 0px;
         }
+
         button:hover {
             background: #414141;
         }
+
         button:active {
             background: colors.$color-btn-work;
         }
     }
+
     .btn-keymode {
         padding: 14px 10px;
         background: colors.$bg-panels;
         border-radius: 20px;
         margin-bottom: 10px;
         color: colors.$text-color;
+
         switch {
             all: unset;
             background: colors.$fg-panels;
             border-radius: 15px;
             min-width: 40px;
             min-height: 20px;
+
             slider {
                 all: unset;
                 background: colors.$text-color;
@@ -510,44 +600,48 @@ window.sidebar {
                 border-radius: 50%;
                 border: none;
             }
+
             &:checked {
                 background-color: #378DF7;
             }
         }
-        
+
     }
+
     .notification-box {
         all: unset;
         border-radius: 14px;
+
         .frame {
             border: 0px;
         }
+
         eventbox.Notification {
 
-        &:first-child>box {
-            margin-top: 4px;
-        }
-    
-        &:last-child>box {
-            margin-bottom: 4px;
-        }
-    
-        // eventboxes can not take margins so we style its inner box instead
-        >box {
-            min-width: 200px;
-            border-radius: 12px;
-            background-color: colors.$bg-panels;
-            //margin: .5rem 1rem .5rem 1rem;
-            margin: 2px 4px;
-            padding: 4px 10px 10px;
-            //box-shadow: 2px 3px 8px 0px gtkalpha(black, .4);
-            //border: 1pt solid gtkalpha($fg-color, .03);
-        }
-        
-        &.critical>box {
-            //border: 1pt solid gtkalpha($error, .4);
-            background: $error;
-    /*
+            &:first-child>box {
+                margin-top: 4px;
+            }
+
+            &:last-child>box {
+                margin-bottom: 4px;
+            }
+
+            // eventboxes can not take margins so we style its inner box instead
+            >box {
+                min-width: 200px;
+                border-radius: 12px;
+                background-color: colors.$bg-panels;
+                //margin: .5rem 1rem .5rem 1rem;
+                margin: 2px 4px;
+                padding: 4px 10px 10px;
+                //box-shadow: 2px 3px 8px 0px gtkalpha(black, .4);
+                //border: 1pt solid gtkalpha($fg-color, .03);
+            }
+
+            &.critical>box {
+                //border: 1pt solid gtkalpha($error, .4);
+                background: $error;
+                /*
             .header {
     
                 .app-name {
@@ -559,145 +653,166 @@ window.sidebar {
                     color: gtkalpha($error, .6);
                 }
             }*/
-        }
-        &.normal>box {
-            background: green;
-        }
-        .header {
-            .time {
-                margin-right: 5px;
             }
-            button {
+
+            &.normal>box {
+                background: green;
+            }
+
+            .header {
+                .time {
+                    margin-right: 5px;
+                }
+
+                button {
+                    all: unset;
+                    margin: 5px 0px;
+                    padding: 5px;
+                    border-radius: 4px;
+                }
+
+                button:hover {
+                    background: #378DF7;
+                }
+            }
+
+
+
+
+            .content {
+                margin-top: 5px;
+                //background: #29222C;
+
+
+                .summary {
+                    font-size: 16px;
+                    color: colors.$text-color;
+                }
+
+                .body {
+                    font-size: 12px;
+                    color: colors.$text-color;
+                }
+
+                .image {
+                    border: 1px solid #000000;
+                    margin-right: .5rem;
+                    border-radius: 9px;
+                    min-width: 80px;
+                    min-height: 80px;
+                    background-size: cover;
+                    background-position: center;
+                }
+            }
+
+            .btn-expand {
                 all: unset;
-                margin: 5px 0px;
-                padding: 5px;
-                border-radius: 4px;
+                margin: 0px 5px 0px 10px;
             }
-            button:hover {
-                background: #378DF7;
-            }
-        }
-        
-        
-    
-    
-        .content {
-            margin-top: 5px;
-            //background: #29222C;
-            
-    
-            .summary {
-                font-size: 16px;
+
+            .btn-expand:hover {
                 color: colors.$text-color;
             }
-    
-            .body {
-                font-size: 12px;
-                color: colors.$text-color;
-            }
-    
-            .image {
-                border: 1px solid #000000;
-                margin-right: .5rem;
-                border-radius: 9px;
-                min-width: 80px;
-                min-height: 80px;
-                background-size: cover;
-                background-position: center;
-            }
-        }
-        .btn-expand {
-            all: unset;
-            margin: 0px 5px 0px 10px;
-        }
-        .btn-expand:hover {
-            color: colors.$text-color;
-        }
-    
-        .actions {
-            margin: 1rem;
-            margin-top: 0px;
-    
-            button {
-                margin: 0px .3rem;
-    
-                &:first-child {
-                    margin-left: 0px;
-                }
-    
-                &:last-child {
-                    margin-right: 0px;
+
+            .actions {
+                margin: 1rem;
+                margin-top: 0px;
+
+                button {
+                    margin: 0px .3rem;
+
+                    &:first-child {
+                        margin-left: 0px;
+                    }
+
+                    &:last-child {
+                        margin-right: 0px;
+                    }
                 }
             }
         }
     }
-    }
+
     .btn-slider-settings {
         all: unset;
         padding: 20px 10px;
         border-radius: 50%;
         color: colors.$text-color;
+
         .menu-shortcuts-icon-arrow {
-            margin-left: 255px;
+            margin-left: 272px;
             color: colors.$text-color;
         }
     }
+
     .slider {
         margin-left: 40px;
+
         scale {
             all: unset;
-            min-width: 225px;
+            min-width: 240px;
+
             highlight {
                 all: unset;
                 min-height: 10px;
                 background-color: colors.$text-color;
                 border-radius: 10px;
             }
+
             trough {
                 all: unset;
                 min-height: 10px;
                 background-color: colors.$fg-panels;
                 border-radius: 10px;
             }
+
             slider {
                 all: unset;
             }
         }
     }
+
     .soundconf-box {
         all: unset;
     }
+
     .keybindconf-box {
         all: unset;
     }
+
     .microphone-box {
         all: unset;
-        
+
         &:first-child>box {
             margin-left: 40px;
-        }   
+        }
+
         box {
-            label{
+            label {
                 color: colors.$text-color;
             }
-        }    
+        }
 
     }
+
     .wificonf-box {
         all: unset;
         border-radius: 14px;
+
         centerbox.power {
             padding: 14px 10px;
             background: colors.$bg-panels;
             border-radius: 20px;
             margin-bottom: 10px;
             font-weight: bold;
+
             switch {
                 all: unset;
                 background: colors.$fg-panels;
                 border-radius: 15px;
                 min-width: 40px;
                 min-height: 6px;
+
                 slider {
                     all: unset;
                     background: colors.$text-color;
@@ -706,72 +821,86 @@ window.sidebar {
                     border-radius: 50%;
                     border: none;
                 }
+
                 &:checked {
                     background-color: #378DF7;
                 }
             }
-            
+
         }
+
         .current {
             label {
                 margin-left: 16px;
                 font-size: 14px;
                 color: colors.$color-btn-work;
             }
+
             box {
                 margin: 10px 0px;
                 background: colors.$bg-panels;
                 border-radius: 20px;
+
                 icon {
                     all: unset;
                     margin: 0px 0px 0px 40px;
                     font-size: 30px;
                     color: colors.$text-color;
                 }
+
                 .label-1 {
                     color: #378DF7;
                     font-size: 16px;
                 }
+
                 .label-2 {
                     color: colors.$color-btn-work;
                     font-size: 14px;
                 }
             }
         }
+
         .nets {
             label {
                 margin-left: 16px;
                 font-size: 14px;
                 color: colors.$color-btn-work;
             }
+
             button {
                 all: unset;
+
                 box {
                     margin: 10px 0px 0px;
                     padding: 10px;
                     background: colors.$bg-panels;
                     border-radius: 20px;
+
                     icon {
                         all: unset;
                         color: colors.$text-color;
                     }
+
                     label {
                         color: colors.$text-color;
                         font-size: 16px;
                     }
-                } 
+                }
             }
         }
+
         .connect {
             label {
                 margin: 10px 0px 10px 16px;
                 font-size: 14px;
                 color: colors.$color-btn-work;
             }
+
             box {
                 padding: 20px;
                 background-color: colors.$bg-panels;
                 border-radius: 20px;
+
                 entry {
                     all: unset;
                     min-width: 200px;
@@ -780,6 +909,7 @@ window.sidebar {
                     padding: 10px;
                 }
             }
+
             button {
                 all: unset;
                 margin: 10px 40px;
@@ -788,32 +918,51 @@ window.sidebar {
                 border-radius: 14px;
                 transition: all 300ms;
             }
+
             button:hover {
                 color: #ffffff;
                 background: #8db1dd;
             }
         }
     }
+
+    .scan {
+        all: unset;
+
+        icon {
+            padding: 10px;
+            border-radius: 50%;
+        }
+    }
+
+    .scan:hover {
+        icon {
+            background: #378DF7;
+        }
+    }
 }
 
-.revealer-box{
+.revealer-box {
     background: colors.$bg;
     border-radius: 8px;
     padding: 10px;
 }
 
-window.media{
+window.media {
     all: unset;
     background-color: transparent;
+
     .media-box {
         centerbox {
             icon {
                 font-size: 18px;
             }
         }
+
         label {
             color: colors.$text-color;
         }
+
         box {
             label {
                 font-size: 12px;
@@ -821,9 +970,11 @@ window.media{
             }
         }
     }
+
     .media-menu {
         margin-left: 10px;
     }
+
     scale {
         padding: 0px;
         margin: 40px 0px 4px;
@@ -845,6 +996,7 @@ window.media{
             all: unset;
         }
     }
+
     .cover-art {
         box {
             border-radius: 14px;
@@ -854,73 +1006,21 @@ window.media{
             background-position: center;
         }
     }
-    .control{
+
+    .control {
         label {
             color: colors.$text-color;
         }
+
         centerbox {
             margin: 0px 10px;
+
             button {
                 all: unset;
                 background: #393939;
                 margin: 0px 2px;
                 padding: 0px 8px;
                 border-radius: 4px;
-            }
-        }
-    }
-}
-
-window.volume {
-    all: unset;
-    background-color: transparent;
-    .volume-box {
-        min-width: 120px;
-        background: #17111B;
-        border: 2px solid #29222C;
-        padding: 10px 20px;
-        margin-top: 12px;
-        border-radius: 14px;
-    }
-    /*
-    scale {
-        padding: 0;
-        min-width: 80px;
-        margin: 10px 10px;
-    
-        trough {
-            all: unset;
-            min-height: 10px;
-            border-radius: 10px;
-            background: #29222C;
-        }
-    
-        highlight {
-            all: unset;
-            border-radius: 10px;
-            background-color: #ffffff;
-        }
-    
-        slider {
-            all: unset;
-        }
-    }*/
-    levelbar {
-        all: unset;
-        trough {
-            all: unset;
-            min-height: 10px;
-            background: #29222C;
-            border-radius: 10px;
-            margin: 10px;
-
-            block.filled {
-                border: none;
-                background: #ffffff;
-                border-radius: 10px;
-            }
-            block.empty {
-                all: unset;
             }
         }
     }
@@ -934,21 +1034,113 @@ window.screenshot {
         background: colors.$bg-widgets;
         border-radius: 10px;
         padding: 20px;
+
         box {
             all: unset;
+
             .icon {
                 font-size: 30px;
             }
         }
     }
+
     button:hover {
         background-color: colors.$fg-widgets;
     }
+
     &:first-child {
         margin: 0px 20px;
     }
+
     &:last-child {
         margin: 0px 20px;
     }
 }
 
+window.volume {
+    background-color: transparent;
+
+    levelbar {
+        all: unset;
+
+        trough {
+            all: unset;
+            min-width: 30px;
+            background: #29222C;
+            border-radius: 20px;
+            margin: 10px;
+
+            block.filled {
+                border: none;
+                background: #757575;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+
+            block.empty {
+                all: unset;
+            }
+        }
+    }
+
+    .volume-high trough block.filled {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .overlay {
+        label {
+            margin-bottom: 54px;
+        }
+
+        icon {
+            font-size: 20px;
+        }
+    }
+}
+
+window.brightness {
+    background-color: transparent;
+
+    levelbar {
+        all: unset;
+
+        trough {
+            all: unset;
+            min-width: 30px;
+            background: #29222C;
+            border-radius: 20px;
+            margin: 10px;
+
+            block.filled {
+                border: none;
+                background: #757575;
+                border-bottom-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+
+            block.empty {
+                all: unset;
+            }
+        }
+    }
+
+    .brightness-high trough block.filled {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .overlay {
+        label {
+            margin-bottom: 54px;
+        }
+
+        icon {
+            font-size: 20px;
+        }
+    }
+}

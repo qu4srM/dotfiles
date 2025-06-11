@@ -12,7 +12,6 @@ import { percentageFloat } from "../bar/BarTop"
 const TIMEOUT_DELAY = 5000/*
 onInterval(percentageFloat)
 let onInterval = function ({percentage}) {
-
 }
 
 let interval = setInterval(onInterval, 1000)*/
@@ -20,15 +19,15 @@ let reload = function () {
     if (percentageFloat.get() == 1) {
         safeExecAsync(["bash", "-c", `notify-send "Charging" "La bateria se cargó correctamente" -u normal`])
         stop()
-        setTimeout(()=> {
+        setTimeout(() => {
             ready()
-        }, 60000)
-    } else if (percentageFloat.get() == 0.15){
+        }, 3000000)
+    } else if (percentageFloat.get() == 0.15) {
         safeExecAsync(["bash", "-c", `notify-send "Discharging" "Conecte el cargador, queda poca bateria" -u critical`])
         stop()
-        setTimeout(()=> {
+        setTimeout(() => {
             ready()
-        }, 60000)
+        }, 3000000)
     } else {
         stop()
         ready()
@@ -37,11 +36,11 @@ let reload = function () {
 
 let intervalPercentage = setInterval(reload, 1000)
 
-function stop () {
+function stop() {
     clearInterval(intervalPercentage)
 }
 
-function ready () {
+function ready() {
     intervalPercentage = setInterval(reload, 1000)
 }
 
@@ -84,7 +83,7 @@ class NotifiationMap implements Subscribable {
                 // so that it acts as a "popup" and we can still display it
                 // in a notification center like widget
                 // but clicking on the close button will close it
-                onHoverLost: () => {}, //this.delete(id),
+                onHoverLost: () => { }, //this.delete(id),
 
                 // notifd by default does not close notifications
                 // until user input or the timeout specified by sender
@@ -131,7 +130,7 @@ class NotifiationMap implements Subscribable {
 }
 
 
-function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
+function OnRevealer({ visible }: { visible: Variable<boolean> }) {
     const notifs = new NotifiationMap()
     return <revealer
         setup={self => show(self, visible)}
@@ -144,9 +143,9 @@ function OnRevealer ({ visible }: { visible: Variable<boolean> }) {
             </box>
         </centerbox>
     </revealer>
-    
+
 }
-export default function NotificationConfig ({ config }: { config: Variable<boolean> }) {
+export default function NotificationConfig({ config }: { config: Variable<boolean> }) {
     const visible = config
     return <OnRevealer visible={visible} />
 }
