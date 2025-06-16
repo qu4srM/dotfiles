@@ -524,7 +524,7 @@ window.sidebar {
     .btn-quick-settings {
         all: unset;
         padding: 20px 10px;
-        border-radius: 8px;
+        border-radius: 50%;
         color: colors.$text-color;
         transition: all 300ms;
 
@@ -551,14 +551,21 @@ window.sidebar {
         all: unset;
         padding: 10px 10px;
         border-radius: 50%;
-        color: colors.$text-color;
+
+        icon {
+            color: colors.$text-color;
+        }
     }
 
     .active {
         all: unset;
         padding: 10px;
         border-radius: 50%;
-        color: colors.$text-color;
+
+        icon {
+            color: colors.$text-color;
+        }
+
         background: #378DF7;
     }
 
@@ -799,36 +806,6 @@ window.sidebar {
         all: unset;
         border-radius: 14px;
 
-        centerbox.power {
-            padding: 14px 10px;
-            background: colors.$bg-panels;
-            border-radius: 20px;
-            margin-bottom: 10px;
-            font-weight: bold;
-
-            switch {
-                all: unset;
-                background: colors.$fg-panels;
-                border-radius: 15px;
-                min-width: 40px;
-                min-height: 6px;
-
-                slider {
-                    all: unset;
-                    background: colors.$text-color;
-                    min-width: 6px;
-                    min-height: 6px;
-                    border-radius: 50%;
-                    border: none;
-                }
-
-                &:checked {
-                    background-color: #378DF7;
-                }
-            }
-
-        }
-
         .current {
             label {
                 margin-left: 16px;
@@ -887,6 +864,10 @@ window.sidebar {
                     }
                 }
             }
+
+            button:hover box {
+                background-color: #378DF7;
+            }
         }
 
         .connect {
@@ -913,15 +894,12 @@ window.sidebar {
             button {
                 all: unset;
                 margin: 10px 40px;
-                color: #ffffff;
-                background: #378DF7;
                 border-radius: 14px;
                 transition: all 300ms;
-            }
 
-            button:hover {
-                color: #ffffff;
-                background: #8db1dd;
+                label {
+                    color: colors.$text-color;
+                }
             }
         }
     }
@@ -938,6 +916,32 @@ window.sidebar {
     .scan:hover {
         icon {
             background: #378DF7;
+        }
+    }
+
+    .bluetooth-box {
+        .info {
+            label {
+                color: colors.$text-color;
+                margin-right: 20px;
+            }
+
+            button {
+                all: unset;
+                background: colors.$bg-panels;
+                padding: 10px 0px 10px 10px;
+                border-radius: 14px;
+            }
+
+            button:hover {
+                background: #378DF7;
+            }
+        }
+
+        .paired {
+            label {
+                color: colors.$color-btn-work;
+            }
         }
     }
 }
@@ -1045,7 +1049,7 @@ window.screenshot {
     }
 
     button:hover {
-        background-color: colors.$fg-widgets;
+        background-color: #378DF7;
     }
 
     &:first-child {
@@ -1066,13 +1070,13 @@ window.volume {
         trough {
             all: unset;
             min-width: 30px;
-            background: #29222C;
+            background: colors.$bg;
             border-radius: 20px;
             margin: 10px;
 
             block.filled {
                 border: none;
-                background: #757575;
+                background-color: colors.$fg-widgets;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 border-top-left-radius: 0px;
@@ -1092,10 +1096,12 @@ window.volume {
 
     .overlay {
         label {
+            color: colors.$text-color;
             margin-bottom: 54px;
         }
 
         icon {
+            color: colors.$text-color;
             font-size: 20px;
         }
     }
@@ -1110,13 +1116,15 @@ window.brightness {
         trough {
             all: unset;
             min-width: 30px;
-            background: #29222C;
+            background: colors.$bg;
             border-radius: 20px;
             margin: 10px;
 
             block.filled {
+                all: unset;
                 border: none;
-                background: #757575;
+                min-width: 30px;
+                background-color: colors.$fg-widgets;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 border-top-left-radius: 0px;
@@ -1136,10 +1144,12 @@ window.brightness {
 
     .overlay {
         label {
+            color: colors.$text-color;
             margin-bottom: 54px;
         }
 
         icon {
+            color: colors.$text-color;
             font-size: 20px;
         }
     }

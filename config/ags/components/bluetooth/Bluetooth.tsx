@@ -201,10 +201,10 @@ function OnRevealer({ visible }: { visible: Variable<boolean> }) {
         transitionType={SLIDE_DOWN}
         transitionDuration={100}>
         <box className="bluetooth-box" orientation={1}>
-            <box className="current" orientation={1}>
+            <box className="info" orientation={0} halign={Gtk.Align.CENTER}>
                 <label label={bind(name)} />
-                <button onClicked={() => { console.log(lengthPaired.get()) }}>
-                    Execute Requirements Bluetooth (Always)
+                <button cursor="pointer" onClicked={() => { console.log(lengthPaired.get()) }}>
+                    Execute This (Always)
                 </button>
             </box>
             <box className="paired" orientation={1}>

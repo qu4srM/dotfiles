@@ -145,7 +145,7 @@ function OnRevealer({ visible }: { visible: Variable<boolean> }) {
                         onChanged={e => ssid.set(e.text)} />
                 </box>
                 <button css={bind(currentGradient).as(g => isreconnecting.get() ? `background: ${g};` : `background: #378DF7;`)} cursor="pointer" onClicked={reConnect}>
-                    Reconnect
+                    <label label="Reconnect" />
                 </button>
                 <label label={bind(status)} halign={CENTER} />
                 <label label="Connect to network" halign={START} />
@@ -160,7 +160,7 @@ function OnRevealer({ visible }: { visible: Variable<boolean> }) {
                         onChanged={e => passwdnet.set(e.text)} />
                 </box>
                 <button css={bind(currentGradient).as(g => isconnecting.get() ? `background: ${g};` : `background: #378DF7;`)} cursor="pointer" onClicked={connect}>
-                    Connect
+                    <label label="Connect" />
                 </button>
                 <label label={bind(status)} halign={CENTER} />
             </box>

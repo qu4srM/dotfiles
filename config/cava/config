@@ -23,6 +23,7 @@
 # The number of bars (0-512). 0 sets it to auto (fill up console).
 # Bars' width and space between bars in number of characters.
 ; bars = 0
+bars = 100
 ; bar_width = 2
 ; bar_spacing = 1
 # bar_height is only used for output in "noritake" format
@@ -210,7 +211,7 @@
 # show waveform instead of frequency spectrum, 1 = on, 0 = off
 ; waveform = 0
 
-[color]
+;[color]
 
 # Colors can be one of seven predefined: black, blue, cyan, green, magenta, red, white, yellow.
 # Or defined by hex code '#xxxxxx' (hex code must be within ''). User defined colors requires
@@ -237,8 +238,22 @@
 ; gradient_color_6 = '#cc8033'
 ; gradient_color_7 = '#cc5933'
 ; gradient_color_8 = '#cc3333'
+[color]
+gradient = 1
+gradient_count = 12
 
-
+gradient_color_1 = "#4ec96d"   # verde base
+gradient_color_2 = "#38b28a"   # verde azulado
+gradient_color_3 = "#279dbd"   # azul suave
+gradient_color_4 = "#3b6fc0"   # azul medio
+gradient_color_5 = "#684bb5"   # morado
+gradient_color_6 = "#8652b6"   # morado rosa
+gradient_color_7 = "#ab4ba7"   # rosa morado
+gradient_color_8 = "#d35290"   # rosa fuerte
+gradient_color_9 = "#f06f59"   # naranja suave
+gradient_color_10 = "#f08c4f"  # naranja
+gradient_color_11 = "#f95e4f"  # rojo anaranjado
+gradient_color_12 = "#e84a4a"  # rojo fuerte
 
 [smoothing]
 
