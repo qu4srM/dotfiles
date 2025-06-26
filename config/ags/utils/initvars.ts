@@ -10,7 +10,7 @@ export const countHours = (n) => n * 60 * 60000
 
 // Vars
 
-export const activeBar = Variable("barleft")
+export const activeBar = Variable("bartop")
 
 // Windows
 export const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor
