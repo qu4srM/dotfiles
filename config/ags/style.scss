@@ -133,8 +133,12 @@ window.bar {
 }*/
 
 * {
-    font-family: "Ubuntu Nerd Font";
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
+
 
 window.bar {
     background-color: colors.$bg;
@@ -343,8 +347,6 @@ window.barleft {
                 color: #378DF7;
             }
         }
-
-
     }
 
     .info {
@@ -406,6 +408,146 @@ window.barleft {
     }
 }
 
+window.mariana {
+    background: #00000036;
+
+    button {
+        all: unset;
+        transition: padding 50ms ease;
+    }
+
+    button:hover {
+        padding-top: 3px;
+    }
+
+    .app-label {
+        color: colors.$text-color-inverted;
+        margin: 0px 5px;
+    }
+
+    .app-launcher-btn {
+        margin: 5px 5px 5px 10px;
+
+        icon {
+            font-size: 16px;
+        }
+    }
+
+    .menu-shortcuts-btn {
+        color: colors.$text-color-inverted;
+        margin: 0px 5px;
+    }
+
+    /*
+    .workspaces {
+
+        button:nth-child(1) {
+            color: #ff6b6b;
+        }
+
+        button:nth-child(2) {
+            color: #f0a202;
+        }
+
+        button:nth-child(3) {
+            color: #ffe66d;
+        }
+
+        button:nth-child(4) {
+            color: #8bd448;
+        }
+
+        button:nth-child(5) {
+            color: #4ecdc4;
+        }
+
+        button:nth-child(6) {
+            color: #1aafd0;
+        }
+
+        button:nth-child(7) {
+            color: #5c7aff;
+        }
+
+        button:nth-child(8) {
+            color: #b86bff;
+        }
+
+        button:nth-child(9) {
+            color: #ff6fff;
+        }
+
+        button:nth-child(10) {
+            color: #ff4f81;
+        }
+    }*/
+
+    .workspaces button {
+        color: colors.$text-color;
+        padding: 0px 4px;
+    }
+
+    .workspaces button.focused {
+        color: colors.$text-color-inverted;
+    }
+
+    .workspaces button:hover {
+        color: colors.$text-color-inverted;
+    }
+
+    .media-btn {
+        color: colors.$text-color-inverted;
+        margin: 0px 5px;
+    }
+
+    .hack-btn {
+        color: colors.$text-color-inverted;
+        margin: 0px 5px;
+    }
+
+    .battery-box {
+        margin: 0px 5px;
+
+
+
+        label {
+            color: colors.$text-color-inverted;
+        }
+
+        icon {
+            color: colors.$text-color-inverted;
+        }
+    }
+
+    .menu-btn {
+        margin: 0px 5px;
+
+        box {
+            icon {
+                color: colors.$text-color-inverted;
+                margin: 0px 5px;
+            }
+        }
+    }
+
+    .togglebar-btn {
+        margin-right: 10px;
+
+        icon {
+            color: colors.$text-color-inverted;
+        }
+    }
+
+    .clock-btn {
+        margin: 0px 5px 0px 0px;
+
+        label {
+            margin: 0px 5px;
+            color: colors.$text-color-inverted;
+        }
+    }
+}
+
 window.corner-screen {
     background: transparent;
 
@@ -414,9 +556,6 @@ window.corner-screen {
         color: colors.$bg;
     }
 }
-
-
-
 
 window.OSD {
     box.OSD {

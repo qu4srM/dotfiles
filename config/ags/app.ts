@@ -6,6 +6,7 @@ import { activeBar } from "./utils/initvars"
 //import Bar from "./components/bar/Bar"
 import BarTop from "./components/bar/BarTop"
 import BarLeft from "./components/bar/BarLeft"
+import Mariana from "./components/bar/BarMariana"
 import CornerScreenTop from "./components/corners/CornerScreenTop"
 import CornerScreenBottom from "./components/corners/CornerScreenBottom"
 import NotificationPopups from "./components/notificationsAylur/NotificationPopups"
@@ -42,9 +43,10 @@ App.start({
         if (activeBar.get() === "barleft") {
             BarLeft(null)
         } else if (activeBar.get() === "bartop") {
-            BarTop(null)
-            CornerScreenBottom(null)
-            CornerScreenTop(null)
+            //BarTop(null)
+            //CornerScreenBottom(null)
+            //CornerScreenTop(null)
+            Mariana(null)
         }
 
         SideBar(null)

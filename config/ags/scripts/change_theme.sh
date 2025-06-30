@@ -14,23 +14,25 @@ SCSS_FILE="$HOME/.config/ags/scss/colors.scss"
 
 # Colores predefinidos para el modo oscuro
 DARK_BG="#131412"
-DARK_BG_BLUR="#18111abb"
+DARK_BG_BLUR="#ffffff07"
 DARK_BG_WIDGETS="#1f272e"
 DARK_FG_WIDGETS="#3b3d38"
 DARK_BTN_WORK="#505050"
 DARK_BG_PANELS="#1B1C1A"
 DARK_FG_PANELS="#262724"
 DARK_TEXT_COLOR="#D1D1D1"  # Color de texto en modo oscuro
+DARK_TEXT_COLOR_INVERTED="#ffffff"
 
 # Colores predefinidos para el modo claro
 LIGHT_BG="#d8d6d6"
-LIGHT_BG_BLUR="#f0f0f0bb"
+LIGHT_BG_BLUR="#11111107"
 LIGHT_BG_WIDGETS="#ffffff"
 LIGHT_FG_WIDGETS="#cccccc"
 LIGHT_BTN_WORK="#707070"
 LIGHT_BG_PANELS="#ffffff"
 LIGHT_FG_PANELS="#bdbdbd"
 LIGHT_TEXT_COLOR="#333333"  # Color de texto en modo claro
+LIGHT_TEXT_COLOR_INVERTED="#111111"
 
 # Generación del archivo SCSS según el modo
 if [ "$MODE" = "dark" ]; then
@@ -47,6 +49,7 @@ if [ "$MODE" = "dark" ]; then
 \$bg-panels: $DARK_BG_PANELS;
 \$fg-panels: $DARK_FG_PANELS;
 \$text-color: $DARK_TEXT_COLOR; 
+\$text-color-inverted: $DARK_TEXT_COLOR_INVERTED; 
 EOF
 
 elif [ "$MODE" = "light" ]; then
@@ -63,5 +66,6 @@ elif [ "$MODE" = "light" ]; then
 \$bg-panels: $LIGHT_BG_PANELS;
 \$fg-panels: $LIGHT_FG_PANELS;
 \$text-color: $LIGHT_TEXT_COLOR;
+\$text-color-inverted: $LIGHT_TEXT_COLOR_INVERTED; 
 EOF
 fi
