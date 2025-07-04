@@ -1,11 +1,9 @@
 //@pragma IconTheme PapirusDark
 
 import "modules"
-import "modules/bar/"
-import "modules/bar/components/"
 import "modules/drawers/"
 import "widgets"
-import "widgets/"
+import "services"
 
 
 import QtQuick

@@ -1,22 +1,18 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 Text {
     id: root
-    anchors.centerIn: parent
+    anchors.verticalCenter: parent.verticalCenter
     color: "white"
     font.family: "Roboto"
     font.pixelSize: 12
     font.weight: Font.Medium
 
-    Process {
-        command: ["date", "+%a %b %e %l:%M"]
-
-        running: true
-
-        stdout: StdioCollector {
-            onStreamFinished: root.text = this.text.trim()
-        }
+    text: {
+        const raw = Hyprland.activeToplevel?.lastIpcObject.class || ""
+        raw.charAt(0).toUpperCase() + raw.slice(1)
     }
 }

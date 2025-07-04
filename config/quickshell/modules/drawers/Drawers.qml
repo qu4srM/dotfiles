@@ -86,11 +86,11 @@ Variants {
             Notch {
                 themeColorRect: "#000000"
                 themeColorMain: "#000000"
-                implicitWidthRect: 180
+                implicitWidthRect: 200
                 implicitHeightRect: 24
                 widthRect: 40
                 heightRect: 10
-                margin: -5
+                margin: 5
             }
             
             Bar {

@@ -6,9 +6,9 @@ import Quickshell.Widgets
 
 Rectangle {
     id: root
-    color: mouseArea.containsMouse ? "#333333" : "transparent"
-    height: 30
-    width: textItem.implicitWidth + 10
+    color: mouseArea.containsMouse ? "#000000" : "transparent"
+    height: 24
+    width: textItem.implicitWidth + 20
     implicitWidth: textItem.implicitWidth
     implicitHeight: textItem.implicitHeight
 
