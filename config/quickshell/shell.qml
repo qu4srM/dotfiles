@@ -1,4 +1,4 @@
-//@pragma IconTheme PapirusDark
+//@pragma IconTheme Papirus
 
 import "modules"
 import "modules/drawers/"

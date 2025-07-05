@@ -9,6 +9,7 @@ Scope {
 
     required property ShellScreen screen
     required property Item bar
+    required property Item dock
 
     ExclusionZone {
         anchors.left: true
@@ -26,6 +27,7 @@ Scope {
 
     ExclusionZone {
         anchors.bottom: true
+        exclusiveZone: root.dock.implicitHeight
     }
 
     component ExclusionZone: StyledWindow {

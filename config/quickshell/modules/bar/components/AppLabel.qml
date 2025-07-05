@@ -2,10 +2,12 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import QtQuick.Layouts
 
 Text {
     id: root
     anchors.verticalCenter: parent.verticalCenter
+    Layout.alignment: Qt.AlignVCenter
     color: "white"
     font.family: "Roboto"
     font.pixelSize: 12

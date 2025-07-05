@@ -13,14 +13,9 @@ import Quickshell.Wayland
 
 Item {
     width: 190
-    height: 24
+    height: parent.height
     anchors.verticalCenter: parent.verticalCenter
-
-    Text {
-        text: HyprlandData.currentAppClass
-        font.pixelSize: 12
-        color: "white"
-    }
+    Layout.alignment: Qt.AlignVCenter
 
     RowLayout {
         anchors.centerIn: parent
@@ -31,8 +26,8 @@ Item {
 
             Rectangle {
                 width: 19
-                height: 17
-                radius: 4
+                height: 19
+                radius: 10
                 color: modelData.focused ? "#55677d" : "transparent"
                 z: -1
             }

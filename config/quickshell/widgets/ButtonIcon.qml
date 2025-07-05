@@ -11,13 +11,15 @@ Rectangle {
     property string background: "transparent"
     color: background
     anchors.verticalCenter: parent.verticalCenter
-    implicitWidth: 20
-    implicitHeight: 20
+    Layout.alignment: Qt.AlignVCenter
+    implicitWidth: size
+    implicitHeight: size + 2
     radius: 10
 
     property string iconSystem: ""
     property string iconSource: ""
     property string command: ""
+    property string rightClickCommand: ""  // 👈 nuevo
     property real size: 0
 
     Process {
@@ -25,12 +27,26 @@ Rectangle {
         command: ["bash", "-c", root.command]
     }
 
+    Process {
+        id: runRightClickCommand
+        command: ["bash", "-c", root.rightClickCommand]
+    }
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: runCommand.startDetached()
+
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+        onPressed: (mouse) => {
+            if (mouse.button === Qt.RightButton && root.rightClickCommand !== "") {
+                runRightClickCommand.startDetached()
+            } else if (mouse.button === Qt.LeftButton && root.command !== "") {
+                runCommand.startDetached()
+            }
+        }
     }
 
     IconImage {
@@ -48,5 +64,4 @@ Rectangle {
             }
         }
     }
-
 }

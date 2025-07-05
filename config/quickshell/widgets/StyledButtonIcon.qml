@@ -11,6 +11,7 @@ Rectangle {
     property string background: "transparent"
     color: background
     anchors.verticalCenter: parent.verticalCenter
+    Layout.alignment: Qt.AlignVCenter
     implicitWidth: 22
     implicitHeight: 22
     radius: 10

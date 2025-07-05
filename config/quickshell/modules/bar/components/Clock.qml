@@ -1,10 +1,12 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import QtQuick.Layouts
 
 Item {
     id: root
     anchors.verticalCenter: parent.verticalCenter
+    Layout.alignment: Qt.AlignVCenter
     implicitWidth: textItem.implicitWidth
     implicitHeight: textItem.implicitHeight
 
@@ -17,7 +19,7 @@ Item {
     }
     Process {
         id: process
-        command: ["date", "+%a %b %e %l:%M"]
+        command: ["date", "+%a %b %e %l:%M %P"]
         running: true
 
         stdout: StdioCollector {

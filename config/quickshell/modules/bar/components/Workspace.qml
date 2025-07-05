@@ -18,6 +18,8 @@ Item {
     height: 18
     required property int workspaceId
     property string workspaceActive: ""
+    anchors.verticalCenter: parent.verticalCenter
+    Layout.alignment: Qt.AlignVCenter
 
     Text {
         anchors.centerIn: parent

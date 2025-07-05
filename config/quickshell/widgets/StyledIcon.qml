@@ -6,19 +6,22 @@ import Quickshell.Widgets
 import QtQuick.Controls
 import QtQuick.Effects
 
-Item {
+Rectangle {
     id: root
-    anchors.verticalCenter: parent.verticalCenter
+    property string background: "transparent"
+    color: background
     implicitWidth: size
-    implicitHeight: parent.height
+    implicitHeight: size
     property string iconSource: ""
     property string iconSystem: ""
     property real size: 0
+    anchors.verticalCenter: parent.verticalCenter
+    Layout.alignment: Qt.AlignVCenter
 
     IconImage {
         id: image 
-        anchors.verticalCenter: parent.verticalCenter
         implicitSize: root.size
+        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         asynchronous: true
         source: Quickshell.iconPath(root.iconSystem, true) !== "" ? Quickshell.iconPath(root.iconSystem) : Qt.resolvedUrl("../assets/icons/" + root.iconSource)

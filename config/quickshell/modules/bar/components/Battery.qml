@@ -12,27 +12,43 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 Item {
-    id: root
+    id: root 
     anchors.verticalCenter: parent.verticalCenter
-    implicitWidth: textItem.implicitWidth + 30
-    implicitHeight: textItem.implicitHeight
+    Layout.alignment: Qt.AlignVCenter
+    implicitWidth: row.width
+    implicitHeight: icon.size
+
     property bool isCharging: false
+    property real batteryLevel: 0.0
     
-    RowLayout {
+    Row {
+        id: row
         anchors.centerIn: parent
-        spacing: 0
+        spacing: 6
         Text {
+            visible: true
             id: textItem
+            anchors.verticalCenter: parent.verticalCenter
             color: "white"
             font.family: "Roboto"
             font.pixelSize: 12
             font.weight: Font.Medium
         }
-        StyledIcon {
-            iconSystem: Icons.getBatteryIcon(parseInt(textItem.text), isCharging)
-            size: 14
+        
+        CircularProgress {
+            value: root.batteryLevel
+            strokeWidth: 2
+            StyledIcon {
+                id: icon
+                anchors.horizontalCenter: parent.horizontalCenter
+                iconSystem: Icons.getBatteryIcon(parseInt(textItem.text), isCharging)
+                size: 11
+            }
         }
+
+        
     }
+    
     Process {
         id: multiProcess
         command: ["bash", "-c",
@@ -44,15 +60,18 @@ Item {
         stdout: StdioCollector {
             onStreamFinished: {
                 const parts = this.text.trim().split("|")
-                textItem.text = parts[0] || ""
-                isCharging = parts[1]?.trim() === "1"
+                const levelStr = parts[0] || "0"
+                const levelInt = parseInt(levelStr)
+                root.batteryLevel = levelInt / 100.0
+                textItem.text = levelStr
+                root.isCharging = parts[1]?.trim() === "1"
             }
         }
     }
 
 
     Timer {
-        interval: 1000
+        interval: 10000
         running: true
         repeat: true
         onTriggered: multiProcess.running = true

@@ -48,4 +48,20 @@ Singleton  {
             return "battery-empty-symbolic.svg";
         }
     }
+
+    function getNetworkIcon(strength: int): string {
+        if (strength >= 80)
+            return "network-wireless-signal-excellent";
+        if (strength >= 60)
+            return "network-wireless-signal-good";
+        if (strength >= 40)
+            return "network-wireless-signal-ok";
+        if (strength >= 20)
+            return "network-wireless-signal-weak";
+        return "network-wireless-signal-none";
+    }
+
+    function getBluetoothIcon(connected: bool): string {
+        return connected ? "bluetooth-active-symbolic" : "bluetooth-disabled-symbolic";
+    }
 }

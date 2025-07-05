@@ -1,42 +1,34 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
+import QtQuick.Controls
+import Quickshell 
 import Quickshell.Io
-import Quickshell.Widgets
 
 Rectangle {
     id: root
     color: mouseArea.containsMouse ? "#000000" : "transparent"
-    implicitWidth: textItem.implicitWidth + 20
-    implicitHeight: parent.height
-
-    // Si estás usando un RowLayout afuera:
+    width: item.width + 10
+    height: h - 5
+    radius: 10
+    anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
 
-    property string text: "Screenshot"
+
     property string command: "whoami"
+    required property Item item
+    required property real h
+    
 
     Process {
         id: runCommand
         command: ["bash", "-c", root.command]
     }
-
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: runCommand.startDetached()
-    }
-
-    Text {
-        id: textItem
-        anchors.centerIn: parent
-        text: root.text
-        color: "white"
-        font.family: "Roboto"
-        font.pixelSize: 12
-        font.weight: Font.Medium
     }
     Behavior on color {
         ColorAnimation {
@@ -45,3 +37,5 @@ Rectangle {
         }
     }
 }
+
+
