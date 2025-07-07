@@ -63,7 +63,7 @@ Item {
 
 
     Timer {
-        interval: 1000
+        interval: 3000
         running: true
         repeat: true
         //onTriggered: getAppClassProcess.running = true

@@ -5,6 +5,7 @@ import "root:/widgets/"
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
@@ -36,28 +37,32 @@ Variants {
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
+            
             mask: Region {
                 x: 0
-                y: bar.implicitHeight
+                y: 0
                 width: win.width
-                height: win.height
+                height: win.height - bar.implicitHeight - dock.implicitHeight
                 intersection: Intersection.Xor
+
+
+                Region {
+                    x: 0
+                    y: 0
+                    width: win.width
+                    height: win.height
+                    intersection: Intersection.Xor
+                }
 
                 Region {
                     x: 0
                     y: dock.implicitHeight
                     width: win.width
                     height: win.height
-                intersection: Intersection.Xor
-                }
-                Region {
-                    x: 0
-                    y: bar.implicitHeight
-                    width: win.width
-                    height: win.height - bar.implicitHeight - dock.implicitHeight
                     intersection: Intersection.Xor
                 }
             }
+
 
             
 
@@ -96,12 +101,12 @@ Variants {
             Dock {
                 id: dock
                 screen: scope.modelData
-                h: 35
-                colorDock: "#b6111111"
+                h: 40
+                colorDock: "#29ffffff"
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 5
+                anchors.bottomMargin: 3
             }
         }
     }

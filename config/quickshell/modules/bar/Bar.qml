@@ -29,7 +29,6 @@ Rectangle {
         // Zona izquierda
         Item {
             anchors.fill: parent
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
             Layout.preferredWidth: 300
 
             Row {
