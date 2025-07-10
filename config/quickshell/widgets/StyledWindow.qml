@@ -5,6 +5,6 @@ PanelWindow {
     required property string name
     property string colorMain: "transparent"
 
-    WlrLayershell.namespace: `shell-${name}`
+    WlrLayershell.namespace: `quickshell:${name}`
     color: colorMain
 }

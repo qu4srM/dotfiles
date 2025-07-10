@@ -26,7 +26,7 @@ Item {
         text: "·"
         font.family: "Roboto"
         color: root.workspaceActive === "true" ? "transparent" : "#8393a6"
-        font.pixelSize: 30
+        font.pixelSize: 40
         font.weight: Font.Medium
     }
 

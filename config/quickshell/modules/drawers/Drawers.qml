@@ -37,49 +37,41 @@ Variants {
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
-            
             mask: Region {
                 x: 0
                 y: 0
                 width: win.width
-                height: win.height - bar.implicitHeight - dock.implicitHeight
+                height: win.height
                 intersection: Intersection.Xor
-
-
-                Region {
-                    x: 0
-                    y: 0
-                    width: win.width
-                    height: win.height
-                    intersection: Intersection.Xor
-                }
-
-                Region {
-                    x: 0
-                    y: dock.implicitHeight
-                    width: win.width
-                    height: win.height
-                    intersection: Intersection.Xor
-                }
             }
 
-
-            
 
 
             
             Item {
                 anchors.fill: parent
                 layer.enabled: true
+                layer.effect: MultiEffect {
+                    shadowEnabled: false
+                    blurMax: 0
+                    shadowColor: "#111111"
+                }
                 Border {
+                    visible: false
+                    id: border
                     marginTop: 0
                     colorMain: "#111111"
-                    margin: 2
+                    margin: 3
                     radius: 10
                 }
+                
+                Backgrounds {
+                    marginBorder: border.margin
+                }
+
             }
-            
             Notch {
+                visible: false
                 themeColorRect: "#000000"
                 themeColorMain: "#000000"
                 implicitWidthRect: 200
@@ -89,25 +81,6 @@ Variants {
                 margin: 5
             }
             
-            Bar {
-                id: bar
-                screen: scope.modelData
-                barHeight: 24
-                colorMain: "transparent"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-            }
-            Dock {
-                id: dock
-                screen: scope.modelData
-                h: 40
-                colorDock: "#29ffffff"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 3
-            }
         }
     }
 }

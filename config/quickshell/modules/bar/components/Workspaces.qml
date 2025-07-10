@@ -1,3 +1,4 @@
+import "root:/"
 import "root:/widgets/"
 import "root:/utils/"
 import "root:/services/"
@@ -29,7 +30,6 @@ Item {
                 height: 19
                 radius: 10
                 color: modelData.focused ? "#55677d" : "transparent"
-                z: -1
             }
         }
     }
@@ -38,8 +38,6 @@ Item {
     RowLayout {
         anchors.centerIn: parent
         spacing: 0
-        z: 1
-
         Repeater {
             model: 10
 
@@ -50,11 +48,4 @@ Item {
         }
     }
 
-
-    Connections {
-        target: Hyprland.workspaces
-        function onValuesChanged() {
-            forceLayout()
-        }
-    }
 }

@@ -21,6 +21,7 @@ Rectangle {
     property string command: ""
     property string rightClickCommand: ""  // 👈 nuevo
     property real size: 0
+    property Item hoverItem
 
     Process {
         id: runCommand
@@ -40,6 +41,8 @@ Rectangle {
 
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
+        onEntered: root.hoverItem.visible = true
+        onExited: root.hoverItem.visible = false
         onPressed: (mouse) => {
             if (mouse.button === Qt.RightButton && root.rightClickCommand !== "") {
                 runRightClickCommand.startDetached()
