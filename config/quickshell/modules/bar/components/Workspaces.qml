@@ -1,4 +1,5 @@
 import "root:/"
+import "root:/modules/common/"
 import "root:/widgets/"
 import "root:/utils/"
 import "root:/services/"
@@ -13,10 +14,24 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 Item {
-    width: 190
+    width: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended + 8 : Appearance.sizes.notchWidth + 8
     height: parent.height
     anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
+
+
+    MouseArea {
+        id: mouseArea
+        implicitWidth: parent.width
+        implicitHeight: 6
+        hoverEnabled: true
+        onEntered: {
+            GlobalStates.notchOpen = true
+        }
+        onExited: {
+            GlobalStates.notchOpen = false
+        }
+    }
 
     RowLayout {
         anchors.centerIn: parent
@@ -46,6 +61,14 @@ Item {
                 workspaceId: 1 + index
             }
         }
+    }
+    
+    
+    Behavior on width {
+        animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
+    }
+    Behavior on height {
+        animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
     }
 
 }

@@ -11,13 +11,16 @@ Singleton {
     property QtObject rounding
     property QtObject sizes 
     property QtObject font
+    property QtObject animation
 
     colors: QtObject {
         property bool darkmode: false
         property bool transparent: false
-        property color background: "black"
+        property color background: "#9d212b3c"
         property color background_bar: "black"
         property color background_dock: "black"
+        property color colOnText: "white"
+        property color colMSymbol: "white"
     }
 
     rounding: QtObject {
@@ -53,16 +56,41 @@ Singleton {
             property int hugeass: 23
             property int title: huge
         }
+        property QtObject weight: QtObject {
+            property int thin: Font.Thin            // 100
+            property int extraLight: Font.ExtraLight // 200
+            property int light: Font.Light          // 300
+            property int normal: Font.Normal        // 400
+            property int medium: Font.Medium        // 500
+            property int demiBold: Font.DemiBold    // 600
+            property int bold: Font.Bold            // 700
+            property int extraBold: Font.ExtraBold  // 800
+            property int black: Font.Black          // 900
+        }
+    }
+    animation: QtObject {
+        property QtObject elementExpand: QtObject {
+            property int duration: 300
+            property int type: Easing.InOutQuad
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementExpand.duration
+                    easing.type: root.animation.elementExpand.type
+                }
+            }
+        }
     }
 
     sizes: QtObject {
         property real barHeight: 24
         property real dockHeight: 40
-        property real sidebarWidth: 300
+        property real sidebarWidth: 360
         property real sidebarWidthExtended: 750
         property real notchWidth: 180
-        property real notchWidthExtended: 200
+        property real notchWidthExtended: 300
         property real notchHeight: 5
-        property real notchHeightExtended: 40
+        property real notchHeightExtended: 100
+        property real volumeWidth: 30
+        property real volumeHeight: 400
     }
 }

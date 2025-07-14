@@ -8,12 +8,10 @@ import QtQuick.Effects
 
 IconImage {
     id: root
-    property string iconSource: ""
-    property string iconSystem: ""
+    property string icon: ""
     property real size: 0
     implicitSize: root.size
     asynchronous: true
-    //source: root.iconSystem
-    source: Quickshell.iconPath(root.iconSystem, true) !== "" ? Quickshell.iconPath(root.iconSystem) : Qt.resolvedUrl("../assets/icons/" + root.iconSource)
+    source: Quickshell.iconPath(root.icon, true) !== "" ? Quickshell.iconPath(root.icon) : Qt.resolvedUrl("../assets/icons/" + root.icon)
 }
 

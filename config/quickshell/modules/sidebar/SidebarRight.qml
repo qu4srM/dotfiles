@@ -2,6 +2,7 @@ import "root:/"
 import "root:/modules/common/"
 import "root:/modules/bar/components/"
 import "root:/modules/drawers/"
+import "root:/modules/sidebar/"
 import "root:/widgets/"
 import "root:/utils/"
 
@@ -41,7 +42,6 @@ Scope {
             }
             implicitWidth: Appearance.sizes.sidebarWidth
             property string pathIcons: "root:/assets/icons/"
-            property string colorMain: "transparent"
             property string pathScripts: "~/.config/quickshell/scripts/"
 
             HyprlandFocusGrab {
@@ -66,13 +66,25 @@ Scope {
                         sidebar.hide();
                     }
                 }
-                sourceComponent: Rectangle {  
+                sourceComponent: Rectangle {
+                    color: Appearance?.colors.background ?? "transparent" 
                     implicitWidth: 200
                     radius: 10
 
-
-                    Text {
-                        text: sidebar.sidebarWidth
+                    GridLayout {
+                        id: grid
+                        anchors.fill: parent
+                        columns: 1
+                        rowSpacing: 0
+                        columnSpacing: 0
+                        StatusPanel {}
+                        PanelButtons {}
+                        ProgressBarH {}
+                        Rectangle {
+                            color: "transparent"
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
                     }
                 }
             }

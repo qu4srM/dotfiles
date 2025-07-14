@@ -1,3 +1,5 @@
+import "root:/"
+import "root:/modules/common/"
 import "root:/widgets/"
 import "root:/utils/"
 import "root:/services/"
@@ -18,7 +20,7 @@ Item {
     implicitWidth: row.width
     implicitHeight: icon.size
 
-    property bool isCharging: false
+    property bool materialIconFill: true
     property real batteryLevel: 0.0
     
     Row {
@@ -38,11 +40,14 @@ Item {
         CircularProgress {
             value: root.batteryLevel
             strokeWidth: 2
-            StyledIcon {
+            StyledMaterialSymbol {
                 id: icon
+                text: Icons.getBatteryIcon(parseInt(textItem.text))
+                size: 10
+                color: Appearance.colors.colMSymbol
+                fill: root.materialIconFill ? 1 : 0
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                iconSystem: Icons.getBatteryIcon(parseInt(textItem.text), isCharging)
-                size: 11
             }
         }
 

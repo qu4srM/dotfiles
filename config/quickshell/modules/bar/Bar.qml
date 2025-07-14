@@ -6,7 +6,9 @@ import "root:/modules/drawers/"
 import "root:/widgets/"
 import "root:/utils/"
 
+import Qt5Compat.GraphicalEffects
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
@@ -18,6 +20,7 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
+    property string settingsQmlPath: Quickshell.configPath("settings.qml")
     Variants {
         model: Quickshell.screens
         StyledWindow {
@@ -36,6 +39,7 @@ Scope {
             property string pathScripts: "~/.config/quickshell/scripts/"
 
             implicitHeight: Appearance.sizes.barHeight
+            WlrLayershell.layer: WlrLayer.Overlay
 
 
             RowLayout {
@@ -52,29 +56,80 @@ Scope {
                         anchors.fill: parent
                         anchors.left: parent.left
                         anchors.leftMargin: 14
-                        ButtonIcon { iconSystem: "redhat-symbolic.svg"; command: "~/.config/rofi/launcher/launch.sh"; size: 18 }
+                        ActionButtonIcon {
+                            colBackground: "transparent"
+                            colBackgroundHover: "transparent"
+                            iconImage: "redhat-symbolic"
+                            iconSize: 18
+                            implicitHeight: parent.height 
+                            onPressed: {
+                                Quickshell.execDetached(["bash", "-c", "~/.config/rofi/launcher/launch.sh"])
+                            }
+                        }
                         Separator { implicitWidth: 10 }
                         AppLabel {}
                         Separator { implicitWidth: 5 }
-                        ButtonText { text: "Atajos"; command: bar.pathScripts + "screenshot.sh" }
-                        ButtonText { text: "Configuración"; command: "..." }
-                        ButtonText { text: "HackTheBox"; command: "..." }
-                        ButtonText { text: "Hola" ; command: "..." }
+                        ActionButton {
+                            colBackground: "transparent"
+                            colBackgroundHover: "#111111"
+                            buttonText: "Volume"
+                            implicitHeight: parent.height 
+                            releaseAction: () => {
+                                GlobalStates.onScreenVolumeOpen = true
+                            }
+                        }
+                        ActionButton {
+                            colBackground: "transparent"
+                            colBackgroundHover: "#111111"
+                            buttonText: "Configuración"
+                            implicitHeight: parent.height
+                            onPressed: {
+                                Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
+                            }
+                        }
                     }
                 }
 
                 // Zona central
                 Item {
-                    anchors.fill: parent
                     implicitHeight: parent.implicitHeight
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
                     Row {
                         anchors.centerIn: parent
+                        height: parent.height
                         spacing: 8
-                        StyledButtonIcon { iconSource: "screenshot-light.svg"; command: bar.pathScripts + "screenshot.sh" ; background: "#000000"; size: 14 }
+                        ActionButtonIcon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            colBackground: "#111111"
+                            colBackgroundHover: "transparent"
+                            iconMaterial: "screenshot_region"
+                            iconSize: 14
+                            implicitHeight: parent.height - 2
+                            buttonRadiusTopLeft: 10
+                            buttonRadiusTopRight: 10
+                            buttonRadiusBottomLeft: 10
+                            buttonRadiusBottomRight: 10
+                            onPressed: {
+                                Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
+                            }
+                        }
                         Workspaces { }
-                        StyledButtonIcon { iconSource: "picker-symbolic.svg"; command: "hyprpicker | wl-copy -n"; background: "#000000"; size: 14 }
+                        ActionButtonIcon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            colBackground: "#111111"
+                            colBackgroundHover: "transparent"
+                            iconImage: "picker-symbolic.svg"
+                            iconSize: 14
+                            implicitHeight: parent.height - 2
+                            buttonRadiusTopLeft: 10
+                            buttonRadiusTopRight: 10
+                            buttonRadiusBottomLeft: 10
+                            buttonRadiusBottomRight: 10
+                            onPressed: {
+                                Quickshell.execDetached(["bash", "-c", "hyprpicker | wl-copy -n"])
+                            }
+                        }
                     }
                 }
 
@@ -91,18 +146,24 @@ Scope {
                         anchors.rightMargin: 14
                         spacing: 8
                         Battery {}
-                        ButtonMultiIcon {
-                            item: rowMultiButtonIcon
-                            h: bar.implicitHeight
-                            active: GlobalStates.sidebarRightOpen
-                            onToggled: (value) => GlobalStates.sidebarRightOpen = value
+                        ActionButtonMultiIcon {
+                            iconList: [
+                                Icons.getNetworkIcon(50),
+                                Icons.getBluetoothIcon(true)
 
-                            Row {
-                                id: rowMultiButtonIcon
-                                anchors.centerIn: parent
-                                spacing: 8
-                                StyledIcon { iconSystem: Icons.getNetworkIcon(40); size: 12 }
-                                StyledIcon { iconSystem: Icons.getBluetoothIcon(true); size: 12 }
+                            ]
+                            columns: 2
+                            colBackground: "transparent"
+                            colBackgroundHover: "#111111"
+                            iconSize: 14
+                            buttonRadiusTopLeft: 10
+                            buttonRadiusTopRight: 10
+                            buttonRadiusBottomLeft: 10
+                            buttonRadiusBottomRight: 10
+
+                            implicitHeight: bar.height
+                            releaseAction: () => {
+                                GlobalStates.sidebarRightOpen = true
                             }
                         }
                         Clock {}

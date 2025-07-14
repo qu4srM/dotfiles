@@ -64,43 +64,37 @@ Singleton  {
 
 
 
-    function getBatteryIcon(level: int, isCharging: bool): string {
-        if (isCharging) {
-            if (level >= 80)
-                return "battery-full-charging-symbolic.svg";
-            if (level >= 60)
-                return "battery-good-charging-symbolic.svg";
-            if (level >= 40)
-                return "battery-medium-charging-symbolic.svg";
-            if (level >= 20)
-                return "battery-low-charging-symbolic.svg";
-            return "battery-empty-charging-symbolic.svg";
-        } else {
-            if (level >= 80)
-                return "battery-full-symbolic.svg";
-            if (level >= 60)
-                return "battery-good-symbolic.svg";
-            if (level >= 40)
-                return "battery-medium-symbolic.svg";
-            if (level >= 20)
-                return "battery-low-symbolic.svg";
-            return "battery-empty-symbolic.svg";
-        }
+    function getBatteryIcon(level: int): string {
+        if (level >= 90)
+            return "battery_android_full";
+        if (level >= 80)
+            return "battery_android_6";
+        if (level >= 70)
+            return "battery_android_5";
+        if (level >= 60)
+            return "battery_android_4";
+        if (level >= 50)
+            return "battery_android_3";
+        if (level >= 40)
+            return "battery_android_2";
+        if (level >= 30)
+            return "battery_android_1";
+        if (level >= 20)
+            return "battery_android_0";
+        return "battery_android_alert";
     }
 
     function getNetworkIcon(strength: int): string {
-        if (strength >= 80)
-            return "network-wireless-signal-excellent";
-        if (strength >= 60)
-            return "network-wireless-signal-good";
-        if (strength >= 40)
-            return "network-wireless-signal-ok";
-        if (strength >= 20)
-            return "network-wireless-signal-weak";
-        return "network-wireless-signal-none";
+        if (strength >= 75)
+            return "wifi";
+        if (strength >= 50)
+            return "wifi_2_bar";
+        if (strength >= 25)
+            return "wifi_1_bar";
+        return "wifi_off";
     }
 
     function getBluetoothIcon(connected: bool): string {
-        return connected ? "bluetooth-active-symbolic" : "bluetooth-disabled-symbolic";
+        return connected ? "bluetooth" : "bluetooth_disabled";
     }
 }

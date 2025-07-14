@@ -70,17 +70,9 @@ Variants {
                 }
 
             }
-            Notch {
-                visible: false
-                themeColorRect: "#000000"
-                themeColorMain: "#000000"
-                implicitWidthRect: 200
-                implicitHeightRect: 24
-                widthRect: 40
-                heightRect: 10
-                margin: 5
+            Interactions {
+                screen: scope.modelData
             }
-            
         }
     }
 }

@@ -10,4 +10,5 @@ Singleton {
     id: root
     property bool sidebarRightOpen: false
     property bool notchOpen: false
+    property bool osdOpen: false
 }

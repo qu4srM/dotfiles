@@ -18,6 +18,7 @@ Shape {
     anchors.margins: 0
     preferredRendererType: Shape.CurveRenderer
 
+
     Shapes.Top { // Good
         id: notch
         w: GlobalStates.notchOpen ?  Appearance.sizes.notchWidthExtended: Appearance.sizes.notchWidth
@@ -27,6 +28,7 @@ Shape {
 
         startX: parent.width / 2 + (w/2) + rounding * 2
         startY: 0
+
     }
     
     /*
