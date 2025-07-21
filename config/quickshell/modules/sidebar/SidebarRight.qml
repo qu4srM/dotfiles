@@ -57,9 +57,9 @@ Scope {
                 id: sidebarLoader
                 active: GlobalStates.sidebarRightOpen
                 anchors.fill: parent
-                anchors.topMargin: 14
-                anchors.bottomMargin: 14
-                anchors.rightMargin: 14
+                anchors.topMargin: Appearance.margins.panelMargin
+                anchors.bottomMargin: Appearance.margins.panelMargin
+                anchors.rightMargin: Appearance.margins.panelMargin
                 focus: GlobalStates.sidebarRightOpen
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
@@ -67,9 +67,9 @@ Scope {
                     }
                 }
                 sourceComponent: Rectangle {
-                    color: Appearance?.colors.background ?? "transparent" 
+                    color: Appearance?.colors.colbackground ?? "transparent" 
                     implicitWidth: 200
-                    radius: 10
+                    radius: Appearance.rounding.normal
 
                     GridLayout {
                         id: grid
@@ -79,7 +79,6 @@ Scope {
                         columnSpacing: 0
                         StatusPanel {}
                         PanelButtons {}
-                        ProgressBarH {}
                         Rectangle {
                             color: "transparent"
                             Layout.fillWidth: true

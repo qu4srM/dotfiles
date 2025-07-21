@@ -28,7 +28,7 @@ Scope {
             required property ShellScreen screen
             screen: screen
             name: "bar"
-            color: "transparent"
+            color: Appearance.colors.colbackground
             anchors {
                 top: true
                 left: true
@@ -39,7 +39,7 @@ Scope {
             property string pathScripts: "~/.config/quickshell/scripts/"
 
             implicitHeight: Appearance.sizes.barHeight
-            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.layer: WlrLayer.Top
 
 
             RowLayout {
@@ -55,7 +55,7 @@ Scope {
                     Row {
                         anchors.fill: parent
                         anchors.left: parent.left
-                        anchors.leftMargin: 14
+                        anchors.leftMargin: 6
                         ActionButtonIcon {
                             colBackground: "transparent"
                             colBackgroundHover: "transparent"
@@ -71,20 +71,23 @@ Scope {
                         Separator { implicitWidth: 5 }
                         ActionButton {
                             colBackground: "transparent"
-                            colBackgroundHover: "#111111"
+                            colBackgroundHover: Appearance.colors.colprimary_hover
                             buttonText: "Volume"
                             implicitHeight: parent.height 
                             releaseAction: () => {
-                                GlobalStates.onScreenVolumeOpen = true
+                                Panels.hack.open()
                             }
                         }
                         ActionButton {
                             colBackground: "transparent"
-                            colBackgroundHover: "#111111"
+                            colBackgroundHover: Appearance.colors.colprimary_hover
                             buttonText: "Configuración"
                             implicitHeight: parent.height
                             onPressed: {
                                 Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
+                            }
+                            releaseAction: () => {
+                                GlobalStates.notchSettingsOpen = true
                             }
                         }
                     }
@@ -98,18 +101,34 @@ Scope {
                     Row {
                         anchors.centerIn: parent
                         height: parent.height
-                        spacing: 8
+                        spacing: 4
+
                         ActionButtonIcon {
                             anchors.verticalCenter: parent.verticalCenter
-                            colBackground: "#111111"
-                            colBackgroundHover: "transparent"
+                            colBackground: Appearance.colors.colsecondary
+                            colBackgroundHover: Appearance.colors.colsecondary_hover
+                            iconNerd: "󰆧"
+                            iconSize: 16
+                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
+                            buttonRadiusTopLeft: Appearance.rounding.full
+                            buttonRadiusTopRight: Appearance.rounding.full
+                            buttonRadiusBottomLeft: Appearance.rounding.full
+                            buttonRadiusBottomRight: Appearance.rounding.full
+                            onHovered: () => {
+                                DrawersManager.openPopup("hack")
+                            }
+                        }
+                        ActionButtonIcon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            colBackground: Appearance.colors.colsecondary
+                            colBackgroundHover: Appearance.colors.colsecondary_hover
                             iconMaterial: "screenshot_region"
                             iconSize: 14
-                            implicitHeight: parent.height - 2
-                            buttonRadiusTopLeft: 10
-                            buttonRadiusTopRight: 10
-                            buttonRadiusBottomLeft: 10
-                            buttonRadiusBottomRight: 10
+                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
+                            buttonRadiusTopLeft: Appearance.rounding.full
+                            buttonRadiusTopRight: Appearance.rounding.full
+                            buttonRadiusBottomLeft: Appearance.rounding.full
+                            buttonRadiusBottomRight: Appearance.rounding.full
                             onPressed: {
                                 Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
                             }
@@ -117,15 +136,30 @@ Scope {
                         Workspaces { }
                         ActionButtonIcon {
                             anchors.verticalCenter: parent.verticalCenter
-                            colBackground: "#111111"
-                            colBackgroundHover: "transparent"
+                            colBackground: Appearance.colors.colsecondary
+                            colBackgroundHover: Appearance.colors.colsecondary_hover
                             iconImage: "picker-symbolic.svg"
                             iconSize: 14
-                            implicitHeight: parent.height - 2
-                            buttonRadiusTopLeft: 10
-                            buttonRadiusTopRight: 10
-                            buttonRadiusBottomLeft: 10
-                            buttonRadiusBottomRight: 10
+                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
+                            buttonRadiusTopLeft: Appearance.rounding.full
+                            buttonRadiusTopRight: Appearance.rounding.full
+                            buttonRadiusBottomLeft: Appearance.rounding.full
+                            buttonRadiusBottomRight: Appearance.rounding.full
+                            onPressed: {
+                                Quickshell.execDetached(["bash", "-c", "hyprpicker | wl-copy -n"])
+                            }
+                        }
+                        ActionButtonIcon {
+                            anchors.verticalCenter: parent.verticalCenter
+                            colBackground: Appearance.colors.colsecondary
+                            colBackgroundHover: Appearance.colors.colsecondary_hover
+                            iconMaterial: "wallpaper"
+                            iconSize: 14
+                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
+                            buttonRadiusTopLeft: Appearance.rounding.full
+                            buttonRadiusTopRight: Appearance.rounding.full
+                            buttonRadiusBottomLeft: Appearance.rounding.full
+                            buttonRadiusBottomRight: Appearance.rounding.full
                             onPressed: {
                                 Quickshell.execDetached(["bash", "-c", "hyprpicker | wl-copy -n"])
                             }
@@ -143,7 +177,7 @@ Scope {
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right
-                        anchors.rightMargin: 14
+                        anchors.rightMargin: 6
                         spacing: 8
                         Battery {}
                         ActionButtonMultiIcon {
@@ -154,14 +188,14 @@ Scope {
                             ]
                             columns: 2
                             colBackground: "transparent"
-                            colBackgroundHover: "#111111"
+                            colBackgroundHover: Appearance.colors.colprimary_hover
                             iconSize: 14
-                            buttonRadiusTopLeft: 10
-                            buttonRadiusTopRight: 10
-                            buttonRadiusBottomLeft: 10
-                            buttonRadiusBottomRight: 10
+                            buttonRadiusTopLeft: Appearance.rounding.verysmall
+                            buttonRadiusTopRight: Appearance.rounding.verysmall
+                            buttonRadiusBottomLeft: Appearance.rounding.verysmall
+                            buttonRadiusBottomRight: Appearance.rounding.verysmall
 
-                            implicitHeight: bar.height
+                            implicitHeight: bar.height - Appearance.margins.itemBarMargin
                             releaseAction: () => {
                                 GlobalStates.sidebarRightOpen = true
                             }

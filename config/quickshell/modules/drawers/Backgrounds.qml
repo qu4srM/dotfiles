@@ -11,27 +11,35 @@ import Quickshell
 
 Shape {
     id: root
-    
-    required property real marginBorder
 
     anchors.fill: parent 
-    anchors.margins: 0
     preferredRendererType: Shape.CurveRenderer
-
 
     Shapes.Top { // Good
         id: notch
-        w: GlobalStates.notchOpen ?  Appearance.sizes.notchWidthExtended: Appearance.sizes.notchWidth
-        h: GlobalStates.notchOpen ? Appearance.sizes.notchHeightExtended : Appearance.sizes.notchHeight
-        rounding: 10
-        colorMain: "black"
+        w: GlobalStates.hackOpen ? Appearance.sizes.notchHackWidth - Appearance.rounding.small : Appearance.sizes.notchWidth
+        h: GlobalStates.hackOpen ? Appearance.sizes.notchHackHeight - Appearance.rounding.small: 0
+
+        rounding: GlobalStates.hackOpen ? Appearance.rounding.small : 0
 
         startX: parent.width / 2 + (w/2) + rounding * 2
+        startY: 0
+    }
+
+    /*
+    Shapes.TopOut { // Good
+        id: notch
+        w: Appearance.sizes.notchWidth
+        h: GlobalStates.notchSettingsOpen ? Appearance.sizes.notchSettingsHeight : 0
+
+        rounding: GlobalStates.notchSettingsOpen ? Appearance.rounding.small : 0
+
+        startX: parent.width / 2 + (w/2)
         startY: 0
 
     }
     
-    /*
+    
     Shapes.Right { // Good
         w: 5
         h: 50

@@ -1,5 +1,7 @@
+import "root:/services"
+import "root:/config"
+import "root:/modules/common/"
 import QtQuick
-import Quickshell
 import QtQuick.Shapes
 
 ShapePath {
@@ -7,10 +9,9 @@ ShapePath {
     property real rounding: 10
     property real w: 100
     property real h: 100
-    property string colorMain: "#ffffff"
+    fillColor: Appearance.colors.colbackground
     strokeWidth: -1
-    fillColor: colorMain
-    
+
     Behavior on w {
         NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
     }
@@ -21,7 +22,6 @@ ShapePath {
         NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
     }
 
-    // Arco superior izquierdo (inward)
     PathArc {
         relativeX: -root.rounding
         relativeY: root.rounding
@@ -30,13 +30,11 @@ ShapePath {
         direction: PathArc.Counterclockwise
     }
 
-    // Línea hacia abajo (borde izquierdo)
     PathLine {
         relativeX: 0
         relativeY: root.h
     }
 
-    // Arco inferior izquierdo (inward)
     PathArc {
         relativeX: root.rounding
         relativeY: root.rounding
@@ -45,31 +43,29 @@ ShapePath {
         direction: PathArc.Counterclockwise
     }
 
-    // Línea inferior (hacia la derecha)
     PathLine {
-        relativeX: root.w
+        relativeX: -root.w
         relativeY: 0
     }
 
-    // Arco inferior derecho (outward)
     PathArc {
         relativeX: root.rounding
-        relativeY: root.rounding
+        relativeY: -root.rounding
         radiusX: root.rounding
         radiusY: root.rounding
+        direction: PathArc.Counterclockwise
     }
 
-    // Línea hacia arriba (lado derecho)
     PathLine {
         relativeX: 0
-        relativeY: -(root.h + root.rounding*4)
+        relativeY: -root.h
     }
 
-    // Arco superior derecho (outward)
     PathArc {
         relativeX: -root.rounding
-        relativeY: root.rounding
+        relativeY: -root.rounding
         radiusX: root.rounding
         radiusY: root.rounding
+        direction: PathArc.Counterclockwise
     }
 }

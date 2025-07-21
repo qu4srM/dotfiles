@@ -11,5 +11,5 @@ Text {
         pixelSize: Appearance?.font.pixelSize.smaller ?? size
         weight: Appearance?.font.weight.medium ?? 400
     }
-    color: Appearance?.colors.colOnText ?? "black"
+    color: Appearance?.colors.colprimarytext ?? "black"
 }

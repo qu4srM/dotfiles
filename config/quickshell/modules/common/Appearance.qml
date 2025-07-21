@@ -10,13 +10,21 @@ Singleton {
     property QtObject colors
     property QtObject rounding
     property QtObject sizes 
+    property QtObject margins
     property QtObject font
     property QtObject animation
 
     colors: QtObject {
         property bool darkmode: false
         property bool transparent: false
-        property color background: "#9d212b3c"
+        property color colbackground: "#1F1B1F"
+        property color colprimary: "#7d03ba"
+        property color colprimary_hover: "#a503ba"
+        property color colsecondary: "#36343B"
+        property color colsecondary_hover: "#5a5762"
+        property color colprimaryicon: "#e0d5e0"
+        property color colprimarytext: "#e0d5e0"
+        property color colsecondarytext: "#8393a6"
         property color background_bar: "black"
         property color background_dock: "black"
         property color colOnText: "white"
@@ -26,9 +34,9 @@ Singleton {
     rounding: QtObject {
         property int unsharpen: 2
         property int unsharpenmore: 6
-        property int verysmall: 8
+        property int verysmall: 10
         property int small: 12
-        property int normal: 17
+        property int normal: 15
         property int large: 23
         property int verylarge: 30
         property int full: 9999
@@ -41,7 +49,7 @@ Singleton {
             property string main: "Roboto"
             property string title: "Gabarito"
             property string iconMaterial: "Material Symbols Rounded"
-            property string iconNerd: "SpaceMono NF"
+            property string iconNerd: "Symbols Nerd Font"
             property string monospace: "Roboto Mono"
             property string reading: "Readex Pro"
         }
@@ -82,15 +90,23 @@ Singleton {
     }
 
     sizes: QtObject {
-        property real barHeight: 24
+        property real barHeight: 30
         property real dockHeight: 40
         property real sidebarWidth: 360
         property real sidebarWidthExtended: 750
-        property real notchWidth: 180
-        property real notchWidthExtended: 300
-        property real notchHeight: 5
-        property real notchHeightExtended: 100
+        property real workspacesWidth: 200
+        property real notchWidth: 300
+        property real notchHeight: 20
+        property real notchSettingsHeight: 40
+        property real notchHackWidth: 400
+        property real notchHackHeight: 40
         property real volumeWidth: 30
         property real volumeHeight: 400
+        property real hackHeight: 300
+    }
+
+    margins: QtObject {
+        property real itemBarMargin: 6
+        property real panelMargin: 4
     }
 }

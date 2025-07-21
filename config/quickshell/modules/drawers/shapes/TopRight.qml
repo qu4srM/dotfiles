@@ -18,6 +18,9 @@ ShapePath {
     Behavior on h {
         NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
     }
+    Behavior on rounding {
+        NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
+    }
 
     PathArc {
         relativeX: root.rounding

@@ -1,4 +1,5 @@
 import "root:/widgets/"
+import "root:/modules/common/"
 
 import QtQuick
 import Quickshell
@@ -9,14 +10,11 @@ Item {
     id: root
     anchors.fill: parent
 
-    property real marginTop
     property real margin: 0
-    property string colorMain: "#975f5f"
-    property real radius: 10
     Rectangle {
         id: rect
         anchors.fill: parent
-        color: root.colorMain
+        color: Appearance.colors.colbackground
         visible: false
     }
     Item {
@@ -31,7 +29,7 @@ Item {
             anchors.rightMargin: root.margin
             anchors.bottomMargin: root.margin
 
-            radius: root.radius
+            radius: Appearance.rounding.normal
         }
     }
     MultiEffect {

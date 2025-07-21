@@ -17,42 +17,31 @@ Item {
     id: root 
     anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
-    implicitWidth: row.width
-    implicitHeight: icon.size
+    implicitWidth: icon.size + textItem.implicitWidth + Appearance.margins.itemBarMargin
+    implicitHeight: parent.height
 
     property bool materialIconFill: true
     property real batteryLevel: 0.0
-    
     Row {
-        id: row
-        anchors.centerIn: parent
-        spacing: 6
-        Text {
-            visible: true
+        anchors.fill: parent
+        spacing: 4
+        StyledText {
             id: textItem
-            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: 10
+            font.weight: Font.Bold
             color: "white"
-            font.family: "Roboto"
-            font.pixelSize: 12
-            font.weight: Font.Medium
+            anchors.verticalCenter: parent.verticalCenter
         }
-        
-        CircularProgress {
-            value: root.batteryLevel
-            strokeWidth: 2
-            StyledMaterialSymbol {
-                id: icon
-                text: Icons.getBatteryIcon(parseInt(textItem.text))
-                size: 10
-                color: Appearance.colors.colMSymbol
-                fill: root.materialIconFill ? 1 : 0
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
+        StyledMaterialSymbol {
+            id: icon
+            text: Icons.getBatteryIcon(parseInt(textItem.text))
+            size: 16
+            color: Appearance.colors.colMSymbol
+            fill: root.materialIconFill ? 1 : 0
+            anchors.verticalCenter: parent.verticalCenter
         }
-
-        
     }
+    
     
     Process {
         id: multiProcess

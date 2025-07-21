@@ -1,6 +1,7 @@
 //@pragma IconTheme Papirus
 
 import "modules"
+import "modules/hack/"
 import "modules/drawers/"
 import "modules/bar/"
 import "modules/dock/"
@@ -21,13 +22,15 @@ ShellRoot {
     property bool enableBar: true
     property bool enableDrawers: true
     property bool enableDock: false
-    property bool enableSidebarRight: true
-    property bool enableOsd: true
+    property bool enableSidebarRight: false
+    property bool enableOsd: false
+    property bool enableHack: false
 
     LazyLoader { active: enableDrawers; component: Drawers{} }
     LazyLoader { active: enableBar; component: Bar {} }
     //LazyLoader { active: enableDock; component: Dock {} }
     LazyLoader { active: enableSidebarRight; component:  SidebarRight{} }
-    LazyLoader { active: enableOsd; component: Osd{} }
+    //LazyLoader { active: enableOsd; component: Osd{} }
+    //LazyLoader { active: enableHack; component: Hack {}}
 
 }

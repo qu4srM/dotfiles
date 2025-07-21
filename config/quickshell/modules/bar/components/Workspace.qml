@@ -1,3 +1,4 @@
+import "root:/modules/common/"
 import "root:/widgets/"
 import "root:/utils/"
 import "root:/services/"
@@ -25,7 +26,7 @@ Item {
         anchors.centerIn: parent
         text: "·"
         font.family: "Roboto"
-        color: root.workspaceActive === "true" ? "transparent" : "#8393a6"
+        color: root.workspaceActive === "true" ? "transparent" : mouseArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colsecondarytext
         font.pixelSize: 40
         font.weight: Font.Medium
     }
@@ -37,7 +38,9 @@ Item {
     }
     
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
+        hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: {
             Hyprland.dispatch("workspace " + root.workspaceId)

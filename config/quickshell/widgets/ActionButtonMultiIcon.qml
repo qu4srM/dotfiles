@@ -35,7 +35,7 @@ ActionButton {
                 sourceComponent: StyledMaterialSymbol {
                     text: modelData
                     size: root.iconSize
-                    color: Appearance.colors.colMSymbol
+                    color: Appearance.colors.colprimaryicon
                     fill: root.materialIconFill ? 1 : 0
                 }
             }

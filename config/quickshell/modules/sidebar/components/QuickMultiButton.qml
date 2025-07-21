@@ -1,4 +1,5 @@
 import "root:/widgets/"
+import "root:/modules/common/"
 
 import QtQuick
 import QtQuick.Controls
@@ -14,17 +15,15 @@ Rectangle {
     property string commandToggle: "whoami"
     property string icon: "hola"
     property string cmd: "hyprpicker"
-    property string colorMain: "#111111"
-    property string colorHover: "transparent"
-    property real rounding: 10
     property string text: "none"
-    property string colorToggle: "#1689be"
 
+    property bool toggled: false
 
-    color: colorMain
+    color: mouseArea.containsMouse ? Appearance.colors.colsecondary_hover : Appearance.colors.colsecondary
+
     Layout.fillWidth: true
     Layout.fillHeight: true
-    radius: rounding
+    radius: Appearance.rounding.verysmall
 
     Row {
         anchors.fill: parent
@@ -33,11 +32,11 @@ Rectangle {
         z: 10
 
         ActionButtonIcon {
-            implicitHeight: parent.height -10
-            implicitWidth: parent.width / 4
+            implicitHeight: parent.height - 10
+            implicitWidth: parent.height - 10
             anchors.verticalCenter: parent.verticalCenter
-            colBackground: "#1689be"
-            colBackgroundHover: "transparent"
+            colBackground: Appearance.colors.colprimary
+            colBackgroundHover: Appearance.colors.colprimary_hover
             iconMaterial: root.icon
             iconSize: 20
             buttonRadiusTopLeft: 8
@@ -68,5 +67,11 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: runCommand.startDetached()
+    }
+    Behavior on color {
+        ColorAnimation {
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
     }
 }

@@ -21,6 +21,8 @@ Button {
     property var releaseAction
     property var altAction 
     property var middleClickAction
+    property var onHovered
+    property var onUnhovered  
 
 
     property string colBackground
@@ -34,6 +36,12 @@ Button {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+        onEntered: {
+            if (root.onHovered) root.onHovered()
+        }
+        onExited: {
+            if (root.onUnhovered) root.onUnhovered()
+        }
         onPressed: (event) => { 
             if(event.button === Qt.RightButton) {
                 if (root.altAction) root.altAction();
@@ -58,7 +66,7 @@ Button {
     }
     background: Rectangle {
         id: btnBackground
-        implicitHeight: ṕarent.height
+        implicitHeight: parent.height
 
         topLeftRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusTopLeft
         topRightRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusTopRight
@@ -66,6 +74,13 @@ Button {
         bottomRightRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusBottomRight
 
         color: mouseArea.containsMouse ? root.colBackgroundHover : root.colBackground
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
     contentItem: StyledText {
         text: root.buttonText

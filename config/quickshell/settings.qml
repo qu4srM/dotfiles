@@ -106,6 +106,25 @@ ApplicationWindow {
                 radius: 10
                 ActionButtonIcon {
                     iconImage: "picker-symbolic.svg"
+                    releaseAction: () => {
+                        myPopup.open()
+                    }
+                }
+                Popup {
+                    id: myPopup
+                    width: 200
+                    height: 100
+                    modal: false
+                    focus: true
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "#f4f4f4"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "Esto es un popup interno"
+                        }
+                    }
                 }
             }
         }

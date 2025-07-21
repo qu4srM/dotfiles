@@ -1,3 +1,5 @@
+import "root:/modules/common/"
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -11,19 +13,13 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    property real w: 100
-    property real h: 20
     property real value: 0.5
     property real progress: root.implicitWidth * value
-    property string colorMain: "white"
-    property string colorBg: "black"
     property var motionAction
     property real radius: 2
 
-    implicitWidth: w
-    implicitHeight: h
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
+    implicitWidth: 100
+    implicitHeight: 20
 
     Behavior on progress {
         NumberAnimation {
@@ -41,7 +37,7 @@ Item {
             implicitWidth: progress
             implicitHeight: parent.height - 10
             anchors.verticalCenter: parent.verticalCenter
-            color: root.colorMain
+            color: Appearance.colors.colprimary
             topLeftRadius: root.radius
             bottomLeftRadius: root.radius
         }
@@ -54,7 +50,7 @@ Item {
                 implicitHeight: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: 10
-                color: root.colorMain
+                color: dragArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colprimary
             }
         }
 
@@ -63,13 +59,12 @@ Item {
             implicitWidth: parent.width - progress
             implicitHeight: parent.height - 10
             anchors.verticalCenter: parent.verticalCenter
-            color: root.colorBg
+            color: "white"
             topRightRadius: root.radius
             bottomRightRadius: root.radius
         }
     }
 
-    // 🎯 MouseArea para cambiar el valor arrastrando
     MouseArea {
         id: dragArea
         anchors.fill: parent

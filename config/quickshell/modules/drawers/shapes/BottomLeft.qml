@@ -13,10 +13,22 @@ ShapePath {
     fillColor: colorMain
 
     Behavior on w {
-        NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
+        NumberAnimation { 
+            duration: 300 
+            easing.type: Easing.InOutQuad 
+        }
     }
     Behavior on h {
-        NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
+        NumberAnimation { 
+            duration: 300
+            easing.type: Easing.InOutQuad
+        }
+    }
+    Behavior on rounding {
+        NumberAnimation { 
+            duration: 300 
+            easing.type: Easing.InOutQuad 
+        }
     }
 
     PathArc {

@@ -13,11 +13,12 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Wayland
 
-Item {
-    width: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended + 8 : Appearance.sizes.notchWidth + 8
-    height: parent.height
+Rectangle {
+    width: Appearance.sizes.workspacesWidth
+    height: parent.height - Appearance.margins.itemBarMargin
     anchors.verticalCenter: parent.verticalCenter
-    Layout.alignment: Qt.AlignVCenter
+    color: Appearance.colors.colsecondary
+    radius: Appearance.rounding.verysmall
 
 
     MouseArea {
@@ -35,7 +36,7 @@ Item {
 
     RowLayout {
         anchors.centerIn: parent
-        spacing: 0
+        spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0
 
         Repeater {
             model: Hyprland.workspaces.values
@@ -43,16 +44,19 @@ Item {
             Rectangle {
                 width: 19
                 height: 19
-                radius: 10
-                color: modelData.focused ? "#55677d" : "transparent"
+                radius: Appearance.rounding.full
+                color: modelData.focused ? Appearance.colors.colprimary : "transparent"
             }
+        }
+        Behavior on spacing  {
+            animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
         }
     }
     
     // Íconos + interacciones
     RowLayout {
         anchors.centerIn: parent
-        spacing: 0
+        spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0
         Repeater {
             model: 10
 
@@ -60,6 +64,9 @@ Item {
                 required property int index
                 workspaceId: 1 + index
             }
+        }
+        Behavior on spacing  {
+            animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
         }
     }
     
