@@ -23,14 +23,12 @@ Rectangle {
 
     MouseArea {
         id: mouseArea
+        anchors.top: parent.top
         implicitWidth: parent.width
-        implicitHeight: 6
+        implicitHeight: 8
         hoverEnabled: true
         onEntered: {
-            GlobalStates.notchOpen = true
-        }
-        onExited: {
-            GlobalStates.notchOpen = false
+            GlobalStates.dashboardOpen = true
         }
     }
 
@@ -52,8 +50,6 @@ Rectangle {
             animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
         }
     }
-    
-    // Íconos + interacciones
     RowLayout {
         anchors.centerIn: parent
         spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0

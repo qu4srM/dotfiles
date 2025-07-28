@@ -23,7 +23,6 @@ Item {
     implicitWidth: w
     implicitHeight: h
     anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
 
     Behavior on progress {
         NumberAnimation {

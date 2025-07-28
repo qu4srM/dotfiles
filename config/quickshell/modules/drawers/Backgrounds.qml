@@ -2,8 +2,11 @@ import "root:/"
 import "root:/modules/common/"
 import "root:/modules/sidebar" as Sidebar
 import "root:/modules/drawers/shapes/" as Shapes
+import "root:/modules/dashboard/" as Dashboard
+import "root:/modules/background/" as Backgrounds
 
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Shapes
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -12,9 +15,26 @@ import Quickshell
 Shape {
     id: root
 
+    required property Panels panels
+
     anchors.fill: parent 
     preferredRendererType: Shape.CurveRenderer
 
+    Dashboard.Background {
+        id: dashboardBackground
+        component: panels.dashboard
+
+        startX: (root.width - panels.dashboard.implicitWidth) / 2 - rounding
+        startY: 0
+    }
+    Backgrounds.WallSelectorBackground {
+        id: wallBackground
+        component: panels.wallSelector
+
+        startX: (root.width - panels.wallSelector.implicitWidth) / 2 - rounding
+        startY: root.height
+    }
+    /*
     Shapes.Top { // Good
         id: notch
         w: GlobalStates.hackOpen ? Appearance.sizes.notchHackWidth - Appearance.rounding.small : Appearance.sizes.notchWidth
@@ -26,7 +46,7 @@ Shape {
         startY: 0
     }
 
-    /*
+    
     Shapes.TopOut { // Good
         id: notch
         w: Appearance.sizes.notchWidth

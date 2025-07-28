@@ -9,8 +9,8 @@ import Quickshell.Io
 Singleton {
     id: root
     property bool sidebarRightOpen: false
-    property bool hackOpen: false
-    property bool notchOpen: false
-    property bool notchSettingsOpen: false
+    property bool dashboardOpen: false
+    property bool wallSelectorOpen: false
     property bool osdOpen: false
+    property int currentTabDashboard
 }

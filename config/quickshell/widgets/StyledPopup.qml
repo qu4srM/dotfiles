@@ -18,38 +18,30 @@ import Quickshell.Hyprland
 
 Popup {
     id: root
-    property var onUnhovered  
-
     width: 100
     height: 100
     modal: false
     focus: true
-    padding: 10
-    background: Rectangle {
-        color: "#2b2b2b"
-        radius: 8
-    }
+    property var onUnhovered
+    
 
-    // Animación de apertura
-    enter: Transition {
-        NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 200 }
-        NumberAnimation { property: "scale"; from: 0.95; to: 1.0; duration: 200; easing.type: Easing.OutCubic }
-    }
-
-    // Animación de cierre
-    exit: Transition {
-        NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 150 }
-        NumberAnimation { property: "scale"; from: 1.0; to: 0.95; duration: 150; easing.type: Easing.InCubic }
-    }
-
-    contentItem: MouseArea {
-        id: mouseArea
+    MouseArea {
+        id: popupMouseAreaTop
         anchors.fill: parent
         hoverEnabled: true
+        propagateComposedEvents: true
+
         onExited: {
-            root.close()
-            if (root.onUnhovered) root.onUnhovered()
+            if (!popupMouseAreaTop.containsMouse) {
+                onUnhovered()
+            }
         }
     }
-}
 
+    enter: Transition {
+        NumberAnimation { properties: "opacity"; from: 0; to: 1; duration: 300; easing.type: Easing.OutCubic }
+    }
+    exit: Transition {
+        NumberAnimation { properties: "opacity"; from: 1; to: 0; duration: 300; easing.type: Easing.InCubic }
+    }
+}

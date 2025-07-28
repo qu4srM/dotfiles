@@ -7,13 +7,11 @@ import QtQuick.Controls
 MouseArea {
     id: root
     required property ShellScreen screen
-    property Item osdVol
-    property Item hack
-    property Item popups
     property point dragStart
     
     anchors.fill: parent 
     hoverEnabled: true 
+    /*
 
     property var edgeMargin: 10
     property bool dragging: false
@@ -45,4 +43,5 @@ MouseArea {
     }
     onReleased: () => dragging = false
     onCanceled: () => dragging = false
+    */
 }

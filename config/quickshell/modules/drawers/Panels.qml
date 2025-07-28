@@ -4,6 +4,8 @@ import "root:/modules/sidebar/"
 import "root:/modules/bar/components/"
 import "root:/modules/bar/popups/"
 import "root:/modules/drawers/"
+import "root:/modules/dashboard/"
+import "root:/modules/background/"
 import "root:/widgets/"
 import "root:/utils/"
 
@@ -18,21 +20,20 @@ import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-PopupWindow {
+Item {
     id: root
-    required property ShellRoot screen
-    required property StyledWindow window
-
-    anchor.window: win
-    anchor.rect.x: parentWindow.width / 2 - width / 2
-    anchor.rect.y: parentWindow.height / 2
-    implicitWidth: 20
-    implicitHeight: 20
-    color: "transparent"
-
-    Rectangle {
-        id: fadeWrapper
-        anchors.fill: parent
-        color: "transparent"
+    property alias dashboard: dashboard
+    property alias wallSelector: wallSelector
+    anchors.fill: parent
+    Dashboard {
+        id: dashboard
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
     }
+    WallSelector {
+        id: wallSelector 
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+    }
+
 }

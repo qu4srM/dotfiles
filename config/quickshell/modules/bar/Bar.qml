@@ -46,7 +46,6 @@ Scope {
                 anchors.fill: parent
                 spacing: 0
 
-                // Zona izquierda
                 Item {
                     anchors.fill: parent
                     implicitHeight: parent.implicitHeight
@@ -86,14 +85,18 @@ Scope {
                             onPressed: {
                                 Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                             }
+                        }
+                        ActionButton {
+                            colBackground: "transparent"
+                            colBackgroundHover: Appearance.colors.colprimary_hover
+                            buttonText: "Wallpaper Selector"
+                            implicitHeight: parent.height
                             releaseAction: () => {
-                                GlobalStates.notchSettingsOpen = true
+                                GlobalStates.wallSelectorOpen = true
                             }
                         }
                     }
                 }
-
-                // Zona central
                 Item {
                     implicitHeight: parent.implicitHeight
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
@@ -103,21 +106,6 @@ Scope {
                         height: parent.height
                         spacing: 4
 
-                        ActionButtonIcon {
-                            anchors.verticalCenter: parent.verticalCenter
-                            colBackground: Appearance.colors.colsecondary
-                            colBackgroundHover: Appearance.colors.colsecondary_hover
-                            iconNerd: "󰆧"
-                            iconSize: 16
-                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
-                            buttonRadiusTopLeft: Appearance.rounding.full
-                            buttonRadiusTopRight: Appearance.rounding.full
-                            buttonRadiusBottomLeft: Appearance.rounding.full
-                            buttonRadiusBottomRight: Appearance.rounding.full
-                            onHovered: () => {
-                                DrawersManager.openPopup("hack")
-                            }
-                        }
                         ActionButtonIcon {
                             anchors.verticalCenter: parent.verticalCenter
                             colBackground: Appearance.colors.colsecondary
@@ -149,25 +137,8 @@ Scope {
                                 Quickshell.execDetached(["bash", "-c", "hyprpicker | wl-copy -n"])
                             }
                         }
-                        ActionButtonIcon {
-                            anchors.verticalCenter: parent.verticalCenter
-                            colBackground: Appearance.colors.colsecondary
-                            colBackgroundHover: Appearance.colors.colsecondary_hover
-                            iconMaterial: "wallpaper"
-                            iconSize: 14
-                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
-                            buttonRadiusTopLeft: Appearance.rounding.full
-                            buttonRadiusTopRight: Appearance.rounding.full
-                            buttonRadiusBottomLeft: Appearance.rounding.full
-                            buttonRadiusBottomRight: Appearance.rounding.full
-                            onPressed: {
-                                Quickshell.execDetached(["bash", "-c", "hyprpicker | wl-copy -n"])
-                            }
-                        }
                     }
                 }
-
-                // Zona derecha
                 Item {
                     anchors.fill: parent
                     implicitHeight: parent.implicitHeight

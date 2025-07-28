@@ -27,6 +27,8 @@ Button {
 
     property string colBackground
     property string colBackgroundHover
+    property color colText: Appearance.colors.colprimarytext
+    property color colTextHovered: Appearance.colors.colprimarytext
 
 
 
@@ -84,5 +86,6 @@ Button {
     }
     contentItem: StyledText {
         text: root.buttonText
+        color: mouseArea.containsMouse ? root.colTextHovered : root.colText
     }
 }

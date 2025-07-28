@@ -4,6 +4,7 @@ import "root:/modules/sidebar/"
 import "root:/modules/bar/components/"
 import "root:/modules/bar/popups/"
 import "root:/modules/drawers/"
+import "root:/modules/dashboard/"
 import "root:/widgets/"
 import "root:/utils/"
 
@@ -24,13 +25,13 @@ Variants {
         id: scope
         required property ShellScreen modelData
         
-        Exclusions {
+        /*Exclusions {
             screen: scope.modelData
             bar: bar
             dock: dock
-        }
+        }*/
         StyledWindow {
-            id: win 
+            id: drawers
             screen: scope.modelData
             name: "drawers"
             color: "transparent"
@@ -40,36 +41,45 @@ Variants {
                 right: true
                 bottom: true
             }
+            margins.top: Appearance.sizes.barHeight
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
 
             mask: Region {
                 x: 0
                 y: 0
-                width: win.width
-                height: win.height
+                width: drawers.width
+                height: drawers.height
                 intersection: Intersection.Xor
                 regions: regions.instances
             }
             Variants {
                 id: regions
 
-                model: popups.children
+                model: panels.children
 
                 Region {
                     required property Item modelData
 
                     x: modelData.x
-                    y: modelData.y 
+                    y: modelData.y
                     width: modelData.width
                     height: modelData.height
-                    intersection: Intersection.Combine
+                    intersection: Intersection.Subtract
+                }
+            }
+            function hide() {
+                GlobalStates.dashboardOpen = false
+                GlobalStates.wallSelectorOpen = false
+            }
+            HyprlandFocusGrab {
+                active: GlobalStates.dashboardOpen || GlobalStates.wallSelectorOpen
+                windows: [drawers]
+                onCleared: () => {
+                    if (!active) drawers.hide()
                 }
             }
 
-
-
-            
             Item {
                 anchors.fill: parent
                 layer.enabled: true
@@ -80,28 +90,22 @@ Variants {
                 }
                 Border {
                     id: border
-                    anchors.topMargin: Appearance.sizes.barHeight
                     margin: 0
                 }
                 
                 Backgrounds {
-                    visible: false
-                    anchors.topMargin: Appearance.sizes.barHeight
+                    panels: panels
                 }
-
+                
             }
             Interactions {
                 id: interactions
                 screen: scope.modelData
-                anchors.fill: parent
-                Popups {
-                    id: popups
-                    screen: scope.modelData
-                    Component.onCompleted: {
-                        DrawersManager.popupController = popups
-                    }
+                Panels {
+                    id: panels
                 }
             }
+            
         }
     }
 }

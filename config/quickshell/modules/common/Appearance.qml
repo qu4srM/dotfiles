@@ -102,7 +102,8 @@ Singleton {
         property real notchHackHeight: 40
         property real volumeWidth: 30
         property real volumeHeight: 400
-        property real hackHeight: 300
+        property real dashboardWidth: 500
+        property real dashboardHeight: 200
     }
 
     margins: QtObject {
