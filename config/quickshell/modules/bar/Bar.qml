@@ -20,7 +20,6 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
-    property string settingsQmlPath: Quickshell.configPath("settings.qml")
     Variants {
         model: Quickshell.screens
         StyledWindow {
@@ -61,8 +60,8 @@ Scope {
                             iconImage: "redhat-symbolic"
                             iconSize: 18
                             implicitHeight: parent.height 
-                            onPressed: {
-                                Quickshell.execDetached(["bash", "-c", "~/.config/rofi/launcher/launch.sh"])
+                            releaseAction: () => {
+                                GlobalStates.sidebarLeftOpen = true
                             }
                         }
                         Separator { implicitWidth: 10 }
@@ -71,16 +70,16 @@ Scope {
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
-                            buttonText: "Volume"
+                            buttonText: "Apps"
                             implicitHeight: parent.height 
                             releaseAction: () => {
-                                Panels.hack.open()
+                                GlobalStates.launcherOpen = true
                             }
                         }
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
-                            buttonText: "Configuración"
+                            buttonText: "Cheat Sheet"
                             implicitHeight: parent.height
                             onPressed: {
                                 Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
@@ -89,7 +88,7 @@ Scope {
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
-                            buttonText: "Wallpaper Selector"
+                            buttonText: "Wallpapers"
                             implicitHeight: parent.height
                             releaseAction: () => {
                                 GlobalStates.wallSelectorOpen = true
@@ -154,10 +153,10 @@ Scope {
                         ActionButtonMultiIcon {
                             iconList: [
                                 Icons.getNetworkIcon(50),
-                                Icons.getBluetoothIcon(true)
-
+                                Icons.getBluetoothIcon(true),
+                                "volume_up"
                             ]
-                            columns: 2
+                            columns: iconList.lenght
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
                             iconSize: 14

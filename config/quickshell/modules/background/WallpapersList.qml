@@ -66,10 +66,6 @@ PathView {
         if (idx !== -1)
             currentIndex = idx;
     }
-    Component.onDestruction: {
-        lastIndex = currentIndex;
-    }
-
     model: root.wallpapers.map(w => w.path)
 
     delegate: WallpaperItem {

@@ -18,6 +18,7 @@ Singleton {
         property bool darkmode: false
         property bool transparent: false
         property color colbackground: "#1F1B1F"
+        //property color colbackground: "transparent"
         property color colprimary: "#7d03ba"
         property color colprimary_hover: "#a503ba"
         property color colsecondary: "#36343B"
@@ -87,6 +88,19 @@ Singleton {
                 }
             }
         }
+        property QtObject elementMoveEnter: QtObject {
+            property int duration: 400
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.emphasizedDecel
+            property int velocity: 650
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementMoveEnter.duration
+                    easing.type: root.animation.elementMoveEnter.type
+                    easing.bezierCurve: root.animation.elementMoveEnter.bezierCurve
+                }
+            }
+        }
     }
 
     sizes: QtObject {
@@ -94,6 +108,7 @@ Singleton {
         property real dockHeight: 40
         property real sidebarWidth: 360
         property real sidebarWidthExtended: 750
+        property real sidebarLeftWidth: 440
         property real workspacesWidth: 200
         property real notchWidth: 300
         property real notchHeight: 20

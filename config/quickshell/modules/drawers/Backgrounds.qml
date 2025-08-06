@@ -3,6 +3,7 @@ import "root:/modules/common/"
 import "root:/modules/sidebar" as Sidebar
 import "root:/modules/drawers/shapes/" as Shapes
 import "root:/modules/dashboard/" as Dashboard
+import "root:/modules/overview/" as Overview
 import "root:/modules/background/" as Backgrounds
 
 import QtQuick
@@ -20,13 +21,22 @@ Shape {
     anchors.fill: parent 
     preferredRendererType: Shape.CurveRenderer
 
+    /*
     Dashboard.Background {
         id: dashboardBackground
         component: panels.dashboard
 
         startX: (root.width - panels.dashboard.implicitWidth) / 2 - rounding
         startY: 0
+    }*/
+    Overview.Background {
+        id: overviewBackground
+        component: panels.overview
+
+        startX: (root.width - panels.overview.implicitWidth) / 2 - rounding
+        startY: 0
     }
+    
     Backgrounds.WallSelectorBackground {
         id: wallBackground
         component: panels.wallSelector

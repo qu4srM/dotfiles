@@ -1,3 +1,4 @@
+import "root:/"
 import "root:/utils/"
 import "root:/widgets/"
 import "root:/modules/common/"
@@ -16,6 +17,7 @@ import Quickshell.Hyprland
 
 Item {
     id: root
+    property string settingsQmlPath: Quickshell.configPath("settings.qml")
     width: parent.width
     height: 60
 
@@ -74,7 +76,8 @@ Item {
                 buttonRadiusBottomLeft: 30
                 buttonRadiusBottomRight: 30
                 onPressed: {
-                    Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
+                    Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
+                    GlobalStates.sidebarRightOpen = false
                 }
             }
             ActionButtonIcon {

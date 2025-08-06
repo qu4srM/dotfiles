@@ -1,0 +1,250 @@
+import "root:/"
+import "root:/modules/common/"
+import "root:/modules/sidebar/"
+import "root:/modules/bar/components/"
+import "./overview"
+import "root:/services/"
+
+import "root:/widgets/"
+import "root:/utils/"
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import Quickshell
+import Quickshell.Io
+import Quickshell.Widgets
+import Quickshell.Wayland
+import Quickshell.Hyprland
+
+Item {
+    id: root
+    required property var styledWindow
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(styledWindow.screen)
+    readonly property var toplevels: ToplevelManager.toplevels
+    readonly property int workspacesShown: 2 * 5
+    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
+    property bool monitorIsFocused: (Hyprland.focusedMonitor?.name == monitor.name)
+    property var windows: HyprlandData.windowList
+    property var windowByAddress: HyprlandData.windowByAddress
+    property var windowAddresses: HyprlandData.addresses
+    property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
+    property real scale:  0.16
+    property color activeBorderColor: Appearance.colors.colSecondary
+
+    property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
+        ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
+        ((monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale)
+    property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ? 
+        ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale) :
+        ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
+
+    property real workspaceNumberMargin: 80
+    property real workspaceNumberSize: Math.min(workspaceImplicitHeight, workspaceImplicitWidth) * monitor.scale
+    property int workspaceZ: 0
+    property int windowZ: 1
+    property int windowDraggingZ: 99999
+    property real workspaceSpacing: 5
+
+    property int draggingFromWorkspace: -1
+    property int draggingTargetWorkspace: -1
+
+    property Component windowComponent: OverviewWindow {}
+    property list<OverviewWindow> windowWidgets: []
+
+    implicitWidth: overviewBackground.implicitWidth + overviewBackground.padding * 2
+    implicitHeight: overviewBackground.implicitHeight + overviewBackground.padding * 2
+
+    Rectangle {
+        id: overviewBackground
+        property real padding: 10
+        anchors.fill: parent
+        anchors.margins: 10
+
+        implicitWidth: workspaceColumnLayout.implicitWidth + padding * 2
+        implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
+        radius: 10
+        color: Appearance.colors.colbackground
+    
+        ColumnLayout {
+            id: workspaceColumnLayout
+            z: 0 
+            anchors.centerIn: parent
+            spacing: root.workspaceSpacing
+            Repeater {
+                model: 2
+                delegate: RowLayout {
+                    id: row
+                    property int rowIndex: index
+                    spacing: root.workspaceSpacing
+                    Repeater {
+                        model: 5
+                        Image {
+                            id: workspace
+                            property int colIndex: index
+                            property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * 5 + colIndex + 1
+                            property bool hoveredWhileDragging: false
+                            Layout.preferredWidth: root.workspaceImplicitWidth
+                            Layout.preferredHeight: root.workspaceImplicitHeight
+                            fillMode: Image.PreserveAspectCrop
+                            z: 0
+
+                            source: Wallpapers.actualCurrent
+                            cache: true
+                        
+                            Text {
+                                anchors.centerIn: parent
+                                text: workspaceValue
+                                color: "white"
+                                font.pixelSize: 12
+                            }
+                            MouseArea {
+                                id: workspaceArea
+                                anchors.fill: parent 
+                                acceptedButtons: Qt.LeftButton
+                                onClicked: {
+                                    if (root.draggingTargetWorkspace === -1) {
+                                        GlobalStates.overviewOpen = false
+                                        Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
+                                    }
+                                }
+
+                            }
+                            DropArea {
+                                anchors.fill: parent
+                                onEntered: {
+                                    root.draggingTargetWorkspace = workspaceValue
+                                    if (root.draggingFromWorkspace == root.draggingTargetWorkspace) return;
+                                    hoveredWhileDragging = true
+                                }
+                                onExited: {
+                                    hoveredWhileDragging = false
+                                    if (root.draggingTargetWorkspace == workspaceValue) root.draggingTargetWorkspace = -1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Item {
+            id: windowSpace 
+            anchors.centerIn: parent
+            implicitWidth: workspaceColumnLayout.implicitWidth
+            implicitHeight: workspaceColumnLayout.implicitHeight
+            Repeater {
+                model: ScriptModel {
+                    values: {
+                        return ToplevelManager.toplevels.values.filter((toplevel) => {
+                            const address = `0x${toplevel.HyprlandToplevel.address}`
+                            var win = windowByAddress[address]
+                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            const inMonitor = root.monitor.id === win.monitor
+                            return inWorkspaceGroup && inMonitor;
+                        })
+                    }
+                }
+                delegate: OverviewWindow {
+                    id: window
+                    required property var modelData
+                    property var address: `0x${modelData.HyprlandToplevel.address}`
+                    windowData: windowByAddress[address]
+                    toplevel: modelData
+                    monitorData: HyprlandData.monitors[monitorId]
+                    scale: root.scale
+                    availableWorkspaceWidth: root.workspaceImplicitWidth
+                    availableWorkspaceHeight: root.workspaceImplicitHeight
+
+                    property int monitorId: windowData?.monitor
+                    property var monitor: HyprlandData.monitors[monitorId]
+
+                    property int workspaceColIndex: (windowData?.workspace.id - 1) % 5
+                    property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / 5)
+                    xOffset: (root.workspaceImplicitWidth + root.workspaceSpacing + 1) * workspaceColIndex
+                    yOffset: (root.workspaceImplicitHeight + root.workspaceSpacing + 1) * workspaceRowIndex
+
+
+                    Timer {
+                        id: updateWindowPosition
+                        interval: 20
+                        repeat: false
+                        running: false
+                        onTriggered: {
+                            window.x = Math.round(Math.max((windowData?.at[0] - (monitor?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0) + xOffset)
+                            window.y = Math.round(Math.max((windowData?.at[1] - (monitor?.y ?? 0) - monitorData?.reserved[1]) * root.scale, 0) + yOffset)
+                        }
+                    }
+
+                    z: atInitPosition ? root.windowZ : root.windowDraggingZ
+                    Drag.hotSpot.x: targetWindowWidth / 2
+                    Drag.hotSpot.y: targetWindowHeight / 2
+
+                    MouseArea {
+                        id: dragArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: hovered = true // For hover color change
+                        onExited: hovered = false // For hover color change
+                        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                        drag.target: parent
+                        onPressed: (mouse) => {
+                            root.draggingFromWorkspace = windowData?.workspace.id
+                            window.pressed = true
+                            window.Drag.active = true
+                            window.Drag.source = window
+                            window.Drag.hotSpot.x = mouse.x
+                            window.Drag.hotSpot.y = mouse.y
+                            // console.log(`[OverviewWindow] Dragging window ${windowData?.address} from position (${window.x}, ${window.y})`)
+                        }
+                        onReleased: {
+                            const targetWorkspace = root.draggingTargetWorkspace
+                            window.pressed = false
+                            window.Drag.active = false
+                            root.draggingFromWorkspace = -1
+                            if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
+                                Hyprland.dispatch(`movetoworkspacesilent ${targetWorkspace}, address:${window.windowData?.address}`)
+                                updateWindowPosition.restart()
+                                HyprlandData.updateAll()
+                            }
+                            else {
+                                window.x = window.initX
+                                window.y = window.initY
+                            }
+                        }
+                        onClicked: (event) => {
+                            if (!windowData) return;
+
+                            if (event.button === Qt.LeftButton) {
+                                GlobalStates.overviewOpen = false
+                                Hyprland.dispatch(`focuswindow address:${windowData.address}`)
+                                event.accepted = true
+                            } else if (event.button === Qt.MiddleButton) {
+                                Hyprland.dispatch(`closewindow address:${windowData.address}`)
+                                event.accepted = true
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Rectangle { // Focused workspace indicator
+                id: focusedWorkspaceIndicator
+                property int activeWorkspaceInGroup: monitor.activeWorkspace?.id - (root.workspaceGroup * root.workspacesShown)
+                property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / 5)
+                property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % 5
+                x: (root.workspaceImplicitWidth + workspaceSpacing) * activeWorkspaceColIndex
+                y: (root.workspaceImplicitHeight + workspaceSpacing) * activeWorkspaceRowIndex
+                z: root.windowZ
+                width: root.workspaceImplicitWidth
+                height: root.workspaceImplicitHeight
+                color: "transparent"
+                radius: 10
+                border.width: 2
+                border.color: "white"
+            }
+        }
+    }
+
+
+}

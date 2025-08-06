@@ -28,7 +28,7 @@ Rectangle {
         implicitHeight: 8
         hoverEnabled: true
         onEntered: {
-            GlobalStates.dashboardOpen = true
+            GlobalStates.overviewOpen = true
         }
     }
 

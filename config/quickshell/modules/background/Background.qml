@@ -31,7 +31,7 @@ Scope {
             name: "background"
             WlrLayershell.layer: WlrLayer.Bottom //GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
             color: "transparent"
-            exclusiveZone: 0
+            //exclusiveZone: 0
             exclusionMode: ExclusionMode.Ignore
             anchors {
                 top: true

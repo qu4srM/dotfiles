@@ -5,6 +5,7 @@ import "root:/modules/bar/components/"
 import "root:/modules/bar/popups/"
 import "root:/modules/drawers/"
 import "root:/modules/dashboard/"
+import "root:/modules/overview/"
 import "root:/widgets/"
 import "root:/utils/"
 
@@ -18,21 +19,14 @@ import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
-
-Variants {
-    model: Quickshell.screens
-    Scope {
-        id: scope
-        required property ShellScreen modelData
-        
-        /*Exclusions {
-            screen: scope.modelData
-            bar: bar
-            dock: dock
-        }*/
+Scope {
+    id: root 
+    Variants {
+        model: Quickshell.screens
         StyledWindow {
             id: drawers
-            screen: scope.modelData
+            required property var modelData
+            screen: modelData
             name: "drawers"
             color: "transparent"
             anchors {
@@ -69,11 +63,11 @@ Variants {
                 }
             }
             function hide() {
-                GlobalStates.dashboardOpen = false
+                GlobalStates.overviewOpen = false
                 GlobalStates.wallSelectorOpen = false
             }
             HyprlandFocusGrab {
-                active: GlobalStates.dashboardOpen || GlobalStates.wallSelectorOpen
+                active: GlobalStates.overviewOpen || GlobalStates.wallSelectorOpen
                 windows: [drawers]
                 onCleared: () => {
                     if (!active) drawers.hide()
@@ -100,9 +94,10 @@ Variants {
             }
             Interactions {
                 id: interactions
-                screen: scope.modelData
+                screen: modelData
                 Panels {
                     id: panels
+                    styledWindow: drawers
                 }
             }
             
