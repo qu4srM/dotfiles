@@ -1,10 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/modules/sidebar/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.widgets 
+import qs.utils
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
@@ -22,7 +20,7 @@ Item {
     required property StyledWindow window
     property string wallpaperPath
 
-    property Image current: one
+    property Item current: one
 
     anchors.fill: parent
 
@@ -62,10 +60,7 @@ Item {
         scale: 0.8
         source: path
 
-        sourceSize {
-            width: root.window.screen.width
-            height: root.window.screen.height
-        }
+        sourceSize: Qt.size(root.window.screen.width, root.window.screen.height)
 
         onStatusChanged: {
             if (status === Image.Ready)
@@ -86,9 +81,9 @@ Item {
             NumberAnimation {
                 target: img
                 properties: "opacity,scale"
-                duration: Appearance.anim.durations.normal
+                duration: Appearance.animationDurations.normal
                 easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.standard
+                easing.bezierCurve: Appearance.animationCurves.standard
             }
         }
     }

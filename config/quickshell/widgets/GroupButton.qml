@@ -1,7 +1,6 @@
-
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/widgets/"
+import qs.configs
+import qs.services
+import qs.widgets
 
 
 import Qt5Compat.GraphicalEffects

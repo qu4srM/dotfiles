@@ -1,6 +1,7 @@
-import "root:/utils/"
-import "root:/widgets/"
-import "root:/modules/sidebar/components/"
+import qs 
+import qs.modules.sidebarright.components
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -31,34 +32,34 @@ Item {
             icon: Icons.getNetworkIcon(50)
             commandToggle: "whoami"
             cmd: "hyprpicker"
-            text: "Network"
+            text: Translation.tr("Network")
         }
         QuickMultiButton {
             id: bluetooth
             icon: Icons.getBluetoothIcon(true)
             commandToggle: "whoami"
             cmd: "hyprpicker"
-            text: "Bluetooth"
+            text: Translation.tr("Bluetooth")
         }
         QuickButton {
             id: darkmode 
-            icon: Icons.getBluetoothIcon(true)
-            text: "Dark Mode"
+            icon: "dark_mode"
+            text: Translation.tr("Dark mode")
         }
         QuickButton {
             id: dnd
-            icon: Icons.getBluetoothIcon(true)
-            text: "Do not disturb"
+            icon: "do_not_disturb_on"
+            text: Translation.tr("Do not disturb")
         }
         QuickButton {
             id: airplane
-            icon: Icons.getBluetoothIcon(true)
-            text: "Airplane Mode"
+            icon: "gamepad"
+            text: Translation.tr("Game mode")
         }
         QuickButton {
-            id: lightNight
-            icon: Icons.getBluetoothIcon(true)
-            text: "Dark Mode"
+            id: nightLight
+            icon: "night_sight_auto"
+            text: Translation.tr("Night Light")
         }
     }
 }

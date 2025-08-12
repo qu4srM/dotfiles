@@ -1,7 +1,8 @@
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.modules.dock
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -16,12 +17,14 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
+    property bool pinned: Config.options?.dock.pinnedOnStartup ?? false
+    property Item lastHoveredItem
     Variants {
         model: Quickshell.screens
         StyledWindow {
             id: dock
-            required property ShellScreen screen
-            screen: screen
+            required property var modelData
+            screen: modelData
             name: "dock"
             color: "transparent"
             anchors {
@@ -29,197 +32,114 @@ Scope {
                 left: true
                 right: true
             }
+            margins.bottom: 4
             property string pathIcons: "root:/assets/icons/"
             property string colorMain: "transparent"
             property string colorDock: "#29141414"
             property string pathScripts: "~/.config/quickshell/scripts/"
             property string pinnedAppsPath: "~/.config/quickshell/utils/data/pinned_apps.json"
+            /*readonly property var apps: {
+                return DesktopEntries.applications.values.filter(app => app?.name && app?.icon)
+            }*/
 
-            ListModel { id: appModel }
-            property var activeAppSet: new Set()
-            property var activeAppCount: ({})
-
-
-            implicitHeight: 40
-
-            FileView {
-                id: fileView
-                path: pinnedAppsPath
-                watchChanges: true
-                onAdapterUpdated: writeAdapter()
-
-                JsonAdapter {
-                    id: pinnedStore
-                    property list<string> pinnedApps: []
-                }
-            }
-
+            implicitHeight: 50
             Rectangle {
-                id: dockContainer
-                color: dock.colorDock
-                border.width: 1
-                border.color: "#445b5b5b"
-                radius: 15
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                implicitHeight: dock.implicitHeight
-                implicitWidth: row.implicitWidth + 6
+                anchors.centerIn: parent
+                implicitWidth: list.width + 16
+                implicitHeight: parent.height
+                color: Appearance.colors.colbackground
+                radius: Appearance.rounding.normal
 
-                Row {
-                    id: row
-                    anchors.centerIn: parent
-                    spacing: 0
+                Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this);  }
 
-                    // Apps fijadas
-                    Repeater {
-                        model: pinnedStore.pinnedApps
-                        delegate: Item {
-                            width: dock.implicitHeight
-                            height: dock.implicitHeight
+                ListView {
+                    id: list
+                    width: contentWidth
+                    height: parent.height
+                    orientation: ListView.Horizontal
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 8
+                    model: ScriptModel {
+                        values: {
+                            let pinned = (Config.options.dock.pinnedApps || []).map(p => p.toLowerCase());
+                            let apps = DesktopEntries.applications.values.filter(app => {
+                                let appName = app?.name?.toLowerCase() || "";
+                                let appId = app?.id?.toLowerCase() || "";
+                                return (pinned.includes(appName) || pinned.includes(appId)) && app?.icon;
+                            });
+                            return apps;
+                        }
+                    }
+                    delegate: DockItem {
+                        id: dockItem
+                        appListRoot: root
+                        monitor: Hyprland.monitorFor(dock.screen)
+                        toolTipElement: tooltip
+                        anchors.verticalCenter: parent.verticalCenter
 
-                            ButtonIcon {
-                                id: btn
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                iconSystem: Icons.getIcon(modelData)
-                                command: modelData
-                                size: dock.implicitHeight - 12
-                                //hoverItem: tooltip
-                            }
+                        property real hoverScale: 1.0
 
-                            Rectangle {
-                                visible: false
-                                id: tooltip
-                                color: "#a5141414"
-                                width: tooltipText.width + 20
-                                height: 20
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                radius: 10
-                                y: -0
+                        // En vez de solo escalar, cambiamos el tamaño real que ocupa
+                        implicitWidth: baseSize * hoverScale
+                        implicitHeight: baseSize * hoverScale
 
-                                Text {
-                                    id: tooltipText
-                                    anchors.centerIn: parent
-                                    text: modelData
-                                    color: "white"
-                                    font.family: "Roboto"
-                                    font.pixelSize: 12
-                                    font.weight: Font.Medium
-                                }
-                            }
+                        property real baseSize: 30 // tamaño base del icono
+                        Behavior on implicitWidth { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this);  }
+                        Behavior on implicitHeight { animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this);  }
+                    }
 
-                            Row {
-                                spacing: 2
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: 2
-
-                                Repeater {
-                                    model: Math.min(dock.activeAppCount[modelData] || 0, 5)
-                                    delegate: Rectangle {
-                                        width: 3
-                                        height: 3
-                                        radius: 3
-                                        color: "#55677D"
-                                    }
-                                }
+                }
+                MouseArea {
+                    anchors.fill: list
+                    hoverEnabled: true
+                    propagateComposedEvents: true   
+                    onPositionChanged: {
+                        for (let i = 0; i < list.count; i++) {
+                            let item = list.itemAtIndex(i)
+                            if (item) {
+                                let centerX = item.x + item.implicitWidth / 2
+                                let dist = Math.abs(mouse.x - centerX)
+                                let maxDist = 50
+                                let scaleFactor = 1 + Math.max(0, (maxDist - dist) / maxDist) * 0.5
+                                item.hoverScale = scaleFactor
                             }
                         }
                     }
-                    Separator {
-                        implicitWidth: 10
-                        height: dock.implicitHeight
-
-                        Rectangle {
-                            visible: appModel.count > 0 && pinnedStore.pinnedApps.length > 0
-                            anchors.centerIn: parent
-                            width: 2
-                            height: parent.height - 10
-                            color: "#55677D"
+                    onExited: {
+                        for (let i = 0; i < list.count; i++) {
+                            let item = list.itemAtIndex(i)
+                            if (item) {
+                                item.hoverScale = 1.0
+                            }
                         }
-
                     }
 
-                    // Apps activas no fijadas
-                    Repeater {
-                        model: appModel
-                        delegate: Item {
-                            width: dock.implicitHeight
-                            height: dock.implicitHeight
+                }
 
-                            ButtonIcon {
-                                id: iconBtn
-                                iconSystem: Icons.getIcon(modelData)
-                                command: model.icon
-                                size: dock.implicitHeight - 10
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                acceptedButtons: Qt.RightButton | Qt.LeftButton
-                                onPressed: (mouse) => {
-                                    if (mouse.button === Qt.RightButton) {
-                                        const app = model.icon
-                                        const list = [...pinnedStore.pinnedApps]
-                                        if (!list.includes(app)) {
-                                            list.push(app)
-                                            pinnedStore.pinnedApps = list
-                                        }
-                                    }
-                                }
-                            }
+                PopupWindow {
+                    id: tooltip
+                    property var lastHoveredItemName: root.lastHoveredItem?.modelData.name
+                    anchor {
+                        window: dock
+                        rect.y: parentWindow.height - dock.implicitHeight - dock.margins.bottom - tooltip.implicitHeight
+                    }
+                    visible: root.lastHoveredItem != null 
+                    implicitWidth: textLabel.implicitWidth + 16
+                    implicitHeight: textLabel.implicitHeight + 8
+                    color: "transparent"
+                    Rectangle {
+                        anchors.fill: parent
+                        color: Appearance.colors.colbackground 
+                        radius: Appearance.rounding.normal
+                        StyledText {
+                            id: textLabel
+                            anchors.centerIn: parent 
+                            text: tooltip.lastHoveredItemName
+                            color: "white"
                         }
                     }
                 }
             }
-
-
-            // Obtener apps activas y contarlas
-            Process {
-                id: fetchApps
-                command: ["bash", "-c",
-                    "hyprctl clients -j | jq -r '.[].class' | sort | uniq -c | awk '{print $2\":\"$1}' | paste -sd '|' -"
-                ]
-                running: true
-
-                stdout: StdioCollector {
-                    onStreamFinished: {
-                        appModel.clear()
-                        const raw = this.text.trim()
-                        const parts = raw.split("|")
-
-                        let countMap = {}
-                        let classSet = new Set()
-
-                        for (let i = 0; i < parts.length; ++i) {
-                            const entry = parts[i].trim()
-                            const [className, countStr] = entry.split(":")
-                            const count = parseInt(countStr)
-                            if (!className) continue
-
-                            classSet.add(className)
-                            countMap[className] = count
-
-                            if (!pinnedStore.pinnedApps.includes(className)) {
-                                appModel.append({ icon: className })
-                            }
-                        }
-
-                        root.activeAppSet = classSet
-                        root.activeAppCount = countMap
-                    }
-                }
-            }
-
-            Timer {
-                interval: 3000
-                running: true
-                repeat: true
-                onTriggered: fetchApps.running = true
-            }
-
-            Component.onCompleted: fetchApps.running = true
         }
     }
 }

@@ -1,8 +1,9 @@
-import "root:/modules/common/"
-import "root:/widgets/"
-import "root:/utils/"
-import "root:/services/"
-import "root:/modules/bar/components/"
+import qs 
+import qs.configs
+import qs.modules.bar.components
+import qs.services
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -63,8 +64,7 @@ Item {
             }
         }
     }
-
-
+    
     Timer {
         interval: 3000
         running: true

@@ -1,12 +1,7 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/bar/popups/"
-import "root:/modules/dashboard/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs
+import qs.configs
+import qs.modules.sidebarleft 
+import qs.widgets 
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -20,19 +15,27 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Item {
-    id: root 
+    id: root
+    anchors.fill: parent
 
     property Item currentItem: row.children[GlobalStates.currentTabDashboard]
-    anchors.fill: parent 
 
     Tabs {
         id: tabs
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right 
-        anchors.topMargin: 10
+        anchors.margins: 10
+
         animWidth: parent.width
+        tabButtonList: [
+            { "icon": "dashboard", "name": Translation.tr("Dashboard") },
+            { "icon": "deployed_code", "name": Translation.tr("Hacking") },
+            { "icon": "queue_music", "name": Translation.tr("Media") },
+            { "icon": "speed", "name": Translation.tr("Performance") }
+        ]
     }
+
     ClippingRectangle {
         id: view
         anchors.top: tabs.bottom

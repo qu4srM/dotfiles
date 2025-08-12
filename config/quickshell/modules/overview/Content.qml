@@ -1,11 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/modules/overview/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.modules.overview
+import qs.widgets 
+import qs.utils
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -34,8 +31,11 @@ Item {
                 GlobalStates.overviewOpen = false;
             } 
         }
-
-         OverviewWidget {
+        Item {
+            height: 1 // Prevent Wayland protocol error
+            width: 1 // Prevent Wayland protocol error
+        }
+        OverviewWidget {
             styledWindow: root.styledWindow
         }
     }

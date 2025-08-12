@@ -1,4 +1,4 @@
-import "root:/modules/common"
+import qs.configs
 import QtQuick
 import QtQuick.Layouts
 

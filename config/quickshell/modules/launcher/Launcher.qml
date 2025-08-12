@@ -1,12 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs
+import qs.configs
+import qs.widgets
+import qs.utils
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -17,16 +13,17 @@ import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-
 Scope {
     id: root
+
     Variants {
         model: Quickshell.screens
+
         StyledWindow {
             id: launcher
-            required property ShellScreen screen
+            required property var modelData
             visible: GlobalStates.launcherOpen
-            screen: screen
+            screen: modelData
             name: "launcher"
             color: "transparent"
 
@@ -46,35 +43,37 @@ Scope {
                 id: grab
                 windows: [ launcher ]
                 active: GlobalStates.launcherOpen
-                onCleared: () => {
+                onCleared: {
                     if (!active) launcher.hide()
                 }
             }
 
             Rectangle {
-                anchors.fill: parent 
+                anchors.fill: parent
                 color: Appearance.colors.colbackground
                 radius: 10
 
                 ColumnLayout {
-                    id: columnLayout
+                    id: columnLayout 
                     anchors.fill: parent
-                    anchors.topMargin: 20
                     spacing: 0
-                    
+
                     Rectangle {
                         id: searchContainer
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        implicitWidth: parent.width - 40
-                        implicitHeight: searchbox.implicitHeight + 10
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredWidth: parent.width - 40
+                        Layout.preferredHeight: searchbox.implicitHeight
+                        Layout.topMargin: 20
                         color: Appearance.colors.colsecondary
-                        radius: 8
+                        radius: 4
 
-                        RowLayout {
+                        Row {
                             id: searchbox
                             anchors.fill: parent
-                            anchors.margins: 5
+                            anchors.leftMargin: 10
+
                             StyledMaterialSymbol {
+                                anchors.verticalCenter: parent.verticalCenter
                                 text: "search"
                                 font.pixelSize: 20
                                 color: "white"
@@ -87,7 +86,7 @@ Scope {
                                 placeholderText: "Search..."
                                 focus: true
                                 background: Rectangle {
-                                    anchors.fill: parent 
+                                    anchors.fill: parent
                                     color: "transparent"
                                 }
 
@@ -95,7 +94,6 @@ Scope {
 
                                 Keys.onPressed: (event) => {
                                     const cols = Math.max(1, Math.floor(grid.width / grid.cellWidth))
-
                                     if (event.modifiers & Qt.ControlModifier) {
                                         if (event.key === Qt.Key_J) {
                                             grid.currentIndex = (grid.currentIndex + 1) % grid.count
@@ -125,22 +123,20 @@ Scope {
                                         grid.currentIndex = (grid.currentIndex - cols + grid.count) % grid.count
                                         event.accepted = true
                                         break
-                                    default:
-                                        break
                                     }
                                 }
 
                                 onAccepted: {
                                     if (grid.currentItem?.modelData)
                                         grid.currentItem.modelData.execute()
+                                    text = ""
                                 }
 
                                 onTextChanged: grid.currentIndex = 0
                             }
-
                         }
                     }
-                    
+
                     GridView {
                         id: grid
                         Layout.alignment: Qt.AlignHCenter
@@ -150,11 +146,10 @@ Scope {
                         keyNavigationEnabled: true
                         cellWidth: 80
                         cellHeight: 80
-                        snapMode: GridView.SnapToItem
+                        snapMode: GridView.SnapToRow
                         clip: true
-                        cacheBuffer: 0 
+                        cacheBuffer: 0
                         currentIndex: 0
-
                         topMargin: 7
                         bottomMargin: grid.count == 0 ? 0 : 7
 
@@ -164,19 +159,17 @@ Scope {
                             radius: 8
                             color: Appearance.colors.colsecondary
                         }
-                        
 
                         highlightFollowsCurrentItem: true
-						highlightMoveDuration: 100
+                        highlightMoveDuration: 100
                         preferredHighlightBegin: grid.topMargin
-						preferredHighlightEnd: grid.height - grid.bottomMargin
+                        preferredHighlightEnd: grid.height - grid.bottomMargin
                         highlightRangeMode: GridView.ApplyRange
 
                         delegate: MouseArea {
                             required property DesktopEntry modelData
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
-
                             implicitWidth: grid.cellWidth
                             implicitHeight: grid.cellHeight
 
@@ -210,7 +203,7 @@ Scope {
                         }
 
                         model: ScriptModel {
-                            values: {DesktopEntries.applications.values
+                            values: { DesktopEntries.applications.values
                                 .map(object => {
                                     const stxt = search.text.toLowerCase();
                                     const ntxt = object.name.toLowerCase();
@@ -254,51 +247,43 @@ Scope {
                                 })
                                 .map(entry => entry.object);
                             }
-
                             onValuesChanged: grid.currentIndex = 0
                         }
 
                         add: Transition {
-							NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 100 }
-						}
-
-						displaced: Transition {
-							NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
-							NumberAnimation { property: "opacity"; to: 1; duration: 100 }
-						}
-
-						move: Transition {
-							NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
-							NumberAnimation { property: "opacity"; to: 1; duration: 100 }
-						}
-
-						remove: Transition {
-							NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
-							NumberAnimation { property: "opacity"; to: 0; duration: 100 }
-						}
-
+                            NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 100 }
+                        }
+                        displaced: Transition {
+                            NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
+                            NumberAnimation { property: "opacity"; to: 1; duration: 100 }
+                        }
+                        move: Transition {
+                            NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
+                            NumberAnimation { property: "opacity"; to: 1; duration: 100 }
+                        }
+                        remove: Transition {
+                            NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
+                            NumberAnimation { property: "opacity"; to: 0; duration: 100 }
+                        }
                     }
                 }
             }
-        }   
+        }
     }
 
     GlobalShortcut {
         name: "launcherToggle"
         description: "Toggles launcher on press"
-        onPressed: GlobalStates.launcherOpen = !GlobalStates.launcherOpen;
+        onPressed: GlobalStates.launcherOpen = !GlobalStates.launcherOpen
     }
-
     GlobalShortcut {
         name: "launcherOpen"
         description: "Opens launcher on press"
-        onPressed: GlobalStates.launcherOpen = true;
+        onPressed: GlobalStates.launcherOpen = true
     }
-
     GlobalShortcut {
         name: "launcherClose"
         description: "Closes launcher on press"
-        onPressed: GlobalStates.launcherOpen = false;
+        onPressed: GlobalStates.launcherOpen = false
     }
-
 }

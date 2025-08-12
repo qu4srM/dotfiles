@@ -1,11 +1,7 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/bar/popups/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs
+import qs.configs
+import qs.modules.sidebarleft 
+import qs.widgets 
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -18,49 +14,40 @@ import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-Item {
+ColumnLayout {
     id: root
+    spacing: 0
     required property real animWidth
-    readonly property alias count: navBar.count
-    implicitHeight: navBar.implicitHeight + indicator.implicitHeight + indicator.anchors.topMargin + 2
+    required property var tabButtonList
+    signal currentIndexChanged(int index)
+    implicitWidth: Math.max(tabBar.implicitWidth, 600)
 
     TabBar {
-        id: navBar
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
+        id: tabBar
+        Layout.fillWidth: true
         spacing: 0
         currentIndex: GlobalStates.currentTabDashboard
+        onCurrentIndexChanged: {
+            root.onCurrentIndexChanged(currentIndex)
+        }
         background: null
-
-        Tab {
-            iconName: "dashboard"
-            text: qsTr("Dashboard")
-        }
-        Tab {
-            iconName: "deployed_code"
-            text: qsTr("Hacking")
-        }
-        Tab {
-            iconName: "queue_music"
-            text: qsTr("Media")
-        }
-        Tab {
-            iconName: "queue_music"
-            text: qsTr("Gemini")
-        }
-        Tab {
-            iconName: "speed"
-            text: qsTr("Performance")
+        Repeater {
+            model: root.tabButtonList
+            delegate: PrimaryTabButton {
+                required property var modelData
+                iconName: modelData.icon
+                labelText: modelData.name
+                count: root.tabButtonList.length
+                implicitWidth: 120 
+                implicitHeight: 50
+            }
         }
     }
-
     Item {
         id: indicator
-        anchors.top: navBar.bottom
-        anchors.topMargin: 4
-        implicitWidth: navBar.currentItem ? navBar.currentItem.implicitWidth : 0
-        implicitHeight: 2
+        Layout.fillWidth: true
+        implicitHeight: 3
+        /*
         x: {
             const tab = navBar.currentItem;
             const width = (root.animWidth - navBar.spacing * (root.count - 1)) / root.count;
@@ -70,94 +57,41 @@ Item {
             return extraOffset + width * index + (width - tab.implicitWidth) / 2;
 
         }
+        */
         clip: true
 
 
         Rectangle {
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            implicitHeight: parent.implicitHeight * 2
-            color: Appearance.colors.colprimary_hover
-            radius: 2
-        }
-
-        Behavior on x {
-            NumberAnimation {
-                duration: 400
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: [0.2, 0, 0, 1, 1, 1]
+            id: indicatorItem
+            property int tabCount: root.tabButtonList.length
+            property real fullTabSize: root.width / tabCount;
+            //property real targetWidth: tabBar.contentItem?.children[0]?.children[tabBar.currentIndex]?.tabContentWidth ?? 0
+            property real targetWidth: (root.animWidth - tabBar.spacing * (tabCount - 1)) / tabCount;
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
             }
-        }
+            implicitWidth: targetWidth
+            //implicitWidth: tabBar.currentItem.implicitWidth
 
-        Behavior on implicitWidth {
-            NumberAnimation {
-                duration: 400
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: [0.2, 0, 0, 1, 1, 1]
+            color: Appearance.colors.colprimary_hover
+            radius: Appearance?.rounding.full ?? 9999
+            x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
+        
+
+            Behavior on x {
+                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
+            }
+
+            Behavior on implicitWidth {
+                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
             }
         }
     }
-    Separator {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: indicator.bottom
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-
+    Rectangle {
+        id: tabBarBottomBorder
+        Layout.fillWidth: true
         implicitHeight: 1
         color: "white"
     }
-    component Tab: TabButton {
-        id: tab
-        required property string iconName
-        readonly property bool current: TabBar.tabBar.currentItem === this
-        background: null
-        contentItem: CustomMouseArea {
-            id: mouseArea
-            implicitWidth: Math.max(icon.width, label.width)
-            implicitHeight: icon.height + label.height
-            cursorShape: Qt.PointingHandCursor
-
-            onPressed: event => {
-                GlobalStates.currentTabDashboard = tab.TabBar.index
-            }
-            function onWheel(event: WheelEvent): void {
-                if (event.angleDelta.y < 0)
-                    GlobalStates.currentTabDashboard = Math.min(GlobalStates.currentTabDashboard + 1, root.count - 1);
-                else if (event.angleDelta.y > 0)
-                    GlobalStates.currentTabDashboard = Math.max(GlobalStates.currentTabDashboard - 1, 0);
-            }
-        }
-        StyledMaterialSymbol {
-            id: icon
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: label.top
-
-            text: tab.iconName
-            color: tab.current ? Appearance.colors.colprimary_hover : Appearance.colors.colprimaryicon
-            fill: tab.current ? 1 : 0
-            font.pointSize: Appearance.font.size.large
-
-            Behavior on fill {
-                NumberAnimation {
-                    duration: 400
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: [0.2, 0, 0, 1, 1, 1]
-                }
-            }
-        }
-
-        StyledText {
-            id: label
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-
-            text: tab.text
-            color: tab.current ? Appearance.colors.colprimary_hover : Appearance.colors.colprimaryicon
-        }
-    }
-
 }

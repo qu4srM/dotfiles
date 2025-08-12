@@ -1,5 +1,3 @@
-import "root:/services"
-import "root:/config"
 import QtQuick
 import QtQuick.Shapes
 

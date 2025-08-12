@@ -1,9 +1,9 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/widgets/"
-import "root:/utils/"
-import "root:/services/"
-import "root:/modules/bar/components/"
+import qs 
+import qs.configs
+import qs.modules.bar.components
+import qs.services
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -17,7 +17,7 @@ Item {
     id: root 
     anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
-    implicitWidth: icon.active ? 30 : 25
+    implicitWidth: icon.active ? 32 : 26
     implicitHeight: parent.height - 8
 
     property bool materialIconFill: true
@@ -56,7 +56,7 @@ Item {
 
     RowLayout {
         anchors.centerIn: parent
-        spacing: 0
+        spacing: icon.active ? -root.implicitWidth / 8 + 1 : -12
         Loader {
             id: icon
             active: root.isCharging || root.batteryLevel <= 0.2
@@ -72,8 +72,6 @@ Item {
             id: textItem
             font.weight: Font.Bold
             color: Appearance.colors.colbackground 
-            anchors.left: icon.right
-            anchors.leftMargin: icon.active ? -root.implicitWidth / 6 + 1 : -6
         }  
 
     }

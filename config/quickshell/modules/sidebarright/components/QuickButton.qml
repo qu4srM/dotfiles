@@ -1,5 +1,6 @@
-import "root:/modules/common/"
-import "root:/widgets/"
+import qs
+import qs.configs
+import qs.widgets 
 
 import QtQuick
 import QtQuick.Controls
@@ -34,7 +35,14 @@ Rectangle {
             text: root.icon
             size: 20
             color: Appearance.colors.colMSymbol
-            fill: 1
+            fill: root.toggled ? 1 : 0
+            Behavior on fill {
+                NumberAnimation {
+                    duration: Appearance.animationDurations.normal
+                    easing.type: Easing.BezierSpline
+                    easing.bezierCurve: Appearance.animationCurves.standard
+                }
+            }
         }
 
         Text {

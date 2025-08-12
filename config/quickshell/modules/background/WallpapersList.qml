@@ -1,11 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/modules/sidebar/"
-import "root:/modules/background/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.widgets 
+import qs.utils
+import qs.services
 
 import QtQuick
 import QtQuick.Controls

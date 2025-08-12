@@ -1,5 +1,5 @@
-import "root:/modules/common/"
-import "root:/widgets/"
+import qs.configs
+import qs.widgets
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -12,6 +12,7 @@ Button {
     id: root
     property bool toggle 
     property string buttonText 
+    property real buttonRadius
     property real buttonRadiusTopLeft
     property real buttonRadiusTopRight
     property real buttonRadiusBottomLeft
@@ -70,10 +71,10 @@ Button {
         id: btnBackground
         implicitHeight: parent.height
 
-        topLeftRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusTopLeft
-        topRightRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusTopRight
-        bottomLeftRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusBottomLeft
-        bottomRightRadius: root.buttonRadius > 0 ? 0 : root.buttonRadiusBottomRight
+        topLeftRadius: root.buttonRadius > 0 ? root.buttonRadius : root.buttonRadiusTopLeft
+        topRightRadius: root.buttonRadius > 0 ? root.buttonRadius : root.buttonRadiusTopRight
+        bottomLeftRadius: root.buttonRadius > 0 ? root.buttonRadius : root.buttonRadiusBottomLeft
+        bottomRightRadius: root.buttonRadius > 0 ? root.buttonRadius : root.buttonRadiusBottomRight
 
         color: mouseArea.containsMouse ? root.colBackgroundHover : root.colBackground
 

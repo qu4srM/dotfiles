@@ -1,10 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs
+import qs.configs
+import qs.modules.sidebarleft
+import qs.utils 
+import qs.widgets 
 
 import QtQuick
 import QtQuick.Controls
@@ -46,7 +44,9 @@ Item {
         interval: 1000
         running: true
         repeat: true
-        onTriggered: multiProcess.running = true
+        onTriggered: {
+            multiProcess.running = true
+        }
     }
 
     MouseArea {
@@ -91,6 +91,7 @@ Item {
                     Quickshell.execDetached(["bash", "-c", `echo \"${safeText}\" | wl-copy -n`]);
                 }
             }
+
         }
 
         onExited: {

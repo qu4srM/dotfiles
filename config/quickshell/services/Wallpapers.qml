@@ -1,6 +1,6 @@
 pragma Singleton
 
-import "root:/utils/"
+import qs.utils
 
 import Quickshell
 import Quickshell.Io
@@ -55,5 +55,5 @@ Singleton {
             root.actualCurrent = text().trim()
         }
     }
-    Component.onCompleted: scan.start()
+    Component.onCompleted: scan.running = true
 }

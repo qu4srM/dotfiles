@@ -1,5 +1,6 @@
-import "root:/widgets/"
-import "root:/modules/common/"
+import qs
+import qs.configs
+import qs.widgets
 
 import QtQuick
 import Quickshell

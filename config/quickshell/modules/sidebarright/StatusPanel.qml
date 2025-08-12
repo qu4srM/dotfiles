@@ -1,8 +1,8 @@
-import "root:/"
-import "root:/utils/"
-import "root:/widgets/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/components/"
+import qs 
+import qs.configs
+import qs.modules.sidebarright.components
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -62,6 +62,9 @@ Item {
                 onPressed: {
                     Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
                 }
+                StyledToolTip {
+                    content: Translation.tr("Reboot") + " Hyprland"
+                }
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
@@ -79,6 +82,9 @@ Item {
                     Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                     GlobalStates.sidebarRightOpen = false
                 }
+                StyledToolTip {
+                    content: Translation.tr("Settings")
+                }
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
@@ -93,7 +99,10 @@ Item {
                 buttonRadiusBottomLeft: 30
                 buttonRadiusBottomRight: 30
                 onPressed: {
-                    Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
+                    GlobalStates.sessionOpen = true
+                }
+                StyledToolTip {
+                    content: Translation.tr("Power Menu")
                 }
             }
 

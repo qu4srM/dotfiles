@@ -1,11 +1,7 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/bar/popups/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs
+import qs.configs
+import qs.modules.sidebarleft 
+import qs.widgets
 
 import Qt5Compat.GraphicalEffects
 import QtQuick

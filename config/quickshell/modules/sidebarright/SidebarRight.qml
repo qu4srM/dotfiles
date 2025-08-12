@@ -1,10 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/modules/sidebar/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.modules.sidebarright
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -24,10 +22,10 @@ Scope {
         model: Quickshell.screens
         StyledWindow {
             id: sidebar
-            required property ShellScreen screen
+            required property var modelData
 
             visible: GlobalStates.sidebarRightOpen
-            screen: screen
+            screen: modelData
             name: "sidebarRight"
             color: "transparent"
             exclusiveZone: 0

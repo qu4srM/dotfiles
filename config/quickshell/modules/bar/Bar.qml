@@ -1,10 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.modules.bar.components
+import qs.widgets 
+import qs.utils
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -24,8 +22,8 @@ Scope {
         model: Quickshell.screens
         StyledWindow {
             id: bar
-            required property ShellScreen screen
-            screen: screen
+            required property var modelData
+            screen: modelData
             name: "bar"
             color: Appearance.colors.colbackground
             anchors {
@@ -46,12 +44,11 @@ Scope {
                 spacing: 0
 
                 Item {
-                    anchors.fill: parent
-                    implicitHeight: parent.implicitHeight
                     Layout.preferredWidth: 300
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 
                     Row {
-                        anchors.fill: parent
+                        anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
                         anchors.leftMargin: 6
                         ActionButtonIcon {
@@ -59,7 +56,7 @@ Scope {
                             colBackgroundHover: "transparent"
                             iconImage: "redhat-symbolic"
                             iconSize: 18
-                            implicitHeight: parent.height 
+                            implicitHeight: bar.implicitHeight 
                             releaseAction: () => {
                                 GlobalStates.sidebarLeftOpen = true
                             }
@@ -70,8 +67,8 @@ Scope {
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
-                            buttonText: "Apps"
-                            implicitHeight: parent.height 
+                            buttonText: Translation.tr("Apps")
+                            implicitHeight: bar.implicitHeight 
                             releaseAction: () => {
                                 GlobalStates.launcherOpen = true
                             }
@@ -79,8 +76,8 @@ Scope {
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
-                            buttonText: "Cheat Sheet"
-                            implicitHeight: parent.height
+                            buttonText: Translation.tr("Cheat sheet")
+                            implicitHeight: bar.implicitHeight 
                             onPressed: {
                                 Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                             }
@@ -88,8 +85,8 @@ Scope {
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
-                            buttonText: "Wallpapers"
-                            implicitHeight: parent.height
+                            buttonText: Translation.tr("Wallpapers")
+                            implicitHeight: bar.implicitHeight 
                             releaseAction: () => {
                                 GlobalStates.wallSelectorOpen = true
                             }
@@ -97,6 +94,7 @@ Scope {
                     }
                 }
                 Item {
+                    Layout.fillWidth: true
                     implicitHeight: parent.implicitHeight
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
@@ -111,7 +109,7 @@ Scope {
                             colBackgroundHover: Appearance.colors.colsecondary_hover
                             iconMaterial: "screenshot_region"
                             iconSize: 14
-                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
+                            implicitHeight: bar.implicitHeight - 6
                             buttonRadiusTopLeft: Appearance.rounding.full
                             buttonRadiusTopRight: Appearance.rounding.full
                             buttonRadiusBottomLeft: Appearance.rounding.full
@@ -120,14 +118,16 @@ Scope {
                                 Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
                             }
                         }
-                        Workspaces { }
+                        Workspaces {
+                            implicitHeight: bar.implicitHeight - 6
+                        }
                         ActionButtonIcon {
                             anchors.verticalCenter: parent.verticalCenter
                             colBackground: Appearance.colors.colsecondary
                             colBackgroundHover: Appearance.colors.colsecondary_hover
                             iconImage: "picker-symbolic.svg"
                             iconSize: 14
-                            implicitHeight: parent.height - Appearance.margins.itemBarMargin
+                            implicitHeight: bar.implicitHeight - 6
                             buttonRadiusTopLeft: Appearance.rounding.full
                             buttonRadiusTopRight: Appearance.rounding.full
                             buttonRadiusBottomLeft: Appearance.rounding.full
@@ -139,10 +139,8 @@ Scope {
                     }
                 }
                 Item {
-                    anchors.fill: parent
-                    implicitHeight: parent.implicitHeight
-                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight 
                     Layout.preferredWidth: 300
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -156,7 +154,7 @@ Scope {
                                 Icons.getBluetoothIcon(true),
                                 "volume_up"
                             ]
-                            columns: iconList.lenght
+                            columns: iconList.length
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colprimary_hover
                             iconSize: 14

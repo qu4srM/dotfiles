@@ -1,12 +1,9 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "root:/modules/bar/popups/"
-import "root:/modules/drawers/"
-import "root:/services/"
-import "root:/widgets/"
-import "root:/utils/"
+import qs
+import qs.configs
+import qs.modules.sidebarleft 
+import qs.widgets 
+import qs.utils 
+import qs.services
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -65,6 +62,7 @@ Item {
             id: center
             implicitWidth: 200
             implicitHeight: 200
+            /*
 
             Column {
                 id: column
@@ -149,21 +147,23 @@ Item {
                     }
                 }
             }
+            */
         }
         Rectangle {
             id: left
             implicitWidth: 200
             implicitHeight: 200
             color: "transparent"
-
+            
             AnimatedImage {
                 anchors.fill: parent
                 playing: Players.active?.isPlaying ?? false
                 speed: 0.7
-                source: Qt.resolvedUrl("root:/assets/animated/jake.gif")
+                source: Paths.expandTilde("root:/assets/animated/jake.gif")
                 asynchronous: true
                 fillMode: AnimatedImage.PreserveAspectFit
             }
+            
         }
     }
 }

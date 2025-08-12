@@ -1,9 +1,9 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/widgets/"
-import "root:/utils/"
-import "root:/services/"
-import "root:/modules/bar/components/"
+import qs 
+import qs.configs
+import qs.modules.bar.components
+import qs.services
+import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -15,7 +15,6 @@ import Quickshell.Wayland
 
 Rectangle {
     width: Appearance.sizes.workspacesWidth
-    height: parent.height - Appearance.margins.itemBarMargin
     anchors.verticalCenter: parent.verticalCenter
     color: Appearance.colors.colsecondary
     radius: Appearance.rounding.verysmall
@@ -32,7 +31,7 @@ Rectangle {
         }
     }
 
-    RowLayout {
+    Row {
         anchors.centerIn: parent
         spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0
 
@@ -50,12 +49,11 @@ Rectangle {
             animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
         }
     }
-    RowLayout {
+    Row {
         anchors.centerIn: parent
         spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0
         Repeater {
             model: 10
-
             Workspace {
                 required property int index
                 workspaceId: 1 + index

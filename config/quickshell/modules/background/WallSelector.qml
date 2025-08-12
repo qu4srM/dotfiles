@@ -1,9 +1,8 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/drawers/"
-import "root:/widgets/"
-import "root:/utils/"
-import "./background/"
+import qs 
+import qs.configs
+import qs.modules.background
+import qs.widgets 
+import qs.utils
 
 import Qt5Compat.GraphicalEffects
 import QtQuick

@@ -1,6 +1,7 @@
-import "root:/services"
-import "root:/config"
-import "root:/modules/common/"
+import qs 
+import qs.configs
+import qs.services
+
 import QtQuick
 import QtQuick.Shapes
 

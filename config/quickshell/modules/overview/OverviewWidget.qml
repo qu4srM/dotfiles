@@ -1,12 +1,9 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/sidebar/"
-import "root:/modules/bar/components/"
-import "./overview"
-import "root:/services/"
-
-import "root:/widgets/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.modules.overview
+import qs.widgets 
+import qs.utils
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
@@ -31,7 +28,7 @@ Item {
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
     property real scale:  0.16
-    property color activeBorderColor: Appearance.colors.colSecondary
+    property color activeBorderColor: Appearance.colors.colsecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
         ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
@@ -184,8 +181,8 @@ Item {
                         id: dragArea
                         anchors.fill: parent
                         hoverEnabled: true
-                        onEntered: hovered = true // For hover color change
-                        onExited: hovered = false // For hover color change
+                        onEntered: hovered = true
+                        onExited: hovered = false
                         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                         drag.target: parent
                         onPressed: (mouse) => {
@@ -195,7 +192,6 @@ Item {
                             window.Drag.source = window
                             window.Drag.hotSpot.x = mouse.x
                             window.Drag.hotSpot.y = mouse.y
-                            // console.log(`[OverviewWindow] Dragging window ${windowData?.address} from position (${window.x}, ${window.y})`)
                         }
                         onReleased: {
                             const targetWorkspace = root.draggingTargetWorkspace

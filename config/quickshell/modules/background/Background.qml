@@ -1,11 +1,9 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/modules/sidebar/"
-import "root:/widgets/"
-import "root:/services/"
-import "root:/utils/"
+import qs 
+import qs.configs
+import qs.widgets 
+import qs.utils
+import qs.services
+
 
 import QtQuick
 import QtQuick.Controls
@@ -25,9 +23,8 @@ Scope {
         model: Quickshell.screens
         StyledWindow {
             id: background
-            required property ShellScreen screen
-            visible: true
-            screen: screen
+            required property var modelData
+            screen: modelData
             name: "background"
             WlrLayershell.layer: WlrLayer.Bottom //GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
             color: "transparent"

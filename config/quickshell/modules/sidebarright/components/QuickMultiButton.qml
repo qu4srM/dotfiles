@@ -1,5 +1,6 @@
-import "root:/widgets/"
-import "root:/modules/common/"
+import qs
+import qs.configs
+import qs.widgets 
 
 import QtQuick
 import QtQuick.Controls
@@ -45,6 +46,10 @@ Rectangle {
             buttonRadiusBottomRight: 8
             onPressed: {
                 Quickshell.execDetached(["bash", "-c", root.commandToggle])
+            }
+
+            StyledToolTip {
+                content: root.toggled ? root.text + " On" : root.text + " Off"
             }
         }
 

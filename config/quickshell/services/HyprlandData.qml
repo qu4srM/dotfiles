@@ -51,9 +51,6 @@ Singleton {
         updateLayers();
         updateWorkspaces();
     }
-    Component.onCompleted: {
-        updateAll();
-    }
     function biggestWindowForWorkspace(workspaceId) {
         const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == workspaceId);
         return windowsInThisWorkspace.reduce((maxWin, win) => {
@@ -77,6 +74,9 @@ Singleton {
         }
     }
     */
+    Component.onCompleted: {
+        updateAll();
+    }
     Connections {
         target: Hyprland
 

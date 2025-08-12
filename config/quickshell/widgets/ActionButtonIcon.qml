@@ -1,5 +1,5 @@
-import "root:/modules/common/"
-import "root:/widgets/"
+import qs.configs
+import qs.widgets
 
 import Qt5Compat.GraphicalEffects
 import QtQuick

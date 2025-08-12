@@ -1,5 +1,5 @@
-import "root:/modules/common/"
-import "root:/widgets/"
+import qs.configs
+import qs.widgets
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -17,7 +17,7 @@ ActionButton {
     property var iconList: []
     property bool materialIconFill: true
     property real iconSize
-    property int columns: 3
+    property real columns
     implicitWidth: grid.implicitWidth + 10
 
     contentItem: GridLayout {
