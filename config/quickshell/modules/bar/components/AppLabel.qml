@@ -6,7 +6,6 @@ import QtQuick.Layouts
 
 Text {
     id: root
-    anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
     color: "white"
     font.family: "Roboto"

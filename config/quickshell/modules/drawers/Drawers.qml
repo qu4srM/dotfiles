@@ -30,7 +30,16 @@ Scope {
                 right: true
                 bottom: true
             }
-            margins.top: Appearance.sizes.barHeight
+            function topMargin() {
+                if (Config.options.bar.floating || GlobalStates.screenLock)
+                    return 0;
+                if (Config.options.bar.showBackground)
+                    return Appearance.sizes.barHeight;
+                return 0;
+            }
+
+            margins.top: drawers.topMargin()
+
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
 
@@ -65,7 +74,7 @@ Scope {
                 active: GlobalStates.overviewOpen || GlobalStates.wallSelectorOpen
                 windows: [drawers]
                 onCleared: () => {
-                    if (!active) drawers.hide()
+                    drawers.hide()
                 }
             }
 
@@ -73,16 +82,16 @@ Scope {
                 anchors.fill: parent
                 layer.enabled: true
                 layer.effect: MultiEffect {
-                    shadowEnabled: false
-                    blurMax: 0
-                    shadowColor: "#111111"
+                    shadowEnabled: true
+                    blurMax: 15
+                    shadowColor: "#eb000000"
                 }
                 Border {
                     id: border
-                    margin: 0
                 }
                 
                 Backgrounds {
+                    anchors.topMargin: Config.options.bar.floating ? Appearance.sizes.barHeight + Appearance.margins.panelMargin : 0
                     panels: panels
                 }
                 
@@ -90,12 +99,16 @@ Scope {
             Interactions {
                 id: interactions
                 screen: modelData
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Escape) {
+                        drawers.hide();
+                    }
+                }
                 Panels {
                     id: panels
                     styledWindow: drawers
                 }
             }
-            
         }
     }
 }

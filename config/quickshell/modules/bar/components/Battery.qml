@@ -15,7 +15,6 @@ import Quickshell.Wayland
 
 Item {
     id: root 
-    anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
     implicitWidth: icon.active ? 32 : 26
     implicitHeight: parent.height - 8
@@ -63,7 +62,7 @@ Item {
             sourceComponent: StyledMaterialSymbol {
                 text: root.isCharging ? "bolt" : "exclamation"
                 size: 14
-                color: Appearance.colors.colbackground
+                color: Appearance.colors.colBackground
                 fill: root.materialIconFill ? 1 : 0
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -71,7 +70,7 @@ Item {
         StyledText {
             id: textItem
             font.weight: Font.Bold
-            color: Appearance.colors.colbackground 
+            color: Appearance.colors.colBackground
         }  
 
     }

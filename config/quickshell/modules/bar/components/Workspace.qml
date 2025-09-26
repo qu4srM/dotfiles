@@ -12,32 +12,88 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Wayland
+import Quickshell.Widgets
 
 
 Item {
     id: root
-    width: 19
-    height: 18
+    width: iconSize + 2
+    height: iconSize + 2
     required property int workspaceId
-    property string workspaceActive: ""
+    property bool fillMaterial
+    property string iconNerd
+    property string iconMaterial
+    property real iconSize
+
+    property bool workspaceActive: workspaceId === (HyprlandData.activeWorkspace ? HyprlandData.activeWorkspace.id : -1)
+
     anchors.verticalCenter: parent.verticalCenter
     Layout.alignment: Qt.AlignVCenter
 
-    Text {
+    property bool hasWindows: HyprlandData.biggestWindowForWorkspace(root.workspaceId) !== null
+    
+    Item {
         anchors.centerIn: parent
-        text: "·"
-        font.family: "Roboto"
-        color: root.workspaceActive === "true" ? "transparent" : mouseArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colsecondarytext
-        font.pixelSize: 40
-        font.weight: Font.Medium
+
+        Loader {
+            id: iconMaterialLoader 
+            anchors.centerIn: parent 
+            active: !root.hasWindows && !!root.iconMaterial && root.iconMaterial.length > 0
+            sourceComponent: StyledMaterialSymbol {
+                anchors.centerIn: parent 
+                text: root.iconMaterial
+                size: root.iconSize
+                color: {
+                    if (root.hasWindows) {
+                        return "transparent"
+                    }
+                    if (Config.options.bar.showBackground) {
+                        return mouseArea.containsMouse ? Appearance.colors.colPrimaryHover : Appearance.colors.colText
+                    } else {
+                        return mouseArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colprimarytext
+                    }
+                }
+                font.variableAxes: { 
+                    "FILL": root.workspaceActive && !root.hasWindows ? 1 : 0
+                }
+            }
+        }
+
+        Loader {
+            id: iconNerdLoader 
+            anchors.centerIn: parent 
+            active: !root.hasWindows && !iconMaterialLoader.active && !!root.iconNerd && root.iconNerd.length > 0
+            sourceComponent: StyledText {
+                anchors.centerIn: parent 
+                text: root.iconNerd
+                font.pixelSize: root.iconSize
+                font.family: Appearance.font.family.iconNerd 
+                color: {
+                    if (root.hasWindows) {
+                        return "transparent"
+                    }
+                    if (Config.options.bar.showBackground) {
+                        return mouseArea.containsMouse ? Appearance.colors.colPrimaryHover : Appearance.colors.colText
+                    } else {
+                        return mouseArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colprimarytext
+                    }
+                }
+            }
+        }
     }
 
-    StyledIcon {
-        id: icon
-        anchors.centerIn: parent
-        size: 13
+    Loader {
+        anchors.centerIn: parent 
+        active: root.hasWindows
+        sourceComponent: IconImage {
+            id: icon
+            anchors.centerIn: parent
+            property var biggestWindow: HyprlandData.biggestWindowForWorkspace(root.workspaceId)
+            implicitSize: 13
+            source: Quickshell.iconPath(Icons.getIcon(biggestWindow?.class), "image-missing")
+        }
     }
-    
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -46,30 +102,5 @@ Item {
         onClicked: {
             Hyprland.dispatch("workspace " + root.workspaceId)
         }
-    }
-    Process {
-        id: multiProcess
-        command: ["bash", "-c",
-            "ws_id=" + root.workspaceId + "; " +
-            "var1=$(hyprctl clients -j | jq -r --argjson ws $ws_id '.[] | select(.workspace.id == $ws) | .class' | head -n1); " +
-            "var2=$(hyprctl clients -j | jq -e --argjson ws $ws_id 'any(.[]; .workspace.id == $ws)' > /dev/null && echo true || echo false); " +
-            "echo \"$var1|$var2\""
-        ]
-        running: true
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const parts = this.text.trim().split("|")
-                icon.iconSystem = Icons.getIcon(parts[0] || "")
-                workspaceActive = parts[1] || ""
-            }
-        }
-    }
-    
-    Timer {
-        interval: 3000
-        running: true
-        repeat: true
-        //onTriggered: getAppClassProcess.running = true
-        onTriggered: multiProcess.running = true
     }
 }

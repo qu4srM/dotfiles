@@ -1,6 +1,7 @@
 import qs
 import qs.configs
 import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -20,7 +21,10 @@ Rectangle {
 
     property bool toggled: false
 
-    color: mouseArea.containsMouse ? Appearance.colors.colsecondary_hover : Appearance.colors.colsecondary
+
+    color: Config.options.bar.showBackground 
+        ? mouseArea.containsMouse ? Appearance.colors.colSurfaceContainerHighestHover : Appearance.colors.colSurfaceContainer
+        : mouseArea.containsMouse ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6) : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
 
     Layout.fillWidth: true
     Layout.fillHeight: true
@@ -36,8 +40,8 @@ Rectangle {
             implicitHeight: parent.height - 10
             implicitWidth: parent.height - 10
             anchors.verticalCenter: parent.verticalCenter
-            colBackground: Appearance.colors.colprimary
-            colBackgroundHover: Appearance.colors.colprimary_hover
+            colBackground: root.toggled ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colSurfaceContainer, 0.8)
+            colBackgroundHover: Appearance.colors.colPrimaryActive
             iconMaterial: root.icon
             iconSize: 20
             buttonRadiusTopLeft: 8
@@ -53,11 +57,9 @@ Rectangle {
             }
         }
 
-        Text {
+        StyledText {
             anchors.verticalCenter: parent.verticalCenter
             text: root.text
-            color: "white"
-            font.pixelSize: 12
             elide: Text.ElideRight
         }
     } 

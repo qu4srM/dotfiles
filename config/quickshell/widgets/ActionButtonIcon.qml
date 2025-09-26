@@ -1,5 +1,6 @@
 import qs.configs
 import qs.widgets
+import qs.utils
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -13,8 +14,9 @@ ActionButton {
     property string iconImage
     property string iconMaterial
     property string iconNerd
-    property bool materialIconFill: true
+    property bool materialIconFill: false
     property real iconSize
+    property color iconColor
     implicitWidth: iconSize + 10
 
     contentItem: Item {
@@ -26,7 +28,7 @@ ActionButton {
             sourceComponent: StyledMaterialSymbol {
                 text: root.iconMaterial
                 size: root.iconSize
-                color: Appearance.colors.colprimaryicon
+                color: root.changeColor ? root.iconColor : Appearance.colors.colText
                 fill: root.materialIconFill ? 1 : 0
             }
         }
@@ -38,7 +40,7 @@ ActionButton {
                 text: root.iconNerd
                 font.pixelSize: root.iconSize
                 font.family: Appearance.font.family.iconNerd
-                color: Appearance.colors.colprimarytext
+                color: root.changeColor ? root.iconColor : Appearance.colors.colText
             }
         }
         Loader {

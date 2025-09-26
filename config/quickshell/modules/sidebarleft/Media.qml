@@ -17,9 +17,9 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.Mpris
 
-Item {
+Rectangle {
     id: root 
-    anchors.fill: parent
+    color: "transparent"
 
     property real playerProgress: {
         const active = Players.active;
@@ -34,134 +34,152 @@ Item {
 
     ColumnLayout {
         id: columnLayout
-        spacing: 0
         anchors.fill: parent 
-
-        Item {
-            id: right
-            implicitWidth: 200
-            implicitHeight: 200
-
-            ClippingRectangle {
-                anchors.fill: parent
-                anchors.margins: 30
-                color: "transparent"
-                radius: Appearance.rounding.full
-
-                Image {
-                    anchors.fill: parent
-                    source: Players.active?.trackArtUrl ?? ""
-                    asynchronous: true
-                    fillMode: Image.PreserveAspectCrop
-                    sourceSize.width: width
-                    sourceSize.height: height
-                }
-            }
-        }
-        Item {
-            id: center
-            implicitWidth: 200
-            implicitHeight: 200
-            /*
-
-            Column {
-                id: column
-                anchors.fill: parent
-                anchors.margins: 10
-                spacing: 8
-
-                StyledText {
-                    text: Players.active
-                    color: "white"
-                }
-
-                StyledText {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
-                    color: "white"
-                }
-
-                StyledText {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
-                    color: "white"
-                }
-
-                StyledText {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
-                    color: "white"
-                }
-
-                Row {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.fillWidth: true
-                    height: 30
-                    spacing: 10
-
-                    ActionButtonIcon {
-                        anchors.verticalCenter: parent.verticalCenter
-                        colBackground: "transparent"
-                        colBackgroundHover: "transparent"
-                        iconMaterial: "skip_previous"
-                        iconSize: 18
-                        releaseAction: () => Players.active?.previous()
-                    }
-
-                    ActionButtonIcon {
-                        anchors.verticalCenter: parent.verticalCenter
-                        colBackground: Appearance.colors.colsecondary
-                        colBackgroundHover: Appearance.colors.colsecondary_hover
-                        implicitHeight: iconSize + 10
-                        iconMaterial: Players.active?.isPlaying ? "pause" : "play_arrow"
-                        iconSize: 20
-                        releaseAction: () => Players.active?.togglePlaying()
-                    }
-
-                    ActionButtonIcon {
-                        anchors.verticalCenter: parent.verticalCenter
-                        colBackground: "transparent"
-                        colBackgroundHover: "transparent"
-                        iconMaterial: "skip_next"
-                        iconSize: 18
-                        releaseAction: () => Players.active?.next()
-                    }
-                }
-
-                ProgressBarH {
-                    implicitWidth: parent.width - 12
-                    value: root.playerProgress
-                }
-
-                Row {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.fillWidth: true
-                    height: 20
-                    spacing: parent.width - 55
-
-                    StyledText {
-                        text: root.lengthStr(Players.active?.position ?? -1)
-                    }
-                    StyledText {
-                        text: root.lengthStr(Players.active?.length ?? -1)
-                    }
-                }
-            }
-            */
+        spacing: 10
+        Rectangle {
+            implicitWidth: parent.width 
+            Layout.fillHeight: true
+            color: Config.options.bar.showBackground ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+            radius: Appearance.rounding.normal
         }
         Rectangle {
-            id: left
-            implicitWidth: 200
-            implicitHeight: 200
-            color: "transparent"
-            
-            AnimatedImage {
+            implicitWidth: parent.width 
+            implicitHeight: 180
+            clip: true
+            color: Config.options.bar.showBackground ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+            radius: Appearance.rounding.normal
+                
+            Item {
+                id: image 
+                implicitWidth: parent.width
+                implicitHeight: parent.width
+                y: -parent.width / 2 - 50
+                x: 0
+
+                property bool playing: Players.active?.isPlaying ?? false
+
+                ClippingRectangle {
+                    id: clip
+                    anchors.fill: parent
+                    anchors.margins: 60
+                    color: "transparent"
+                    radius: Appearance.rounding.full
+                    opacity: 0.7
+
+                    Image {
+                        id: albumArt
+                        anchors.fill: parent
+                        source: Players.active?.trackArtUrl ?? ""
+                        asynchronous: true
+                        fillMode: Image.PreserveAspectCrop
+                        sourceSize.width: width
+                        sourceSize.height: height
+
+                        transformOrigin: Item.Center
+                        rotation: 0
+
+                        RotationAnimator on rotation {
+                            id: spin
+                            from: 0
+                            to: 360
+                            duration: 20000 
+                            loops: Animation.Infinite
+                            running: image.playing
+                        }
+                    }
+                }
+            }
+            Item {
+                id: control 
                 anchors.fill: parent
-                playing: Players.active?.isPlaying ?? false
-                speed: 0.7
-                source: Paths.expandTilde("root:/assets/animated/jake.gif")
-                asynchronous: true
-                fillMode: AnimatedImage.PreserveAspectFit
+
+                Column {
+                    id: column
+                    anchors.centerIn: parent
+                    width: parent.width - 20
+                    spacing: 10
+
+                    StyledText {
+                        text: Players.active
+                        color: "white"
+                    }
+
+                    StyledText {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
+                        color: "white"
+                    }
+
+                    StyledText {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
+                        color: "white"
+                    }
+
+                    StyledText {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
+                        color: "white"
+                    }
+
+                    
+
+                    ProgressBarH {
+                        implicitWidth: parent.width - 12
+                        value: root.playerProgress
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.fillWidth: true
+                        height: 10
+                        spacing: parent.width - 55
+
+                        StyledText {
+                            text: root.lengthStr(Players.active?.position ?? -1)
+                        }
+                        StyledText {
+                            text: root.lengthStr(Players.active?.length ?? -1)
+                        }
+                    }
+                    RowLayout {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.fillWidth: true
+                        height: 20
+                        spacing: 10
+
+                        ActionButtonIcon {
+                            Layout.alignment: Qt.AlignVCenter
+                            colBackground: "transparent"
+                            colBackgroundHover: "transparent"
+                            implicitHeight: iconSize + 10
+                            iconMaterial: "skip_previous"
+                            iconSize: 18
+                            releaseAction: () => Players.active?.previous()
+                        }
+
+                        ActionButtonIcon {
+                            Layout.alignment: Qt.AlignVCenter
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colsecondary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+                            implicitHeight: iconSize + 10
+                            iconMaterial: Players.active?.isPlaying ? "pause" : "play_arrow"
+                            iconSize: 20
+                            releaseAction: () => Players.active?.togglePlaying()
+                        }
+
+                        ActionButtonIcon {
+                            Layout.alignment: Qt.AlignVCenter
+                            colBackground: "transparent"
+                            colBackgroundHover: "transparent"
+                            implicitHeight: iconSize + 10
+                            iconMaterial: "skip_next"
+                            iconSize: 18
+                            releaseAction: () => Players.active?.next()
+                        }
+                    }
+                }
+                
             }
             
         }

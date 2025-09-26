@@ -85,16 +85,32 @@ Singleton  {
     }
 
     function getNetworkIcon(strength: int): string {
-        if (strength >= 75)
-            return "wifi";
+        if (strength >= 80)
+            return "android_wifi_4_bar";
         if (strength >= 50)
-            return "wifi_2_bar";
+            return "wifi";
         if (strength >= 25)
+            return "wifi_2_bar";
+        if (strength >= 0)
             return "wifi_1_bar";
-        return "wifi_off";
+        return "android_wifi_3_bar_off";
     }
 
     function getBluetoothIcon(connected: bool): string {
         return connected ? "bluetooth" : "bluetooth_disabled";
     }
+
+    function getWeatherIcon(cond) {
+        cond = cond.toLowerCase();
+        if (cond.indexOf("sunny") !== -1) return "weather-clear";
+        if (cond.indexOf("clear") !== -1) return "weather-clear-night";
+        if (cond.indexOf("partly cloudy") !== -1) return "weather-few-clouds";
+        if (cond.indexOf("cloud") !== -1) return "weather-clouds";
+        if (cond.indexOf("rain") !== -1) return "weather-showers";
+        if (cond.indexOf("storm") !== -1) return "weather-storm";
+        if (cond.indexOf("snow") !== -1) return "weather-snow";
+        if (cond.indexOf("fog") !== -1) return "weather-fog";
+        return "weather-severe-alert"; // fallback
+    }
+
 }

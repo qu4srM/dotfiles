@@ -32,11 +32,15 @@ Scope {
             property string pathScripts: "~/.config/quickshell/scripts/"
 
             WlrLayershell.layer: WlrLayer.Overlay
-            implicitHeight: 340
-            implicitWidth: grid.implicitWidth + 40
+            implicitHeight: grid.implicitHeight + 100
+            implicitWidth: grid.implicitWidth + 50
 
             function hide() {
                 GlobalStates.launcherOpen = false
+            }
+
+            onVisibleChanged: {
+                if (visible) search.forceActiveFocus()
             }
 
             HyprlandFocusGrab {
@@ -48,23 +52,32 @@ Scope {
                 }
             }
 
+            StyledRectangularShadow {
+                visible: Config.options.bar.showBackground ? Config.options.appearance.shape ? false : true : false
+                target: content
+            }
+
             Rectangle {
+                id: content
                 anchors.fill: parent
-                color: Appearance.colors.colbackground
+                anchors.margins: 10
+                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colbackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                 radius: 10
+                border.width: Config.options.bar.showBackground ? 0 : 1
+                border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
 
                 ColumnLayout {
-                    id: columnLayout 
+                    id: columnLayout
                     anchors.fill: parent
                     spacing: 0
 
                     Rectangle {
                         id: searchContainer
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredWidth: parent.width - 40
+                        Layout.preferredWidth: parent.width - 30
                         Layout.preferredHeight: searchbox.implicitHeight
                         Layout.topMargin: 20
-                        color: Appearance.colors.colsecondary
+                        color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                         radius: 4
 
                         Row {
@@ -76,15 +89,15 @@ Scope {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "search"
                                 font.pixelSize: 20
-                                color: "white"
+                                color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
                             }
 
                             TextField {
                                 id: search
                                 Layout.fillWidth: true
-                                color: "white"
-                                placeholderText: "Search..."
-                                focus: true
+                                color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+                                placeholderText: "Applications"
+                                focus: launcher.visible
                                 background: Rectangle {
                                     anchors.fill: parent
                                     color: "transparent"
@@ -141,7 +154,7 @@ Scope {
                         id: grid
                         Layout.alignment: Qt.AlignHCenter
                         implicitWidth: cellWidth * 5
-                        implicitHeight: cellHeight * 3 + 10
+                        implicitHeight: cellHeight * 4 + 10
                         keyNavigationWraps: true
                         keyNavigationEnabled: true
                         cellWidth: 80
@@ -157,7 +170,7 @@ Scope {
                             width: grid.cellWidth
                             height: grid.cellHeight
                             radius: 8
-                            color: Appearance.colors.colsecondary
+                            color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                         }
 
                         highlightFollowsCurrentItem: true
@@ -167,7 +180,9 @@ Scope {
                         highlightRangeMode: GridView.ApplyRange
 
                         delegate: MouseArea {
+                            id: appItem
                             required property DesktopEntry modelData
+                            property string shape: Config.options.appearance.shape
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             implicitWidth: grid.cellWidth
@@ -177,12 +192,68 @@ Scope {
                                 modelData.execute()
                                 launcher.hide()
                             }
+                            Item {
+                                id: shapes
+                                anchors.top: parent.top
+                                anchors.topMargin: 2
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                implicitWidth: iconImage.width + 12
+                                implicitHeight: iconImage.height + 12
+                                Loader {
+                                    anchors.fill: parent
+                                    active: appItem.shape === "circle" ? true : false
+                                    sourceComponent: Rectangle {
+                                        anchors.fill: parent 
+                                        color: Appearance.colors.colPrimary
+                                        radius: Appearance.rounding.full
+                                    }
+                                }
+                                Loader {
+                                    anchors.fill: parent
+                                    active: appItem.shape === "square" ? true : false
+                                    sourceComponent: Rectangle {
+                                        anchors.fill: parent 
+                                        color: Appearance.colors.colPrimary
+                                        radius: Appearance.rounding.normal
+                                    }
+                                }
+                                Loader {
+                                    anchors.fill: parent
+                                    active: appItem.shape === "4sidedcookie" ? true : false
+                                    sourceComponent: SidedCookieShape {
+                                        sides: 4
+                                        bulge: 0.2
+                                    }
+                                }
+                                Loader {
+                                    anchors.fill: parent
+                                    active: appItem.shape === "7sidedcookie" ? true : false
+                                    sourceComponent: SidedCookieShape {
+                                        sides: 7
+                                        bulge: 0.1
+                                    }
+                                }
+
+                                Loader {
+                                    anchors.fill: parent
+                                    active: root.shape === "arch" ? true : false
+                                    sourceComponent: Rectangle {
+                                        anchors.fill: parent 
+                                        color: Appearance.colors.palettes.primary.col60
+                                        topLeftRadius: Appearance.rounding.full
+                                        topRightRadius: Appearance.rounding.full
+                                        bottomLeftRadius: Appearance.rounding.unsharpenmore
+                                        bottomRightRadius: Appearance.rounding.unsharpenmore
+                                    }
+                                }
+                            }
 
                             Column {
                                 anchors.centerIn: parent
                                 spacing: 6
 
                                 IconImage {
+                                    id: iconImage
                                     source: Quickshell.iconPath(modelData.icon)
                                     asynchronous: true
                                     width: 42
@@ -268,6 +339,7 @@ Scope {
                     }
                 }
             }
+            
         }
     }
 

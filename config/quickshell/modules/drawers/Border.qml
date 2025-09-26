@@ -15,7 +15,7 @@ Item {
     Rectangle {
         id: rect
         anchors.fill: parent
-        color: Appearance.colors.colbackground
+        color: Config.options.bar.showBackground ? Appearance.colors.colSurface : "transparent"
         visible: false
     }
     Item {
@@ -26,9 +26,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            anchors.leftMargin: root.margin
-            anchors.rightMargin: root.margin
-            anchors.bottomMargin: root.margin
+            anchors.margins: root.margin
 
             radius: Appearance.rounding.normal
         }

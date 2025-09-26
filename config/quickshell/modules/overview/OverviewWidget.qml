@@ -21,24 +21,24 @@ Item {
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(styledWindow.screen)
     readonly property var toplevels: ToplevelManager.toplevels
     readonly property int workspacesShown: 2 * 5
-    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
-    property bool monitorIsFocused: (Hyprland.focusedMonitor?.name == monitor.name)
+    readonly property int workspaceGroup: Math.floor(((monitor?.activeWorkspace?.id ?? 1) - 1) / workspacesShown)
+    property bool monitorIsFocused: (Hyprland.focusedMonitor?.name == monitor?.name)
     property var windows: HyprlandData.windowList
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
-    property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
-    property real scale:  0.16
+    property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor?.id)
+    property real scale: 0.16
     property color activeBorderColor: Appearance.colors.colsecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
-        ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
-        ((monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale)
+        ((monitor?.height ?? 0 - (monitorData?.reserved[0] ?? 0) - (monitorData?.reserved[2] ?? 0)) * root.scale / (monitor?.scale ?? 1)) :
+        ((monitor?.width ?? 0 - (monitorData?.reserved[0] ?? 0) - (monitorData?.reserved[2] ?? 0)) * root.scale / (monitor?.scale ?? 1))
     property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ? 
-        ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale) :
-        ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
+        ((monitor?.width ?? 0 - (monitorData?.reserved[1] ?? 0) - (monitorData?.reserved[3] ?? 0)) * root.scale / (monitor?.scale ?? 1)) :
+        ((monitor?.height ?? 0 - (monitorData?.reserved[1] ?? 0) - (monitorData?.reserved[3] ?? 0)) * root.scale / (monitor?.scale ?? 1))
 
     property real workspaceNumberMargin: 80
-    property real workspaceNumberSize: Math.min(workspaceImplicitHeight, workspaceImplicitWidth) * monitor.scale
+    property real workspaceNumberSize: Math.min(workspaceImplicitHeight, workspaceImplicitWidth) * (monitor?.scale ?? 1)
     property int workspaceZ: 0
     property int windowZ: 1
     property int windowDraggingZ: 99999
@@ -61,8 +61,7 @@ Item {
 
         implicitWidth: workspaceColumnLayout.implicitWidth + padding * 2
         implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
-        radius: 10
-        color: Appearance.colors.colbackground
+        color: "transparent"
     
         ColumnLayout {
             id: workspaceColumnLayout
@@ -77,25 +76,31 @@ Item {
                     spacing: root.workspaceSpacing
                     Repeater {
                         model: 5
-                        Image {
+                        Rectangle {
                             id: workspace
                             property int colIndex: index
                             property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * 5 + colIndex + 1
                             property bool hoveredWhileDragging: false
-                            Layout.preferredWidth: root.workspaceImplicitWidth
-                            Layout.preferredHeight: root.workspaceImplicitHeight
-                            fillMode: Image.PreserveAspectCrop
-                            z: 0
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            implicitWidth: root.workspaceImplicitWidth
+                            implicitHeight: root.workspaceImplicitHeight
+                            color: "transparent"
 
-                            source: Wallpapers.actualCurrent
-                            cache: true
+                            Image {
+                                anchors.fill: parent
+                                source: Wallpapers.actualCurrent
+                                fillMode: Image.PreserveAspectCrop
+                                cache: true
+                            }
                         
                             Text {
                                 anchors.centerIn: parent
                                 text: workspaceValue
                                 color: "white"
-                                font.pixelSize: 12
+                                font.pixelSize: Appearance.font.pixelSize.normal
                             }
+
                             MouseArea {
                                 id: workspaceArea
                                 anchors.fill: parent 
@@ -106,8 +111,8 @@ Item {
                                         Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
                                     }
                                 }
-
                             }
+
                             DropArea {
                                 anchors.fill: parent
                                 onEntered: {
@@ -125,6 +130,7 @@ Item {
                 }
             }
         }
+
         Item {
             id: windowSpace 
             anchors.centerIn: parent
@@ -136,8 +142,9 @@ Item {
                         return ToplevelManager.toplevels.values.filter((toplevel) => {
                             const address = `0x${toplevel.HyprlandToplevel.address}`
                             var win = windowByAddress[address]
+                            if (!win) return false
                             const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
-                            const inMonitor = root.monitor.id === win.monitor
+                            const inMonitor = root.monitor?.id === win?.monitor
                             return inWorkspaceGroup && inMonitor;
                         })
                     }
@@ -153,7 +160,7 @@ Item {
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
 
-                    property int monitorId: windowData?.monitor
+                    property int monitorId: windowData?.monitor ?? -1
                     property var monitor: HyprlandData.monitors[monitorId]
 
                     property int workspaceColIndex: (windowData?.workspace.id - 1) % 5
@@ -161,6 +168,7 @@ Item {
                     xOffset: (root.workspaceImplicitWidth + root.workspaceSpacing + 1) * workspaceColIndex
                     yOffset: (root.workspaceImplicitHeight + root.workspaceSpacing + 1) * workspaceRowIndex
 
+                    property bool atInitPosition: true
 
                     Timer {
                         id: updateWindowPosition
@@ -168,8 +176,8 @@ Item {
                         repeat: false
                         running: false
                         onTriggered: {
-                            window.x = Math.round(Math.max((windowData?.at[0] - (monitor?.x ?? 0) - monitorData?.reserved[0]) * root.scale, 0) + xOffset)
-                            window.y = Math.round(Math.max((windowData?.at[1] - (monitor?.y ?? 0) - monitorData?.reserved[1]) * root.scale, 0) + yOffset)
+                            window.x = Math.round(Math.max((windowData?.at[0] - (monitor?.x ?? 0) - (monitorData?.reserved[0] ?? 0)) * root.scale, 0) + xOffset)
+                            window.y = Math.round(Math.max((windowData?.at[1] - (monitor?.y ?? 0) - (monitorData?.reserved[1] ?? 0)) * root.scale, 0) + yOffset)
                         }
                     }
 
@@ -192,6 +200,7 @@ Item {
                             window.Drag.source = window
                             window.Drag.hotSpot.x = mouse.x
                             window.Drag.hotSpot.y = mouse.y
+                            window.atInitPosition = false
                         }
                         onReleased: {
                             const targetWorkspace = root.draggingTargetWorkspace
@@ -206,6 +215,7 @@ Item {
                             else {
                                 window.x = window.initX
                                 window.y = window.initY
+                                window.atInitPosition = true
                             }
                         }
                         onClicked: (event) => {
@@ -226,7 +236,7 @@ Item {
             
             Rectangle { // Focused workspace indicator
                 id: focusedWorkspaceIndicator
-                property int activeWorkspaceInGroup: monitor.activeWorkspace?.id - (root.workspaceGroup * root.workspacesShown)
+                property int activeWorkspaceInGroup: (monitor?.activeWorkspace?.id ?? 1) - (root.workspaceGroup * root.workspacesShown)
                 property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / 5)
                 property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % 5
                 x: (root.workspaceImplicitWidth + workspaceSpacing) * activeWorkspaceColIndex
@@ -241,6 +251,4 @@ Item {
             }
         }
     }
-
-
 }

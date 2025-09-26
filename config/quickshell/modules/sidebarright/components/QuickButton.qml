@@ -1,6 +1,7 @@
 import qs
 import qs.configs
 import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -18,7 +19,18 @@ Rectangle {
 
     property bool toggled: false
 
-    color: mouseArea.containsMouse ? Appearance.colors.colsecondary_hover : ( toggled ? Appearance.colors.colprimary : Appearance.colors.colsecondary)
+    color: Config.options.bar.showBackground
+        ? (mouseArea.containsMouse
+            ? Appearance.colors.colPrimaryHover
+            : (toggled
+                ? Appearance.colors.colPrimary
+                : Appearance.colors.colSurfaceContainer))
+        : (mouseArea.containsMouse
+            ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+            : (toggled
+                ? Appearance.colors.colPrimary
+                : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)))
+
 
     Layout.fillWidth: true
     Layout.fillHeight: true
@@ -27,14 +39,14 @@ Rectangle {
     Row {
         anchors.fill: parent
         anchors.leftMargin: 6 + 10
-        spacing: 4
+        spacing: anchors.leftMargin - 3
 
         StyledMaterialSymbol {
             id: symbol
             anchors.verticalCenter: parent.verticalCenter
             text: root.icon
             size: 20
-            color: Appearance.colors.colMSymbol
+            color: Appearance.colors.colText
             fill: root.toggled ? 1 : 0
             Behavior on fill {
                 NumberAnimation {
@@ -45,11 +57,9 @@ Rectangle {
             }
         }
 
-        Text {
+        StyledText {
             anchors.verticalCenter: parent.verticalCenter
             text: root.text
-            color: "white"
-            font.pixelSize: 12
             elide: Text.ElideRight
         }
     }

@@ -31,7 +31,12 @@ Singleton {
             property JsonObject appearance: JsonObject {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
-                property bool transparency: false
+                property JsonObject transparency: JsonObject {
+                    property bool enable: false
+                    property bool automatic: true
+                    property real backgroundTransparency: 0.11
+                    property real contentTransparency: 0.57
+                }
                 property JsonObject wallpaperTheming: JsonObject {
                     property bool enableAppsAndShell: true
                     property bool enableQtApps: true
@@ -40,6 +45,7 @@ Singleton {
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                 }
+                property string shape: ""
             }
 
             property JsonObject audio: JsonObject {
@@ -66,6 +72,7 @@ Singleton {
             }
 
             property JsonObject bar: JsonObject {
+                property bool floating: false
                 property JsonObject autoHide: JsonObject {
                     property bool enable: false
                     property bool pushWindows: false
@@ -78,7 +85,7 @@ Singleton {
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
                 property bool borderless: false // true for no grouping of items
                 property string topLeftIcon: "spark" // Options: distro, spark
-                property bool showBackground: true
+                property bool showBackground: false
                 property bool verbose: true
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
@@ -127,8 +134,12 @@ Singleton {
                 property bool pinnedOnStartup: false
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
                 property list<string> pinnedApps: [ // IDs of pinned entries
-                    "org.kde.dolphin", "kitty", "code-oss", "zen", "burpsuite", "steam", "lutris", "discord"]
+                    "org.kde.dolphin", "kitty", "code-oss", "zen", "burpsuite", "steam", "lutris", "discord", "blender", "eclipse", "spotify", "obsidian", "onlyoffice-desktopeditors"]
                 property list<string> ignoredAppRegexes: []
+            }
+            property JsonObject launcher: JsonObject {
+                property real rowsApps: 4
+                property real columnsApps: 5
             }
 
             property JsonObject interactions: JsonObject {
@@ -176,8 +187,18 @@ Singleton {
 
             property JsonObject time: JsonObject {
                 // https://doc.qt.io/qt-6/qtime.html#toString
-                property string format: "hh:mm"
-                property string dateFormat: "ddd, dd/MM"
+                property string format: "hh:mm A"
+                property string dateFormat: "ddd MMM dd"
+                property string hour: "h A"
+                property string minutes: "mm"
+                property string meridiem: "A"
+                property JsonObject pomodoro: JsonObject {
+                    property string alertSound: ""
+                    property int breakTime: 300
+                    property int cyclesBeforeLongBreak: 4
+                    property int focus: 1500
+                    property int longBreak: 900
+                }
             }
 
             property JsonObject windows: JsonObject {

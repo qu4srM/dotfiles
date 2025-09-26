@@ -1,4 +1,5 @@
 import qs.configs
+import qs.utils
 import qs.widgets
 import QtQuick
 import QtQuick.Controls
@@ -33,7 +34,7 @@ ToolTip {
             id: backgroundRectangle
             anchors.bottom: contentItemBackground.bottom
             anchors.horizontalCenter: contentItemBackground.horizontalCenter
-            color: Appearance?.colors.colTooltip ?? "#3C4043"
+            color: Config.options.bar.showBackground ? Appearance.colors.colOnTooltip : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
             radius: Appearance?.rounding.verysmall ?? 7
             width: internalVisibleCondition ? (tooltipTextObject.width + 2 * padding) : 0
             height: internalVisibleCondition ? (tooltipTextObject.height + 2 * padding) : 0
@@ -52,7 +53,7 @@ ToolTip {
                 text: content
                 font.pixelSize: Appearance?.font.pixelSize.smaller ?? 14
                 font.hintingPreference: Font.PreferNoHinting // Prevent shaky text
-                color: Appearance?.colors.colOnTooltip ?? "#FFFFFF"
+                color: Appearance?.colors.colTooltip ?? "#FFFFFF"
                 wrapMode: Text.Wrap
             }
         }   

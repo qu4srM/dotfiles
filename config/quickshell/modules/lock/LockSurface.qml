@@ -1,12 +1,15 @@
 import qs 
 import qs.configs
 import qs.widgets
+import qs.utils
 import qs.services
 
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-//import qs.modules.common.functions
+import Quickshell
+import Quickshell.Services.SystemTray
+import Quickshell.Services.UPower
 
 MouseArea {
     id: root
@@ -18,10 +21,6 @@ MouseArea {
         passwordBox.forceActiveFocus();
     }
 
-    Component.onCompleted: {
-        forceFieldFocus();
-    }
-
     Connections {
         target: context
         function onShouldReFocus() {
@@ -29,99 +28,158 @@ MouseArea {
         }
     }
 
-    Keys.onPressed: (event) => {
-        if (event.key === Qt.Key_Escape) {
-            root.context.currentText = ""
+    hoverEnabled: true
+    acceptedButtons: Qt.LeftButton
+    onPressed: mouse => {
+        forceFieldFocus();
+    }
+    onPositionChanged: mouse => {
+        forceFieldFocus();
+    }
+    Component.onCompleted: {
+        forceFieldFocus();
+    }
+
+    Keys.onPressed: event => {
+        root.context.resetClearTimer();
+        if (event.key === Qt.Key_Escape) { // Esc to clear
+            root.context.currentText = "";
         }
         forceFieldFocus();
     }
+    
 
-    hoverEnabled: true
-    acceptedButtons: Qt.LeftButton
-    onPressed: (mouse) => {
-        forceFieldFocus();
-    }
-    onPositionChanged: (mouse) => {
-        forceFieldFocus();
-    }
-
-    anchors.fill: parent
-
+    /*
+    
     Rectangle {
-        id: passwordBoxContainer
+        anchors.fill: parent 
+        anchors.margins: 90
+        color: "black"
+        RowLayout {
+            anchors.fill: parent
+            spacing: 30
+            Rectangle {
+                implicitWidth: parent.width / 2 - 30 / 2
+                implicitHeight: parent.height
+                color: "#111111"
+                radius: Appearance.rounding.normal
+                StyledText {
+                    anchors.left: parent.left 
+                    anchors.bottom: parent.bottom 
+                    anchors.margins: 20 
+                    text: Time.meridiem
+                    color: "white"
+                    font.pixelSize: 50
+
+                }
+                StyledText {
+                    anchors.centerIn: parent 
+                    text: Time.hour
+                    color: "white"
+                    font.pixelSize: parent.implicitHeight - 100
+                }
+            }
+            Rectangle {
+                implicitWidth: parent.width / 2 - 30 / 2
+                implicitHeight: parent.height
+                color: "#111111"
+                radius: Appearance.rounding.normal
+                StyledText {
+                    anchors.centerIn: parent 
+                    text: Time.minutes
+                    color: "white"
+                    font.pixelSize: parent.implicitHeight - 100
+                }
+            }   
+        }
+        
+    }
+    */
+    Item {
+        id: mainIsland 
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+
+        implicitWidth: 200
+        implicitHeight: 60
         anchors {
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
-            bottomMargin: root.showInputField ? 20 : -height
+            bottomMargin: root.showInputField ? 20 : - height
         }
         Behavior on anchors.bottomMargin {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
-        radius: Appearance.rounding.full
-        color: Appearance.colors.colLayer2
-        implicitWidth: 160
-        implicitHeight: 44
-
-        StyledText {
-            visible: root.context.showFailure && passwordBox.text.length == 0
-            anchors.centerIn: parent
-            text: "Incorrect"
-            color: Appearance.m3colors.m3error
-        }
-        StyledTextInput {
-            id: passwordBox
-
+        RowLayout {
+            id: toolbarLayout
             anchors {
                 fill: parent
-                margins: 10
+                margins: 8
             }
-            clip: true
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            focus: true
-            onFocusChanged: root.forceFieldFocus();
-            color: Appearance.colors.colOnLayer2
-            font {
-                pixelSize: 10
-            }
+            spacing: 4
+            TextField {
+                id: passwordBox
+                placeholderText: root.context.showFailure && passwordBox.text.length == 0 ? Translation.tr("Incorrect password") : Translation.tr("Enter password")
+                placeholderTextColor: Appearance.colors.colOutline
 
-            // Password
-            enabled: !root.context.unlockInProgress
-            echoMode: TextInput.Password
-            inputMethodHints: Qt.ImhSensitiveData
+                Layout.fillHeight: true
+                implicitWidth: 200
+                padding: 10
+                clip: true
+                horizontalAlignment: TextInput.AlignHCenter
+                verticalAlignment: TextInput.AlignVCenter
+                focus: true
+                onFocusChanged: if (!focus) root.forceFieldFocus()
 
-            // Synchronizing (across monitors) and unlocking
-            onTextChanged: root.context.currentText = this.text
-            onAccepted: root.context.tryUnlock()
-            Connections {
-                target: root.context
-                function onCurrentTextChanged() {
-                    passwordBox.text = root.context.currentText;
+                color: Appearance.colors?.colOnSurface ?? "white"
+                font.pixelSize: Appearance.font.pixelSize.small
+                renderType: Text.NativeRendering
+                selectedTextColor: Appearance.colors.colOnSecondaryContainer
+                selectionColor: Appearance.colors.colSecondaryContainer
+
+                // Password
+                enabled: !root.context.unlockInProgress
+                echoMode: TextInput.Password
+                inputMethodHints: Qt.ImhSensitiveData
+
+                // Synchronizing (across monitors) and unlocking
+                onTextChanged: root.context.currentText = this.text
+                onAccepted: root.context.tryUnlock()
+                
+
+                background: Rectangle {
+                    color: Appearance.colors.colSurfaceContainer
+                    radius: Appearance.rounding.full
+                }
+
+                Connections {
+                    target: root.context
+                    function onCurrentTextChanged() {
+                        passwordBox.text = root.context.currentText;
+                    }
+                }
+                Keys.onPressed: event => {
+                    root.context.resetClearTimer();
                 }
             }
-        }
-        
-    }
-    ActionButton {
-        anchors{
-            verticalCenter: passwordBoxContainer.verticalCenter
-            left: passwordBoxContainer.right
-            leftMargin: 5
-        }
-        visible: opacity > 0
-        implicitHeight: passwordBoxContainer.implicitHeight - 12
-        implicitWidth: implicitHeight
-        buttonRadius: passwordBoxContainer.radius
-        colBackground: Appearance.colors.colprimary
-        onClicked: root.context.tryUnlock()
+            ActionButton {
+                implicitHeight: parent.height
+                implicitWidth: Layout.preferredHeight
+                colBackground: Appearance.colors?.colPrimary ?? "#0078d7"
+                onClicked: root.context.tryUnlock()
+                buttonRadius: Appearance.rounding.full
 
-        contentItem: StyledMaterialSymbol {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            size: 24
-            text: "arrow_right_alt"
-            color: Appearance.colors.colbackground
+                contentItem: StyledMaterialSymbol {
+                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    size: 24
+                    text: "arrow_right_alt"
+                    color: Appearance.colors?.colSurfaceContainer ?? "white"
+                }
+            }
+            
         }
+
     }
 }

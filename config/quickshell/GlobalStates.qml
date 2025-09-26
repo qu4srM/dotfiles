@@ -8,6 +8,8 @@ import Quickshell.Io
 
 Singleton {
     id: root
+    property bool barOpen: true
+    property bool drawersOpen: true
     property bool sidebarRightOpen: false
     property bool sidebarLeftOpen: false
     property bool dashboardOpen: false

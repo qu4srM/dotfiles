@@ -17,7 +17,7 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    property string settingsQmlPath: Quickshell.configPath("settings.qml")
+    property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     width: parent.width
     height: 60
 
@@ -49,8 +49,8 @@ Item {
             Layout.fillHeight: true
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                colBackground: Appearance.colors.colsecondary
-                colBackgroundHover: Appearance.colors.colsecondary_hover
+                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
                 iconMaterial: "restart_alt"
                 iconSize: 20
                 implicitWidth: 40
@@ -68,8 +68,8 @@ Item {
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                colBackground: Appearance.colors.colsecondary
-                colBackgroundHover: Appearance.colors.colsecondary_hover
+                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
                 iconMaterial: "settings"
                 iconSize: 16
                 implicitWidth: 40
@@ -79,8 +79,8 @@ Item {
                 buttonRadiusBottomLeft: 30
                 buttonRadiusBottomRight: 30
                 onPressed: {
-                    Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                     GlobalStates.sidebarRightOpen = false
+                    Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                 }
                 StyledToolTip {
                     content: Translation.tr("Settings")
@@ -88,8 +88,8 @@ Item {
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                colBackground: Appearance.colors.colsecondary
-                colBackgroundHover: Appearance.colors.colsecondary_hover
+                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
                 iconMaterial: "power_settings_new"
                 iconSize: 16
                 implicitWidth: 40

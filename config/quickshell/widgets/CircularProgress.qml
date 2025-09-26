@@ -10,15 +10,13 @@ Canvas {
 
     implicitWidth: w
     implicitHeight: h
-    anchors.verticalCenter: parent.verticalCenter
-    Layout.alignment: Qt.AlignVCenter
 
     property real progressRight: value  // de 0 a 1
-    property real progressLeft: 1.0 - 0.16 - progressRight   // de 0 a 1
+    property real progressLeft: 1.0 - 0.04 - progressRight   // de 0 a 1
     property real strokeWidth: 3
     property color colorRight: "#ffffff"
     property color colorLeft: "#929292"
-    property real offsetLeft: 2 * Math.PI * 0.08 // Desfase angular (~7.2°)
+    property real offsetLeft: 2 * Math.PI * 0.02 // Desfase angular (~7.2°)
 
     onPaint: {
         const ctx = getContext("2d")

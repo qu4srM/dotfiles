@@ -58,6 +58,7 @@ Scope {
                 anchors.topMargin: Appearance.margins.panelMargin
                 anchors.bottomMargin: Appearance.margins.panelMargin
                 anchors.rightMargin: Appearance.margins.panelMargin
+                anchors.leftMargin: Appearance.margins.panelMargin
                 focus: GlobalStates.sidebarRightOpen
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
@@ -65,24 +66,37 @@ Scope {
                     }
                 }
                 sourceComponent: Rectangle {
-                    color: Appearance?.colors.colbackground ?? "transparent" 
+                    color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                     implicitWidth: 200
                     radius: Appearance.rounding.normal
-
-                    GridLayout {
-                        id: grid
-                        anchors.fill: parent
-                        columns: 1
-                        rowSpacing: 0
-                        columnSpacing: 0
-                        StatusPanel {}
-                        PanelButtons {}
-                        Rectangle {
-                            color: "transparent"
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
+                    StyledRectangularShadow {
+                        visible: Config.options.bar.showBackground
+                        target: content
+                        radius: parent.radius
+                    }
+                    Rectangle {
+                        id: content
+                        anchors.fill: parent 
+                        color: Config.options.bar.showBackground ? Appearance.colors.colSurface : "transparent"
+                        radius: parent.radius
+                        border.width: Config.options.bar.showBackground ? 0 : 1
+                        border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+                        GridLayout {
+                            id: grid
+                            anchors.fill: parent
+                            columns: 1
+                            rowSpacing: 0
+                            columnSpacing: 0
+                            StatusPanel {}
+                            PanelButtons {}
+                            Rectangle {
+                                color: "transparent"
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
                         }
                     }
+                    
                 }
             }
 

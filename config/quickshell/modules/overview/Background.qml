@@ -1,5 +1,6 @@
 import qs 
 import qs.configs
+import qs.utils
 import qs.services
 
 import QtQuick
@@ -14,8 +15,8 @@ ShapePath {
     readonly property real roundingY: flatten ? component.height / 2 : rounding
 
     strokeWidth: -1
-    fillColor: Appearance.colors.colbackground
-
+    fillColor: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+    
     PathArc {
         relativeX: root.rounding
         relativeY: root.roundingY
@@ -63,9 +64,9 @@ ShapePath {
 
     Behavior on fillColor {
         ColorAnimation {
-            duration: Appearance.anim.durations.normal
+            duration: Appearance.animationDurations.normal
             easing.type: Easing.BezierSpline
-            easing.bezierCurve: Appearance.anim.curves.standard
+            easing.bezierCurve: Appearance.animationCurves.standard
         }
     }
 }

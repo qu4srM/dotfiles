@@ -14,6 +14,12 @@ IconImage {
     implicitSize: root.size
     asynchronous: true
     //source: root.iconSystem
-    source: Quickshell.iconPath(root.iconSystem, true) !== "" ? Quickshell.iconPath(root.iconSystem) : Qt.resolvedUrl("../assets/icons/" + root.iconSource)
+    /*
+    source: Quickshell.iconPath(root.iconSystem, true) !== ""
+          ? Quickshell.iconPath(root.iconSystem)
+          : (root.iconSource !== "" 
+              ? Qt.resolvedUrl("../assets/icons/" + root.iconSource)
+              : Qt.resolvedUrl("../assets/icons/default.svg"))*/
+
 }
 

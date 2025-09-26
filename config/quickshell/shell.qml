@@ -1,8 +1,8 @@
 //@ pragma UseQApplication
+//@ pragma IconTheme Papirus
 //@ pragma Env QS_NO_RELOAD_POPUP=1
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 //@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
-//@ pragma IconTheme Papirus
 //@ pragma Env QT_SCALE_FACTOR=1
 
 import "./modules/background/"
@@ -14,8 +14,7 @@ import "./modules/dock/"
 import "./modules/sidebarright/"
 import "./modules/sidebarleft/"
 import "./modules/session/"
-//import "modules/notificationPopup/"
-import "./services/"
+//import "./modules/notificationPopup/"
 
 
 import QtQuick

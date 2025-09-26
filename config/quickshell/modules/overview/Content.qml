@@ -20,11 +20,12 @@ Item {
     id: root 
     required property var styledWindow
     implicitWidth: columnLayout.implicitWidth
-    implicitHeight: columnLayout.implicitHeight
+    implicitHeight: columnLayout.implicitHeight + columnLayout.anchors.topMargin - 5
 
     ColumnLayout {
         id: columnLayout
         anchors.top: parent.top 
+        anchors.topMargin: Config.options.bar.floating ? Appearance.sizes.barHeight + 10 : (Config.options.bar.showBackground) ? 0 : Appearance.sizes.barHeight / 2
         anchors.horizontalCenter: parent.horizontalCenter
         Keys.onPressed: event => {
             if (event.key === Qt.Key_Escape) {

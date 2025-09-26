@@ -18,39 +18,30 @@ TabButton {
     required property string iconName
     required property string labelText
     required property int count
-    readonly property bool current: TabBar.tabBar.currentItem === this
-    background: null
-    CustomMouseArea {
-        id: mouseArea 
-        anchors.fill: parent 
+    required property bool active
+    background: null 
+    MouseArea {
+        anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-
-        onPressed: event => {
-            GlobalStates.currentTabDashboard = root.TabBar.index
-        }
-        function onWheel(event: WheelEvent): void {
-            if (event.angleDelta.y < 0)
-                GlobalStates.currentTabDashboard = Math.min(GlobalStates.currentTabDashboard + 1, root.count- 1);
-            else if (event.angleDelta.y > 0)
-                GlobalStates.currentTabDashboard = Math.max(GlobalStates.currentTabDashboard - 1, 0);
+        onReleased: (event) => {
+            root.click()
         }
     }
     contentItem: Item {
         anchors.centerIn: parent
         ColumnLayout {
             anchors.centerIn: parent
-            spacing: 0
+            spacing: 4
             StyledMaterialSymbol {
-                id: icon
-                anchors.horizontalCenter: parent.horizontalCenter
+                id: icon 
+                Layout.alignment: Qt.AlignHCenter
                 text: root.iconName
-                color: root.current ? Appearance.colors.colprimary_hover : Appearance.colors.colprimaryicon
-                fill: root.current ? 1 : 0
-                font.pointSize: Appearance.font.size.large
-
+                color: root.active ? Appearance.colors.colPrimary : Appearance.colors.colOutline
+                fill: root.active ? 1 : 0
+                font.pointSize: Appearance.font.pixelSize.small
                 Behavior on fill {
                     NumberAnimation {
-                        duration: 400
+                        duration: 300
                         easing.type: Easing.BezierSpline
                         easing.bezierCurve: [0.2, 0, 0, 1, 1, 1]
                     }
@@ -59,9 +50,10 @@ TabButton {
 
             StyledText {
                 id: label
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 text: root.labelText
-                color: root.current ? Appearance.colors.colprimary_hover : Appearance.colors.colprimaryicon
+                font.pixelSize: 13
+                color: root.active ? Appearance.colors.colPrimary : Appearance.colors.colOutline
             }
         }
     }

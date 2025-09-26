@@ -1,6 +1,14 @@
+//@ pragma UseQApplication
+//@ pragma Env QS_NO_RELOAD_POPUP=1
+//@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
+//@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
+
+// Adjust this to make the app smaller or larger
+//@ pragma Env QT_SCALE_FACTOR=1
+
 import qs
 import qs.configs
-import qs.modules.settings
+//import qs.modules.settings
 import qs.widgets 
 
 
@@ -12,11 +20,12 @@ import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Widgets
 
 ApplicationWindow {
     id: root
 
-    property var pages: [
+    /*property var pages: [
         {
             name: "Style",
             icon: "palette",
@@ -42,30 +51,70 @@ ApplicationWindow {
             icon: "info",
             component: "modules/settings/About.qml"
         }
+    ]*/
+    property var pages: [
+        {
+            name: Translation.tr("Interface"),
+            icon: "cards",
+            component: "modules/settings/InterfaceConfig.qml"
+        },
+        {
+            name: Translation.tr("Bar"),
+            icon: "toolbar",
+            component: "modules/settings/BarConfig.qml"
+        },
+        {
+            name: Translation.tr("Themes"),
+            icon: "format_paint",
+            component: "modules/settings/ThemesConfig.qml"
+        },
+        {
+            name: "Advanced",
+            icon: "construction",
+            component: "modules/settings/AdvancedConfig.qml"
+        },
+        {
+            name: "About",
+            icon: "info",
+            component: "modules/settings/About.qml"
+        }
     ]
+    property int currentPage: 0
 
     visible: true
     onClosing: Qt.quit()
     title: "shell Settings"
 
-    minimumWidth: 600
-    minimumHeight: 400
+    minimumWidth: 300 // 600
+    minimumHeight: 200 // 400
     width: 1100
     height: 600
-    color: "#111111"
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+    
     ColumnLayout {
         anchors {
             fill: parent
             margins: contentPadding
         }
+        spacing: 0
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: false
             implicitHeight: 40
             Text {
-                anchors.horizontalCenter: parent.horizontalCenter
+                id: labelSettings
+                anchors.left: parent.left 
+                anchors.margins: 14
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Settings"
+                text: Translation.tr("Settings")
+                color: "white"
+            }
+
+            Text {
+                anchors.left: labelSettings.right
+                anchors.margins: 152
+                anchors.verticalCenter: parent.verticalCenter
+                text: Translation.tr("Display")
                 color: "white"
             }
 
@@ -73,56 +122,127 @@ ApplicationWindow {
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
+            spacing: 0
             Item {
                 id: navRailWrapper
                 Layout.fillHeight: true
-                Layout.margins: 5
-                implicitWidth: 100
+                Layout.margins: 10
+                Layout.topMargin: 0
+                implicitWidth: 200
                 NavigationRail {
                     id: navRail 
                     anchors {
                         left: parent.left 
                         top: parent.top 
-                        bottom: parent.bottom
+                        //bottom: parent.bottom
                     }
                     spacing: 10
                     expanded: root.width > 900
-                    ColumnLayout {
-                        Repeater {
-                            model: root.pages
-                            Text {
-                                text: modelData.name
-                                color: "white"
+                    ClippingRectangle {
+                        width: navRailWrapper.implicitWidth
+                        height: columnLayoutNavRail.implicitHeight
+                        radius: Appearance.rounding.normal
+                        color: "transparent"
+                        ColumnLayout {
+                            id: columnLayoutNavRail
+                            spacing: 2
+                            Repeater {
+                                model: root.pages
+                                delegate: Rectangle {
+                                    required property var index
+                                    required property var modelData
+                                    implicitWidth: navRailWrapper.implicitWidth
+                                    implicitHeight: 30
+                                    color: Appearance.colors.colSurfaceContainer
+                                    radius: Appearance.rounding.unsharpen
+                                    MouseArea {
+                                        anchors.fill: parent 
+                                        hoverEnabled: true 
+                                        onClicked: root.currentPage = index;
+                                    }
+                                    RowLayout {
+                                        anchors.fill: parent 
+                                        StyledMaterialSymbol {
+                                            anchors.left: parent.left 
+                                            anchors.margins: 10
+                                            text: modelData.icon
+                                            color: "white"
+                                        }
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: modelData.name
+                                            color: "white"
+                                        }
+                                    }
+                                    
+                                }
                             }
                         }
                     }
                 }
             }
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: "#303030"
-                radius: 10
-                ActionButtonIcon {
-                    iconImage: "picker-symbolic.svg"
-                    releaseAction: () => {
-                        myPopup.open()
+                Loader{
+                    id: pageLoader 
+                    anchors.fill: parent
+                    opacity: 1.0
+                    active: Config.ready
+                    Component.onCompleted: {
+                        source = root.pages[0].component
                     }
-                }
-                Popup {
-                    id: myPopup
-                    width: 200
-                    height: 100
-                    modal: false
-                    focus: true
+                    Connections {
+                        target: root
+                        function onCurrentPageChanged() {
+                            if (pageLoader.sourceComponent !== root.pages[root.currentPage].component) {
+                                switchAnim.complete();
+                                switchAnim.start();
+                            }
+                        }
+                    }
+                    SequentialAnimation {
+                        id: switchAnim
 
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "#f4f4f4"
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Esto es un popup interno"
+                        NumberAnimation {
+                            target: pageLoader
+                            properties: "opacity"
+                            from: 1
+                            to: 0
+                            duration: 100
+                            easing.type: Appearance.animation.elementMoveExit.type
+                            easing.bezierCurve: Appearance.animationCurves.emphasizedFirstHalf
+                        }
+                        ParallelAnimation {
+                            PropertyAction {
+                                target: pageLoader
+                                property: "source"
+                                value: root.pages[root.currentPage].component
+                            }
+                            PropertyAction {
+                                target: pageLoader
+                                property: "anchors.topMargin"
+                                value: 20
+                            }
+                        }
+                        ParallelAnimation {
+                            NumberAnimation {
+                                target: pageLoader
+                                properties: "opacity"
+                                from: 0
+                                to: 1
+                                duration: 200
+                                easing.type: Appearance.animation.elementMoveEnter.type
+                                easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
+                            }
+                            NumberAnimation {
+                                target: pageLoader
+                                properties: "anchors.topMargin"
+                                to: 0
+                                duration: 200
+                                easing.type: Appearance.animation.elementMoveEnter.type
+                                easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
+                            }
                         }
                     }
                 }

@@ -15,7 +15,6 @@ import Quickshell.Hyprland
 ActionButton {
     id: root
     property var iconList: []
-    property bool materialIconFill: true
     property real iconSize
     property real columns
     implicitWidth: grid.implicitWidth + 10
@@ -35,8 +34,8 @@ ActionButton {
                 sourceComponent: StyledMaterialSymbol {
                     text: modelData
                     size: root.iconSize
-                    color: Appearance.colors.colprimaryicon
-                    fill: root.materialIconFill ? 1 : 0
+                    color: Appearance.colors.colText
+                    fill: 1
                 }
             }
         }

@@ -14,9 +14,8 @@ Scope {
 		id: lockContext
 
 		onUnlocked: {
-			// Unlock the screen before exiting, or the compositor will display a
-			// fallback lock you can't interact with.
 			GlobalStates.screenLock = false;
+			Quickshell.execDetached(["bash", "-c", `sleep 0.2; hyprctl --batch "dispatch togglespecialworkspace; dispatch togglespecialworkspace"`])
 		}
 	}
     WlSessionLock {
@@ -38,26 +37,23 @@ Scope {
 			}
 		}
     }
-    Variants {
+	Variants {
         model: Quickshell.screens
-        LazyLoader {
-			id: blurLayerLoader
-			required property var modelData
-			active: GlobalStates.screenLock
-			component: StyledWindow {
-				screen: blurLayerLoader.modelData
-                name: "lockWindow"
-				color: "transparent"
-				anchors {
-					top: true
-					left: true
-					right: true
+		delegate: Scope {
+			required property ShellScreen modelData
+			property bool shouldPush: GlobalStates.screenLock
+			property string targetMonitorName: modelData.name
+			property int verticalMovementDistance: modelData.height
+			property int horizontalSqueeze: modelData.width * 0.2
+			onShouldPushChanged: {
+				if (shouldPush) {
+					Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, ${verticalMovementDistance}, ${-verticalMovementDistance}, ${horizontalSqueeze}, ${horizontalSqueeze}`])
+				} else {
+					Quickshell.execDetached(["bash", "-c", `hyprctl keyword monitor ${targetMonitorName}, addreserved, 0, 0, 0, 0`])
 				}
-				implicitHeight: 1
-				exclusiveZone: screen.height * 3 
 			}
 		}
-    }
+	}
     IpcHandler {
         target: "lock"
 

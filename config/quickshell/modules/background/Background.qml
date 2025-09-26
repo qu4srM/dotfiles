@@ -43,6 +43,60 @@ Scope {
                 window: background
                 wallpaperPath: Wallpapers.actualCurrent
             }
+            Item {
+                id: weather
+                anchors.top: parent.top 
+                anchors.right: parent.right 
+                anchors.topMargin: 80
+                anchors.rightMargin: 50
+                implicitWidth: shape.implicitWidth
+                implicitHeight: shape.implicitHeight
+                Rectangle {
+                    id: shape
+                    color: Appearance.colors.colPrimary
+                    rotation: -45
+                    implicitWidth: 120
+                    implicitHeight: shape.implicitWidth - 30
+                    radius: Appearance.rounding.full
+                }
+                StyledText { 
+                    anchors.right: parent.right 
+                    anchors.rightMargin: 15
+                    text: Weather.temperature
+                    color: Appearance.colors.colOnPrimary
+                    font.pixelSize: 40
+                }
+                IconImage {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    anchors.bottom: parent.bottom
+                    implicitSize: 50
+                    source: Quickshell.iconPath(Icons.getWeatherIcon(Weather.condition))
+                }
+            }
+            Item {
+                id: clock 
+                anchors.top: parent.top 
+                anchors.topMargin: 100
+                anchors.horizontalCenter: parent.horizontalCenter 
+                implicitWidth: 100
+                implicitHeight: 50 
+                RowLayout {
+                    spacing: 0
+                    StyledText {
+                        text: "10"
+                        font.pixelSize: 40
+                    }
+                    StyledText {
+                        text: ":"
+                        font.pixelSize: 40
+                    }
+                    StyledText {
+                        text: "10"
+                        font.pixelSize: 40
+                    }
+                }
+            }
 
             
         }

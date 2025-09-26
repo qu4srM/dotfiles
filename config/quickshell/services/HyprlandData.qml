@@ -9,6 +9,7 @@ import Quickshell.Hyprland
 
 Singleton {
     id: root
+
     property var windowList: []
     property var addresses: []
     property var windowByAddress: ({})
@@ -18,14 +19,7 @@ Singleton {
     property var activeWorkspace: null
     property var monitors: []
     property var layers: ({})
-    /*
-    property string currentAppClass: "desktop"
-
-    
-    function updateWindowClass() {
-        getAppClassProcess.running = true;
-    }
-    */
+    property bool activeFloatingWindow: false // Nueva variable
 
     function updateWindowList() {
         getClients.running = true;
@@ -45,12 +39,12 @@ Singleton {
     }
 
     function updateAll() {
-        //updateWindowClass();
         updateWindowList();
         updateMonitors();
         updateLayers();
         updateWorkspaces();
     }
+
     function biggestWindowForWorkspace(workspaceId) {
         const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == workspaceId);
         return windowsInThisWorkspace.reduce((maxWin, win) => {
@@ -59,38 +53,35 @@ Singleton {
             return winArea > maxArea ? win : maxWin;
         }, null);
     }
-    /*
-    Process {
-        id: getAppClassProcess
-        command: [
-            "bash", "-c",
-            "ws_id=$(hyprctl monitors -j | jq -r '.[0].activeWorkspace.id'); " +
-            "hyprctl clients -j | jq -r --argjson ws \"$ws_id\" '.[] | select(.workspace.id == $ws) | .class' | head -n1"
-        ]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.currentAppClass = this.text.trim()
-            }
+
+    function checkActiveFloating() {
+        if (!activeWorkspace || !windowList.length) {
+            root.activeFloatingWindow = false;
+            return;
         }
+        const wsId = activeWorkspace.id;
+        const activeFloating = windowList.some(w => w.workspace.id === wsId && w.floating === true);
+        root.activeFloatingWindow = activeFloating;
     }
-    */
+
     Component.onCompleted: {
         updateAll();
     }
+
     Connections {
         target: Hyprland
-
         function onRawEvent(event) {
-            updateAll()
+            updateAll();
         }
     }
+
     Process {
         id: getClients
         command: ["bash", "-c", "hyprctl clients -j"]
         stdout: StdioCollector {
             id: clientsCollector
             onStreamFinished: {
-                root.windowList = JSON.parse(clientsCollector.text)
+                root.windowList = JSON.parse(clientsCollector.text);
                 let tempWinByAddress = {};
                 for (var i = 0; i < root.windowList.length; ++i) {
                     var win = root.windowList[i];
@@ -98,9 +89,11 @@ Singleton {
                 }
                 root.windowByAddress = tempWinByAddress;
                 root.addresses = root.windowList.map(win => win.address);
+                root.checkActiveFloating(); // chequeo después de actualizar lista
             }
         }
     }
+
     Process {
         id: getMonitors
         command: ["bash", "-c", "hyprctl monitors -j"]
@@ -111,6 +104,7 @@ Singleton {
             }
         }
     }
+
     Process {
         id: getLayers
         command: ["bash", "-c", "hyprctl layers -j"]
@@ -121,6 +115,7 @@ Singleton {
             }
         }
     }
+
     Process {
         id: getWorkspaces
         command: ["bash", "-c", "hyprctl workspaces -j"]
@@ -146,6 +141,7 @@ Singleton {
             id: activeWorkspaceCollector
             onStreamFinished: {
                 root.activeWorkspace = JSON.parse(activeWorkspaceCollector.text);
+                root.checkActiveFloating(); // chequeo después de actualizar workspace
             }
         }
     }

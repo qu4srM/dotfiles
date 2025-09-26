@@ -74,7 +74,7 @@ Scope {
             name: "session"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            color: Colors.setTransparency(Appearance.colors.colbackground, 0.3)
+            color: Colors.setTransparency(Appearance.colors.colBackground, 0.3)
 
             anchors {
                 top: true
@@ -131,8 +131,8 @@ Scope {
                             //Quickshell.execDetached(["loginctl", "lock-session"]); session.hide() 
                             //Quickshell.execDetached(["bash", "-c", "swaylock"]); session.hide() 
                             //session.hide(); Quickshell.execDetached(["bash", "-c", "swaylock"])
+                            GlobalStates.sessionOpen = false
                             GlobalStates.screenLock = true 
-                            session.hide()
                         }
                         KeyNavigation.right: sessionSleep
                     }

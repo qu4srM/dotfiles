@@ -1,6 +1,7 @@
 import qs
 import qs.configs
 import qs.modules.sidebarleft 
+import qs.utils
 import qs.widgets 
 
 import QtQuick
@@ -53,9 +54,7 @@ Scope {
                 id: sidebarLoader
                 active: GlobalStates.sidebarLeftOpen
                 anchors.fill: parent
-                anchors.topMargin: Appearance.margins.panelMargin
-                anchors.bottomMargin: Appearance.margins.panelMargin
-                anchors.leftMargin: Appearance.margins.panelMargin
+                anchors.margins: Appearance.margins.panelMargin
                 focus: GlobalStates.sidebarLeftOpen
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
@@ -63,9 +62,8 @@ Scope {
                     }
                 }
                 sourceComponent: Rectangle {
-                    color: Appearance?.colors.colbackground ?? "transparent" 
-                    implicitWidth: 200
-                    implicitHeight: 100
+                    color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                    anchors.fill: parent
                     radius: Appearance.rounding.normal
                     Content {}
                 }

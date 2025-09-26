@@ -1,126 +1,77 @@
 import qs
 import qs.configs
-import qs.modules.sidebarleft 
+import qs.modules.sidebarleft
+import qs.modules.sidebarleft.study
 import qs.widgets 
 
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Effects
 import Quickshell
-import Quickshell.Io
 import Quickshell.Widgets
-import Quickshell.Wayland
-import Quickshell.Hyprland
 
 Item {
     id: root
     anchors.fill: parent
 
-    property Item currentItem: row.children[GlobalStates.currentTabDashboard]
+    property var tabButtonList: [
+        { "icon": "dashboard", "name": Translation.tr("Dashboard") },
+        { "icon": "book", "name": Translation.tr("Study") },
+        //{ "icon": "deployed_code", "name": Translation.tr("Hacking") },
+        { "icon": "queue_music", "name": Translation.tr("Media") },
+        //{ "icon": "speed", "name": Translation.tr("Performance") }
+    ]
 
-    Tabs {
-        id: tabs
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right 
+    property int currentTab: Persistent.states.sidebarleft.currentTab
+
+    function focusActiveItem() {
+        stackLayout.currentItem.forceActiveFocus()
+    }
+
+    Rectangle {
+        implicitWidth: parent.width
+        implicitHeight: tabBar.implicitHeight
+        topLeftRadius: Appearance.rounding.normal
+        topRightRadius: Appearance.rounding.normal
+        color: Appearance.colors.colSurfaceContainer
+    }
+
+    ColumnLayout {
+        id: columnLayout
+        anchors.fill: parent 
         anchors.margins: 10
+        spacing: 0
 
-        animWidth: parent.width
-        tabButtonList: [
-            { "icon": "dashboard", "name": Translation.tr("Dashboard") },
-            { "icon": "deployed_code", "name": Translation.tr("Hacking") },
-            { "icon": "queue_music", "name": Translation.tr("Media") },
-            { "icon": "speed", "name": Translation.tr("Performance") }
-        ]
-    }
-
-    ClippingRectangle {
-        id: view
-        anchors.top: tabs.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: 10
-
-        radius: Appearance.rounding.normal
-        color: "transparent"
-
-        Flickable {
-            id: flickable
-            anchors.fill: parent
-            flickableDirection: Flickable.HorizontalFlick
-            clip: true
-
-            contentWidth: row.width
-            contentHeight: row.height
-            contentX: row.children[GlobalStates.currentTabDashboard]?.x || 0
-
-            onDragEnded: {
-                const x = contentX - row.children[GlobalStates.currentTabDashboard].x;
-                if (x > row.children[GlobalStates.currentTabDashboard].width / 10)
-                    GlobalStates.currentTabDashboard = Math.min(GlobalStates.currentTabDashboard + 1, row.children.length - 1);
-                else if (x < -row.children[GlobalStates.currentTabDashboard].width / 10)
-                    GlobalStates.currentTabDashboard = Math.max(GlobalStates.currentTabDashboard - 1, 0);
-                else
-                    contentX = Qt.binding(() => row.children[GlobalStates.currentTabDashboard].x);
+        PrimaryTabBar {
+            id: tabBar
+            Layout.fillWidth: true
+            Layout.leftMargin: 10
+            implicitHeight: 60
+            externalTrackedTab: root.currentTab
+            tabButtonList: root.tabButtonList
+            function onCurrentIndexChanged(currentIndex) {
+                Persistent.states.sidebarleft.currentTab = currentIndex
             }
+        }
 
-            RowLayout {
-                id: row
-                Loader {
-                    id: loader1
-                    Layout.alignment: Qt.AlignTop
-                    active: GlobalStates.currentTabDashboard === 0 ? true : false
-                    anchors.fill: parent
-                    sourceComponent: Dash {}
-                }
-                Loader {
-                    id: loader2
-                    Layout.alignment: Qt.AlignTop
-                    active: GlobalStates.currentTabDashboard === 1 ? true : false
-                    anchors.fill: parent
-                    sourceComponent: Hack {}
-                }
-                Loader {
-                    id: loader3
-                    Layout.alignment: Qt.AlignTop
-                    active: GlobalStates.currentTabDashboard === 2 ? true : false
-                    anchors.fill: parent
-                    sourceComponent: Media {}
-                }
-                Loader {
-                    id: loader4
-                    Layout.alignment: Qt.AlignTop
-                    active: GlobalStates.currentTabDashboard === 3 ? true : false
-                    anchors.fill: parent
-                    sourceComponent: Performance {}
-                }
-            }
-            Behavior on contentX {
-                NumberAnimation {
-                    duration: 400
-                    easing.type: Easing.BezierSpline
-                    easing.bezierCurve: [0.2, 0, 0, 1, 1, 1]
-                }
+        ClippingRectangle {
+            id: view
+            Layout.fillWidth: true 
+            Layout.fillHeight: true
+            radius: Appearance.rounding.normal
+            color: "transparent"
+
+            StackLayout {
+                id: stackLayout
+                anchors.fill: parent
+                currentIndex: root.currentTab
+
+                Dash { Layout.fillWidth: true; Layout.fillHeight: true }
+                Study { Layout.fillWidth: true; Layout.fillHeight: true }
+                //Hacking { Layout.fillWidth: true; Layout.fillHeight: true }
+                Media { Layout.fillWidth: true; Layout.fillHeight: true }
             }
         }
     }
-    Behavior on implicitWidth {
-        NumberAnimation {
-            duration: 600
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
-        }
-    }
-
-    Behavior on implicitHeight {
-        NumberAnimation {
-            duration: 600
-            easing.type: Easing.BezierSpline
-            easing.bezierCurve: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
-        }
-    }
-
 }

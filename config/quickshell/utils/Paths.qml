@@ -20,12 +20,21 @@ QtObject {
 
     property string assetsPath: Quickshell.shellPath("assets")
     property string scriptPath: Quickshell.shellPath("scripts")
+    property string statePath: `${strip(state)}/quickshell/states.json`
+    property string todoPath: `${strip(state)}/user/todo.json`
+    property string hackingPath: `${strip(home)}/Machines/`
+    property string avatarPath: assetsPath + "/avatar.jpg"
 
     readonly property string imagecache: cache + "/imagecache"
     
 
     function stringify(path: url): string {
-        return path.toString().replace(/%20/g, " ");
+        let str = path.toString();
+        if (str.startsWith("root:/"))
+            str = `file://${Quickshell.shellDir}/${str.slice(6)}`;
+        else if (str.startsWith("/"))
+            str = `file://${str}`;
+        return new URL(str).pathname;
     }
 
     function expandTilde(path: string): string {

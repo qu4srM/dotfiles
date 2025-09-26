@@ -1,6 +1,7 @@
 import qs 
 import qs.configs 
 import qs.widgets
+import qs.utils
 import QtQuick
 import QtQuick.Layouts
 
@@ -12,11 +13,14 @@ ActionButtonIcon {
     implicitHeight: 120
     implicitWidth: 120
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-    anchors.verticalCenter: parent.verticalCenter
-    colBackground: button.keyboardDown ? Appearance.colors.colsecondary_hover : 
-        button.focus ? Appearance.colors.colprimary : 
-        Appearance.colors.colsecondary
-    colBackgroundHover: Appearance.colors.colprimary_hover
+    colBackground: Config.options.bar.showBackground 
+        ? button.keyboardDown ? Appearance.colors.colSecondaryHover : 
+            button.focus ? Appearance.colors.colPrimary : 
+            Appearance.colors.colSurfaceContainer
+        : button.keyboardDown ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7) : 
+            button.focus ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7) : 
+            Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+    colBackgroundHover: Appearance.colors.colPrimaryHover
     iconSize: 45
     buttonRadius: (button.focus || button.down) ? implicitWidth / 2 : Appearance.rounding.verylarge
 
@@ -24,7 +28,7 @@ ActionButtonIcon {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) 
     }
     Behavior on iconSize {
-        animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
     onHovered: () => {

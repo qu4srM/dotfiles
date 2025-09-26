@@ -8,8 +8,8 @@ Text {
     verticalAlignment: Text.AlignVCenter
     font {
         family: Appearance?.font.family.main ?? "sans-serif"
-        pixelSize: Appearance?.font.pixelSize.smaller ?? size
+        pixelSize: Appearance?.font.pixelSize.small ?? size
         weight: Appearance?.font.weight.medium ?? 400
     }
-    color: Appearance?.colors.colprimarytext ?? "black"
+    color: Appearance?.colors.colText ?? "black"
 }

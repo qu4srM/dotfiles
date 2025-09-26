@@ -14,56 +14,90 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 
 Rectangle {
-    width: Appearance.sizes.workspacesWidth
+    id: root
+    width: workspacesRow.implicitWidth + 5
     anchors.verticalCenter: parent.verticalCenter
-    color: Appearance.colors.colsecondary
-    radius: Appearance.rounding.verysmall
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+    radius: Appearance.rounding.normal
+    
+    /* Icons Nerd
+    property var iconsWorkspaces: [
+        "󰈹", "", "", "", "", "·", "·", "󰊖", "", "󰆧"
+    ]
+    */
+    property var iconsWorkspaces: [
+        "public", "code_blocks", "terminal", "folder", "edit_square", "·", "·", "gamepad", "settings", "vpn_key"
+    ]
 
+    property int activeIndex: {
+        let ws = HyprlandData.activeWorkspace
+        if (!ws) return -1
+        return ws.id - 1
+    }
+    WheelHandler {
+        onWheel: (event) => {
+            if (event.angleDelta.y < 0)
+                Hyprland.dispatch(`workspace r+1`);
+            else if (event.angleDelta.y > 0)
+                Hyprland.dispatch(`workspace r-1`);
+        }
+        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+    }
 
     MouseArea {
         id: mouseArea
         anchors.top: parent.top
         implicitWidth: parent.width
-        implicitHeight: 8
+        implicitHeight: 6
         hoverEnabled: true
-        onEntered: {
-            GlobalStates.overviewOpen = true
-        }
+        onEntered: GlobalStates.overviewOpen = true
     }
 
-    Row {
-        anchors.centerIn: parent
-        spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0
+    Item {
+        id: indicator
+        anchors.fill: parent
+        Rectangle {
+            id: indicatorCircle
+            anchors.verticalCenter: parent.verticalCenter
+            width: 20
+            height: 20
+            radius: Appearance.rounding.full 
+            color: Appearance.colors.colSecondaryContainer
 
-        Repeater {
-            model: Hyprland.workspaces.values
+            x: {
+                if (root.activeIndex < 0) return 0
+                let item = repeater.itemAt(root.activeIndex)
+                return item ? item.x + workspacesRow.x : 0
+            }
 
-            Rectangle {
-                width: 19
-                height: 19
-                radius: Appearance.rounding.full
-                color: modelData.focused ? Appearance.colors.colprimary : "transparent"
+            Behavior on x {
+                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
             }
         }
-        Behavior on spacing  {
-            animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
-        }
     }
+
     Row {
+        id: workspacesRow
         anchors.centerIn: parent
-        spacing: GlobalStates.notchOpen ? Appearance.sizes.notchWidthExtended / 22 : 0
+        spacing: 0
+
         Repeater {
-            model: 10
+            id: repeater
+            model: Hyprland.workspaces.values
             Workspace {
+                required property var modelData
                 required property int index
                 workspaceId: 1 + index
+                iconMaterial: root.iconsWorkspaces[index]
+                fillMaterial: modelData.focused ? 1 : 0
+                iconSize: 18
             }
         }
-        Behavior on spacing  {
+
+        Behavior on spacing {
             animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
         }
     }
-    
     
     Behavior on width {
         animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
@@ -71,5 +105,4 @@ Rectangle {
     Behavior on height {
         animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
     }
-
 }

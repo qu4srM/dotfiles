@@ -9,9 +9,15 @@ Scope {
     signal unlocked()
     signal failed()
 
+    // These properties are in the context and not individual lock surfaces
+    // so all surfaces can share the same state.
     property string currentText: ""
     property bool unlockInProgress: false
     property bool showFailure: false
+
+    function resetClearTimer() {
+        passwordClearTimer.restart();
+    }
 
     Timer {
         id: passwordClearTimer
@@ -22,26 +28,21 @@ Scope {
     }
 
     onCurrentTextChanged: {
-        showFailure = false; // Clear the failure text once the user starts typing.
+        if (currentText.length > 0) {
+            showFailure = false;
+            GlobalStates.screenUnlockFailed = false;
+        }
         GlobalStates.screenLockContainsCharacters = currentText.length > 0;
         passwordClearTimer.restart();
     }
 
     function tryUnlock() {
-        if (currentText === "") return;
-
         root.unlockInProgress = true;
         pam.start();
     }
 
     PamContext {
         id: pam
-
-        // Its best to have a custom pam config for quickshell, as the system one
-        // might not be what your interface expects, and break in some way.
-        // This particular example only supports passwords.
-        configDirectory: "pam"
-        config: "password.conf"
 
         // pam_unix will ask for a response for the password prompt
         onPamMessage: {
@@ -56,6 +57,7 @@ Scope {
                 root.unlocked();
             } else {
                 root.showFailure = true;
+                GlobalStates.screenUnlockFailed = true;
             }
 
             root.currentText = "";

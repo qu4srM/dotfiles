@@ -37,7 +37,7 @@ Item {
             implicitWidth: progress
             implicitHeight: parent.height - 10
             anchors.verticalCenter: parent.verticalCenter
-            color: Appearance.colors.colprimary
+            color: Appearance.colors.colPrimary
             topLeftRadius: root.radius
             bottomLeftRadius: root.radius
         }
@@ -50,7 +50,7 @@ Item {
                 implicitHeight: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: 10
-                color: dragArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colprimary
+                color: dragArea.containsMouse ? Appearance.colors.colPrimaryHover : Appearance.colors.colPrimary
             }
         }
 

@@ -7,4 +7,5 @@ ColumnLayout {
     property bool expanded: true
     property int currentIndex: 0
     spacing: 5
+    
 }

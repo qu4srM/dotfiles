@@ -12,6 +12,8 @@ Button {
     id: root
     property bool toggle 
     property string buttonText 
+    property bool changeColor
+    property color textColor
     property real buttonRadius
     property real buttonRadiusTopLeft
     property real buttonRadiusTopRight
@@ -28,7 +30,7 @@ Button {
 
     property string colBackground
     property string colBackgroundHover
-    property color colText: Appearance.colors.colprimarytext
+    property color colText: Appearance.colors.colText
     property color colTextHovered: Appearance.colors.colprimarytext
 
 
@@ -87,6 +89,6 @@ Button {
     }
     contentItem: StyledText {
         text: root.buttonText
-        color: mouseArea.containsMouse ? root.colTextHovered : root.colText
+        color: mouseArea.containsMouse ? root.colTextHovered : (root.changeColor) ? root.textColor : root.colText
     }
 }
