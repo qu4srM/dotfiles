@@ -83,6 +83,30 @@ cd ..
 rm -rf dotfiles
 ```
 
+### 🖼️ Instalación de Rembg (para wallpapers con efecto de profundidad)
+
+rembg se usa para eliminar fondos de imágenes y generar el efecto de depth overlay en los wallpapers.
+
+📦 Instalación en Arch Linux
+```
+# 1. Instalar pipx (gestor de entornos para apps de Python)
+sudo pacman -S python-pipx
+
+# 2. Instalar rembg con pipx
+pipx install rembg
+
+# 3. Asegurar que ~/.local/bin está en tu PATH
+pipx ensurepath
+```
+🛠️ Dependencias adicionales
+Algunas versiones de rembg requieren: 
+```
+~/.local/share/pipx/venvs/rembg/bin/python -m pip install onnxruntime
+```
+
+
+
+
 ---
 
 ## ⚙️ Personalización
