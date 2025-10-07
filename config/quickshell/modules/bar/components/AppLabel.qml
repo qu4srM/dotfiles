@@ -1,19 +1,32 @@
+import qs 
+import qs.configs
+import qs.widgets 
+import qs.services
+
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Widgets
+import Quickshell.Wayland
 import Quickshell.Hyprland
-import QtQuick.Layouts
 
-Text {
-    id: root
-    Layout.alignment: Qt.AlignVCenter
-    color: "white"
-    font.family: "Roboto"
-    font.pixelSize: 12
-    font.weight: Font.Medium
+Item {
+    id: root 
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
+    readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
-    text: {
-        const raw = Hyprland.activeToplevel?.lastIpcObject.class || ""
-        raw.charAt(0).toUpperCase() + raw.slice(1)
+    property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
+    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
+
+    implicitWidth: textItem.implicitWidth
+    StyledText {
+        id: textItem
+        anchors.verticalCenter: parent.verticalCenter
+        font.pixelSize: Appearance.font.pixelSize.normal
+        color: Appearance.colors.colText
+        text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            root.activeWindow?.appId :
+            (root.biggestWindow?.class) ?? Translation.tr("Desktop")
     }
 }

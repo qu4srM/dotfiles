@@ -69,9 +69,10 @@ Scope {
             function hide() {
                 GlobalStates.overviewOpen = false
                 GlobalStates.wallSelectorOpen = false
+                GlobalStates.launcherOpen = false
             }
             HyprlandFocusGrab {
-                active: GlobalStates.overviewOpen || GlobalStates.wallSelectorOpen
+                active: GlobalStates.overviewOpen || GlobalStates.wallSelectorOpen || GlobalStates.launcherOpen
                 windows: [drawers]
                 onCleared: () => {
                     drawers.hide()

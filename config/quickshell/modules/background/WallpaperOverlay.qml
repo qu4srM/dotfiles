@@ -18,14 +18,14 @@ import Quickshell.Hyprland
 Item {
     id: root
     required property StyledWindow window
-    property string wallpaperPath: Config.options.background.wallpaperPath
+    property string wallpaperOverlayPath: Config.options.background.wallpaperOverlayPath
 
     property Item current: one
 
     anchors.fill: parent
 
-    onWallpaperPathChanged: {
-        if (!wallpaperPath)
+    onWallpaperOverlayPathChanged: {
+        if (!wallpaperOverlayPath)
             current = null;
         else if (current === one)
             two.update();
@@ -47,10 +47,10 @@ Item {
         property string path
 
         function update(): void {
-            if (path === Config.options.background.wallpaperPath)
+            if (path === Config.options.background.wallpaperOverlayPath)
                 root.current = this;
             else
-                path = Config.options.background.wallpaperPath;
+                path = Config.options.background.wallpaperOverlayPath;
         }
 
         anchors.fill: parent

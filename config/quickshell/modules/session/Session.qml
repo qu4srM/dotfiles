@@ -23,6 +23,7 @@ Scope {
             Quickshell.execDetached(["kill", pid]);
         });
     }
+
     function detectRunningStuff() {
         packageManagerRunning = false;
         downloadRunning = false;
@@ -48,6 +49,7 @@ Scope {
             root.downloadRunning = (exitCode === 0);
         }
     }
+
     Loader {
         id: sessionLoader 
         active: GlobalStates.sessionOpen
@@ -61,8 +63,8 @@ Scope {
                     GlobalStates.sessionOpen = false;
                 }
             }
-
         }
+
         sourceComponent: StyledWindow {
             id: session
             visible: sessionLoader.active 
@@ -70,11 +72,12 @@ Scope {
             function hide() {
                 GlobalStates.sessionOpen = false;
             }
+
             exclusionMode: ExclusionMode.Ignore
             name: "session"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            color: Colors.setTransparency(Appearance.colors.colBackground, 0.3)
+            color: Colors.setTransparency(Appearance.colors.colBackground, 0.6)
 
             anchors {
                 top: true
@@ -91,100 +94,138 @@ Scope {
                     session.hide()
                 }
             }
-            ColumnLayout {
-                id: contentColumn
-                anchors.centerIn: parent
-                spacing: 15
 
-                Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Escape) {
-                        session.hide();
-                    }
-                }
+            Rectangle {
+                id: background
+                anchors.centerIn: parent 
+                implicitWidth: contentColumn.implicitWidth + 60
+                implicitHeight: contentColumn.implicitHeight + 60
+                radius: Appearance.rounding.normal
+                color: Appearance.colors.colBackground
+            
                 ColumnLayout {
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 0
-                    StyledText {
-                        Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        font.family: Appearance.font.family.title
-                        font.pixelSize: Appearance.font.pixelSize.title
-                        font.weight: Font.DemiBold
-                        text: Translation.tr("Session")
+                    id: contentColumn
+                    anchors.centerIn: parent
+                    spacing: 15
+
+                    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Escape) {
+                            session.hide();
+                        }
                     }
 
-                    StyledText {
+                    ColumnLayout {
                         Layout.alignment: Qt.AlignHCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.normal
-                        text: Translation.tr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
-                    }
-                }
-                RowLayout {
-                    spacing: 15
-                    SessionActionButton {
-                        id: sessionLock 
-                        toolTipText: Translation.tr("Lock")
-                        focus: session.visible 
-                        iconMaterial: "lock"
-                        onClicked: ()=> {
-                            //Quickshell.execDetached(["loginctl", "lock-session"]); session.hide() 
-                            //Quickshell.execDetached(["bash", "-c", "swaylock"]); session.hide() 
-                            //session.hide(); Quickshell.execDetached(["bash", "-c", "swaylock"])
-                            GlobalStates.sessionOpen = false
-                            GlobalStates.screenLock = true 
+                        spacing: 0
+                        StyledText {
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            font.family: Appearance.font.family.title
+                            font.pixelSize: Appearance.font.pixelSize.title
+                            font.weight: Font.DemiBold
+                            text: Translation.tr("Session")
                         }
-                        KeyNavigation.right: sessionSleep
-                    }
-                    SessionActionButton {
-                        id: sessionSleep
-                        toolTipText: Translation.tr("Sleep")
-                        iconMaterial: "dark_mode"
-                        onClicked: ()=> {
-                            Quickshell.execDetached(["bash", "-c", "systemctl suspend || loginctl suspend"]); session.hide()
-                        }
-                        KeyNavigation.left: sessionLock
-                        KeyNavigation.right: sessionLogout
-                    }
-                    SessionActionButton {
-                        id: sessionLogout
-                        toolTipText: Translation.tr("Logout")
-                        iconMaterial: "logout"
-                        onClicked: ()=> {
-                           root.closeAllWindows(); Quickshell.execDetached(["pkill", "Hyprland"]); session.hide()
-                        }
-                        KeyNavigation.left: sessionSleep
-                        KeyNavigation.right: sessionHibernate
-                    }
-                    SessionActionButton {
-                        id: sessionHibernate
-                        toolTipText: Translation.tr("Hibernate")
-                        iconMaterial: "do_not_disturb_on"
-                        onClicked: ()=> {
-                            Quickshell.execDetached(["bash", "-c", `systemctl hibernate || loginctl hibernate`]); session.hide() 
+
+                        StyledText {
+                            Layout.alignment: Qt.AlignHCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: Appearance.font.pixelSize.normal
+                            text: Translation.tr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
                         }
                     }
-                    SessionActionButton {
-                        id: sessionShutdown
-                        toolTipText: Translation.tr("Shutdown")
-                        iconMaterial: "power_settings_new"
-                        onClicked: ()=> {
-                            root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); session.hide()
+
+                    GridLayout {
+                        id: sessionGrid
+                        columns: 3
+                        rowSpacing: 15
+                        columnSpacing: 15
+                        Layout.alignment: Qt.AlignHCenter
+
+                        SessionActionButton {
+                            id: sessionLock 
+                            toolTipText: Translation.tr("Lock")
+                            focus: session.visible 
+                            iconMaterial: "lock"
+                            onClicked: ()=> {
+                                //Quickshell.execDetached(["loginctl", "lock-session"]); session.hide() 
+                                //Quickshell.execDetached(["bash", "-c", "swaylock"]); session.hide() 
+                                //session.hide(); Quickshell.execDetached(["bash", "-c", "swaylock"])
+                                GlobalStates.sessionOpen = false
+                                GlobalStates.screenLock = true 
+                            }
+
+                            KeyNavigation.right: sessionSleep
+                            KeyNavigation.down: sessionHibernate
                         }
-                        KeyNavigation.left: sessionHibernate
-                        KeyNavigation.right: sessionReboot
+                        SessionActionButton {
+                            id: sessionSleep
+                            toolTipText: Translation.tr("Sleep")
+                            iconMaterial: "dark_mode"
+                            onClicked: ()=> {
+                                Quickshell.execDetached(["bash", "-c", "systemctl suspend || loginctl suspend"]); 
+                                session.hide()
+                            }
+
+                            KeyNavigation.left: sessionLock
+                            KeyNavigation.right: sessionLogout
+                            KeyNavigation.down: sessionShutdown
+                        }
+                        SessionActionButton {
+                            id: sessionLogout
+                            toolTipText: Translation.tr("Logout")
+                            iconMaterial: "logout"
+                            onClicked: ()=> {
+                            root.closeAllWindows(); 
+                            Quickshell.execDetached(["pkill", "Hyprland"]); 
+                            session.hide()
+                            }
+
+                            KeyNavigation.left: sessionSleep
+                            KeyNavigation.down: sessionReboot
+                        }
+                        SessionActionButton {
+                            id: sessionHibernate
+                            toolTipText: Translation.tr("Hibernate")
+                            iconMaterial: "do_not_disturb_on"
+                            onClicked: ()=> {
+                                Quickshell.execDetached(["bash", "-c", `systemctl hibernate || loginctl hibernate`]); 
+                                session.hide() 
+                            }
+
+                            KeyNavigation.up: sessionLock
+                            KeyNavigation.right: sessionShutdown
+                        }
+                        SessionActionButton {
+                            id: sessionShutdown
+                            toolTipText: Translation.tr("Shutdown")
+                            iconMaterial: "power_settings_new"
+                            onClicked: ()=> {
+                                root.closeAllWindows(); 
+                                Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); 
+                                session.hide()
+                            }
+
+                            KeyNavigation.up: sessionSleep
+                            KeyNavigation.left: sessionHibernate
+                            KeyNavigation.right: sessionReboot
+                        }
+                        SessionActionButton {
+                            id: sessionReboot
+                            toolTipText: Translation.tr("Reboot")
+                            iconMaterial: "restart_alt"
+                            onClicked: ()=> {
+                                root.closeAllWindows(); 
+                                Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); 
+                                session.hide()
+                            }
+
+                            KeyNavigation.up: sessionLogout
+                            KeyNavigation.left: sessionShutdown
+                        }
                     }
-                    SessionActionButton {
-                        id: sessionReboot
-                        toolTipText: Translation.tr("Reboot")
-                        iconMaterial: "restart_alt"
-                        onClicked: ()=> {
-                            root.closeAllWindows(); Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); session.hide()
-                        }
-                        KeyNavigation.left: sessionShutdown
-                    }  
                 }
             }
+
             RowLayout {
                 anchors {
                     top: contentColumn.bottom
@@ -212,6 +253,7 @@ Scope {
             }
         }
     }
+
     IpcHandler {
         target: "session"
 
@@ -227,6 +269,7 @@ Scope {
             GlobalStates.sessionOpen = true
         }
     }
+
     GlobalShortcut {
         name: "sessionToggle"
         description: "Toggles session screen on press"

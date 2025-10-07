@@ -15,8 +15,8 @@ import Quickshell.Wayland
 
 Rectangle {
     id: root
-    width: workspacesRow.implicitWidth + 5
-    anchors.verticalCenter: parent.verticalCenter
+    implicitWidth: workspacesRow.implicitWidth + 10
+    Layout.alignment: Qt.AlignVCenter
     color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
     radius: Appearance.rounding.normal
     
@@ -56,22 +56,46 @@ Rectangle {
     Item {
         id: indicator
         anchors.fill: parent
-        Rectangle {
-            id: indicatorCircle
+        Loader {
             anchors.verticalCenter: parent.verticalCenter
-            width: 20
-            height: 20
-            radius: Appearance.rounding.full 
-            color: Appearance.colors.colSecondaryContainer
+            active: !shapeLoader.active 
+            sourceComponent: Rectangle {
+                anchors.verticalCenter: parent.verticalCenter
+                width: 20
+                height: 20
+                radius: Appearance.rounding.full 
+                color: Appearance.colors.colSecondaryContainer
 
-            x: {
-                if (root.activeIndex < 0) return 0
-                let item = repeater.itemAt(root.activeIndex)
-                return item ? item.x + workspacesRow.x : 0
+                x: {
+                    if (root.activeIndex < 0) return 0
+                    let item = repeater.itemAt(root.activeIndex)
+                    return item ? item.x + workspacesRow.x : 0
+                }
+
+                Behavior on x {
+                    animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
+                }
             }
+        }
 
-            Behavior on x {
-                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
+        Loader {
+            id: shapeLoader
+            anchors.verticalCenter: parent.verticalCenter
+            active: Config.options.appearance.shape ? true : false 
+            sourceComponent: ShapesIcons {
+                anchors.verticalCenter: parent.verticalCenter
+                width: 20 
+                height: 20
+                color: Appearance.colors.colSecondaryContainer
+                x: {
+                    if (root.activeIndex < 0) return 0
+                    let item = repeater.itemAt(root.activeIndex)
+                    return item ? item.x + workspacesRow.x : 0
+                }
+
+                Behavior on x {
+                    animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
+                }
             }
         }
     }

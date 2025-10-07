@@ -51,8 +51,8 @@ Item {
     
     x: initX
     y: initY
-    width: (windowData?.size?.[0] ?? 100) * root.scale - 2
-    height: (windowData?.size?.[1] ?? 100) * root.scale - 2
+    width: (windowData?.size?.[0] ?? 100) * root.scale
+    height: (windowData?.size?.[1] ?? 100) * root.scale
     
 
     layer.enabled: true
@@ -60,7 +60,7 @@ Item {
         maskSource: Rectangle {
             width: root.width
             height: root.height
-            radius: 8
+            radius: 10
         }
     }
 
@@ -72,10 +72,9 @@ Item {
 
         Rectangle {
             anchors.fill: parent
+            anchors.centerIn: parent
             radius: 10 * root.scale
-            color: pressed ? "white" : "transparent"
-            border.color : Appearance.colors.colBackground
-            border.width : 1
+            color: pressed ? Appearance.colors.colPrimary : "transparent"
         }
 
         StyledIcon {

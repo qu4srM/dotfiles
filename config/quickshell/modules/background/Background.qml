@@ -1,4 +1,5 @@
 import qs 
+import qs.modules.background
 import qs.configs
 import qs.widgets 
 import qs.utils
@@ -36,12 +37,9 @@ Scope {
                 left: true
                 right: true
             }
-            property string pathIcons: "root:/assets/icons/"
-            property string pathScripts: "~/.config/quickshell/scripts/"
 
             Wallpaper {
                 window: background
-                wallpaperPath: Wallpapers.actualCurrent
             }
             Item {
                 id: weather
@@ -74,30 +72,12 @@ Scope {
                     source: Quickshell.iconPath(Icons.getWeatherIcon(Weather.condition))
                 }
             }
-            Item {
-                id: clock 
-                anchors.top: parent.top 
-                anchors.topMargin: 100
-                anchors.horizontalCenter: parent.horizontalCenter 
-                implicitWidth: 100
-                implicitHeight: 50 
-                RowLayout {
-                    spacing: 0
-                    StyledText {
-                        text: "10"
-                        font.pixelSize: 40
-                    }
-                    StyledText {
-                        text: ":"
-                        font.pixelSize: 40
-                    }
-                    StyledText {
-                        text: "10"
-                        font.pixelSize: 40
-                    }
-                }
-            }
+            DesktopClock {}
 
+
+            /*WallpaperOverlay {
+                window: background
+            }*/
             
         }
     }

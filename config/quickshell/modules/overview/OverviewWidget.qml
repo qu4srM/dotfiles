@@ -27,7 +27,7 @@ Item {
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor?.id)
-    property real scale: 0.16
+    property real scale: 0.14
     property color activeBorderColor: Appearance.colors.colsecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
@@ -84,14 +84,18 @@ Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             implicitWidth: root.workspaceImplicitWidth
-                            implicitHeight: root.workspaceImplicitHeight
+                            implicitHeight: root.workspaceImplicitHeight - Appearance.margins.panelMargin
                             color: "transparent"
-
-                            Image {
+                            ClippingRectangle {
                                 anchors.fill: parent
-                                source: Wallpapers.actualCurrent
-                                fillMode: Image.PreserveAspectCrop
-                                cache: true
+                                color: "transparent"
+                                radius: 10
+                                Image {
+                                    anchors.fill: parent
+                                    source: Config.options.background.wallpaperPath
+                                    fillMode: Image.PreserveAspectCrop
+                                    cache: true
+                                }
                             }
                         
                             Text {
@@ -166,7 +170,7 @@ Item {
                     property int workspaceColIndex: (windowData?.workspace.id - 1) % 5
                     property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / 5)
                     xOffset: (root.workspaceImplicitWidth + root.workspaceSpacing + 1) * workspaceColIndex
-                    yOffset: (root.workspaceImplicitHeight + root.workspaceSpacing + 1) * workspaceRowIndex
+                    yOffset: (root.workspaceImplicitHeight + root.workspaceSpacing - 3) * workspaceRowIndex
 
                     property bool atInitPosition: true
 
@@ -235,19 +239,19 @@ Item {
             }
             
             Rectangle { // Focused workspace indicator
-                id: focusedWorkspaceIndicator
+                id: focusedWorkspaceIndicator 
                 property int activeWorkspaceInGroup: (monitor?.activeWorkspace?.id ?? 1) - (root.workspaceGroup * root.workspacesShown)
                 property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / 5)
                 property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % 5
-                x: (root.workspaceImplicitWidth + workspaceSpacing) * activeWorkspaceColIndex
-                y: (root.workspaceImplicitHeight + workspaceSpacing) * activeWorkspaceRowIndex
-                z: root.windowZ
+                x: (root.workspaceImplicitWidth + workspaceSpacing + 1) * activeWorkspaceColIndex
+                y: (root.workspaceImplicitHeight + workspaceSpacing - 3) * activeWorkspaceRowIndex
+                z: 9999
                 width: root.workspaceImplicitWidth
-                height: root.workspaceImplicitHeight
+                height: root.workspaceImplicitHeight - Appearance.margins.panelMargin
                 color: "transparent"
                 radius: 10
-                border.width: 2
-                border.color: "white"
+                border.width: 1
+                border.color: Appearance.colors.colPrimary
             }
         }
     }

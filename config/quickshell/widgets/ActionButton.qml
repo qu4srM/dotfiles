@@ -71,7 +71,7 @@ Button {
     }
     background: Rectangle {
         id: btnBackground
-        implicitHeight: parent.height
+        implicitHeight: root.contentItem.implicitHeight + 8 
 
         topLeftRadius: root.buttonRadius > 0 ? root.buttonRadius : root.buttonRadiusTopLeft
         topRightRadius: root.buttonRadius > 0 ? root.buttonRadius : root.buttonRadiusTopRight

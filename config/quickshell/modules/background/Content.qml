@@ -18,15 +18,17 @@ import Quickshell.Hyprland
 Item {
     id: root
 
-    implicitWidth: columnLayout.implicitWidth + 200
-    implicitHeight: columnLayout.implicitHeight + 20
+    implicitWidth: columnLayout.implicitWidth
+    implicitHeight: columnLayout.implicitHeight
     anchors.top: parent.top
     anchors.horizontalCenter: parent.horizontalCenter
+    clip: true
 
     ColumnLayout {
         id: columnLayout
         anchors.fill: parent
-
+        
+        
         WallpapersList {
             Layout.alignment: Qt.AlignHCenter
             wallpapers: Wallpapers.allWallpapers

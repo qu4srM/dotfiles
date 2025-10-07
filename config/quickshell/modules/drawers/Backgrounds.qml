@@ -1,7 +1,7 @@
 import qs
 import qs.configs
-import qs.modules.drawers.shapes as Shapes
 import qs.modules.overview as Overview
+import qs.modules.launcher as Launcher
 import qs.modules.background as Backgrounds
 
 import QtQuick
@@ -34,89 +34,12 @@ Shape {
         startX: (root.width - panels.wallSelector.implicitWidth) / 2 - rounding
         startY: root.height
     }
-    /*
-    Shapes.Top { // Good
-        id: notch
-        w: GlobalStates.hackOpen ? Appearance.sizes.notchHackWidth - Appearance.rounding.small : Appearance.sizes.notchWidth
-        h: GlobalStates.hackOpen ? Appearance.sizes.notchHackHeight - Appearance.rounding.small: 0
+    Launcher.LauncherBackground {
+        id: launcherBackground
+        component: panels.launcher
 
-        rounding: GlobalStates.hackOpen ? Appearance.rounding.small : 0
-
-        startX: parent.width / 2 + (w/2) + rounding * 2
-        startY: 0
-    }
-
-    
-    Shapes.TopOut { // Good
-        id: notch
-        w: Appearance.sizes.notchWidth
-        h: GlobalStates.notchSettingsOpen ? Appearance.sizes.notchSettingsHeight : 0
-
-        rounding: GlobalStates.notchSettingsOpen ? Appearance.rounding.small : 0
-
-        startX: parent.width / 2 + (w/2)
-        startY: 0
+        startX: (root.width - panels.launcher.implicitWidth) / 2 - rounding
+        startY: root.height
 
     }
-    
-    
-    Shapes.Right { // Good
-        w: 5
-        h: 50
-        rounding: 10
-
-        startX: parent.width - w - rounding
-        startY: parent.height / 2 - h
-    }
-    
-    
-    Shapes.Left { // Good
-        w: 5
-        h: 50
-        rounding: 10
-
-        startX: 0 + rounding
-        startY: parent.height / 2 - h
-    }
-    Shapes.TopLeft { // Good
-        w: 50
-        h: 5
-        rounding: 10
-
-        startX: 0
-        startY: 0
-    }
-    Shapes.TopRight { // Good
-        w: 50
-        h: 5
-        rounding: 10
-
-        startX: parent.width - w - (rounding * 3)
-        startY: 0
-    }
-    Shapes.Bottom { // Good
-        w: 50
-        h: 5
-        rounding: 10
-
-        startX: parent.width / 2 - (w/2)
-        startY: parent.height - h - (rounding * 2)
-    }
-    Shapes.BottomLeft { // Good
-        w: 50
-        h: 5
-        rounding: 10
-
-        startX: rounding
-        startY: parent.height - h - (rounding * 2)
-    }
-    Shapes.BottomRight { // Good
-        w: 50
-        h: 5
-        rounding: 10
-
-        startX: parent.width - rounding
-        startY: parent.height - h - (rounding * 2)
-    }
-    */
 }

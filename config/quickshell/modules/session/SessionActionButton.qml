@@ -20,22 +20,15 @@ ActionButtonIcon {
         : button.keyboardDown ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7) : 
             button.focus ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7) : 
             Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-    colBackgroundHover: Appearance.colors.colPrimaryHover
-    iconSize: 45
-    buttonRadius: (button.focus || button.down) ? implicitWidth / 2 : Appearance.rounding.verylarge
+    colBackgroundHover: Appearance.colors.colPrimary
+    iconSize: 50
+    buttonRadius: (button.focus || button.down) ? Appearance.rounding.verylarge : implicitWidth / 2
 
     Behavior on buttonRadius { 
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) 
     }
     Behavior on iconSize {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
-
-    onHovered: () => {
-        button.iconSize = 90
-    }
-    onUnhovered: () => {
-        button.iconSize = 45
     }
 
     Keys.onPressed: (event) => {

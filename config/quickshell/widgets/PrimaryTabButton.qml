@@ -22,7 +22,6 @@ TabButton {
     background: null 
     MouseArea {
         anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
         onReleased: (event) => {
             root.click()
         }

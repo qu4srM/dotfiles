@@ -100,11 +100,6 @@ Rectangle {
                     spacing: 10
 
                     StyledText {
-                        text: Players.active
-                        color: "white"
-                    }
-
-                    StyledText {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
                         color: "white"

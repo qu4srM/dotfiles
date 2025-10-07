@@ -21,7 +21,6 @@ Rectangle {
     required property var modelData
     property var listView: parent.width
     property int numOpens: 0
-    property string shape: Config.options.appearance.shape
 
     implicitWidth: parent.height
     implicitHeight: parent.height
@@ -46,61 +45,11 @@ Rectangle {
         PropertyAnimation { target: root; property: "jumpOffset"; to: 0;  duration: 80;  easing.type: Easing.InQuad }
     }
     
-    Item {
-        id: shapes 
-        anchors.fill: parent 
-        Loader {
-            anchors.fill: parent
-            active: root.shape === "circle" ? true : false
-            sourceComponent: Rectangle {
-                anchors.fill: parent 
-                color: Appearance.colors.colPrimaryActive
-                radius: Appearance.rounding.full
-            }
-        }
-        Loader {
-            anchors.fill: parent
-            active: root.shape === "square" ? true : false
-            sourceComponent: Rectangle {
-                anchors.fill: parent 
-                color: Appearance.colors.colPrimaryActive
-                radius: Appearance.rounding.normal
-            }
-        }
-        Loader {
-            anchors.fill: parent
-            active: root.shape === "4sidedcookie" ? true : false
-            sourceComponent: SidedCookieShape {
-                rotation: 23
-                sides: 4
-                bulge: 0.3
-            }
-        }
-        Loader {
-            anchors.fill: parent
-            active: root.shape === "7sidedcookie" ? true : false
-            sourceComponent: SidedCookieShape {
-                sides: 7
-                bulge: 0.1
-            }
-        }
-
-        Loader {
-            anchors.fill: parent
-            active: root.shape === "arch" ? true : false
-            sourceComponent: Rectangle {
-                anchors.fill: parent 
-                color: Appearance.colors.colPrimaryActive
-                topLeftRadius: Appearance.rounding.full
-                topRightRadius: Appearance.rounding.full
-                bottomLeftRadius: Appearance.rounding.unsharpenmore
-                bottomRightRadius: Appearance.rounding.unsharpenmore
-            }
-        }
+    ShapesIcons{
+        id: shapes
+        anchors.fill: parent
     }
     
-
-
 
     MouseArea {
         id: mouseArea
@@ -118,8 +67,8 @@ Rectangle {
             id: iconImage 
             anchors.centerIn: parent
             anchors.verticalCenterOffset: root.jumpOffset
-            width: root.shape ? parent.width - 6 : parent.width - 3
-            height: root.shape ? width - 6 : width - 3
+            width: shapes.shape ? parent.width - 6 : parent.width - 3
+            height: shapes.shape ? width - 6 : width - 3
             source: Quickshell.iconPath(root.modelData?.icon ?? "")
         }
         

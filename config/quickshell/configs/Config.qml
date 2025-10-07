@@ -63,6 +63,7 @@ Singleton {
                 property real clockX: -500
                 property real clockY: -500
                 property string wallpaperPath: ""
+                property string wallpaperOverlayPath: ""
                 property string thumbnailPath: ""
                 property JsonObject parallax: JsonObject {
                     property bool enableWorkspace: true

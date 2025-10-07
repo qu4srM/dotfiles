@@ -41,6 +41,7 @@ Scope {
             property bool reveal: root.pinned
                 || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse)
                 || (!GlobalStates.wallSelectorOpen && !ToplevelManager.activeToplevel?.activated)
+                || (!GlobalStates.launcherOpen && !ToplevelManager.activeToplevel?.activated)
 
             implicitHeight: 70 + content.anchors.bottomMargin
             exclusiveZone: root.pinned ? dock.implicitHeight - 18 : 0

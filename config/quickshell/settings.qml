@@ -87,8 +87,8 @@ ApplicationWindow {
 
     minimumWidth: 300 // 600
     minimumHeight: 200 // 400
-    width: 1100
-    height: 600
+    width: 600
+    height: 468
     color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
     
     ColumnLayout {

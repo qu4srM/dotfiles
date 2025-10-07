@@ -12,21 +12,25 @@ QtObject {
     readonly property url state: StandardPaths.standardLocations(StandardPaths.GenericStateLocation)[0]
     readonly property url cache: StandardPaths.standardLocations(StandardPaths.GenericCacheLocation)[0]
     readonly property url config: StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]
-    //readonly property string config: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]
-    //readonly property string state: StandardPaths.standardLocations(StandardPaths.StateLocation)[0]
-    //readonly property string cache: StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]
     readonly property string pictures: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
     readonly property string downloads: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
 
     property string assetsPath: Quickshell.shellPath("assets")
     property string scriptPath: Quickshell.shellPath("scripts")
-    property string statePath: `${strip(state)}/quickshell/states.json`
-    property string todoPath: `${strip(state)}/user/todo.json`
-    property string hackingPath: `${strip(home)}/Machines/`
+    property string statePath: state + "/quickshell/states.json"
+    property string todoPath: state + "/user/todo.json"
+    property string hackingPath: state + "/Machines/"
     property string avatarPath: assetsPath + "/avatar.jpg"
 
     readonly property string imagecache: cache + "/imagecache"
-    
+
+
+    function getName(path: string): string {
+        let clean = strip(path);
+        let file  = clean.split("/").pop();
+        let base  = file.replace("-overlay", "");
+        return base.split(".")[0];
+    }
 
     function stringify(path: url): string {
         let str = path.toString();

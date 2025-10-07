@@ -20,7 +20,7 @@ Item {
     id: root 
     required property var styledWindow
     implicitWidth: columnLayout.implicitWidth
-    implicitHeight: columnLayout.implicitHeight + columnLayout.anchors.topMargin - 5
+    implicitHeight: columnLayout.implicitHeight + columnLayout.anchors.topMargin 
 
     ColumnLayout {
         id: columnLayout

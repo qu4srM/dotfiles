@@ -504,7 +504,7 @@ Singleton {
         property int expressiveEffects: 200 * scale
     }
     sizes: QtObject {
-        property real barHeight: 30
+        property real barHeight: 40
         property real dockHeight: 40
         property real sidebarWidth: 380
         property real sidebarWidthExtended: 750

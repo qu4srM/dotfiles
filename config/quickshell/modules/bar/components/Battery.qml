@@ -16,8 +16,8 @@ import Quickshell.Wayland
 Item {
     id: root 
     Layout.alignment: Qt.AlignVCenter
-    implicitWidth: icon.active ? 32 : 26
-    implicitHeight: parent.height - 8
+    implicitWidth: icon.active ? 60 : 50
+    implicitHeight: parent.height
 
     property bool materialIconFill: true
     property real batteryLevel: 0.0
@@ -33,8 +33,9 @@ Item {
     }
     Rectangle {
         id: fillBar
+        anchors.verticalCenter: parent.verticalCenter
         width: Math.floor(root.batteryLevel * parent.width)
-        height: parent.height
+        height: parent.height - 2
         color: root.batteryLevel > 0.2 ? Appearance.colors.colprimarytext : "red"
         topLeftRadius: Appearance.rounding.full
         bottomLeftRadius: Appearance.rounding.full
