@@ -54,7 +54,11 @@ Item {
             }
         }
     ]
-    Content {
+    Loader {
         id: content
+        Component.onCompleted: active = GlobalStates.wallSelectorOpen || root.visible
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        sourceComponent: Content {}
     }
 }

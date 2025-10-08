@@ -66,4 +66,19 @@ Item {
             launcher: root 
         }
     }
+    GlobalShortcut {
+        name: "launcherToggle"
+        description: "Toggles launcher on press"
+        onPressed: GlobalStates.launcherOpen = !GlobalStates.launcherOpen
+    }
+    GlobalShortcut {
+        name: "launcherOpen"
+        description: "Opens launcher on press"
+        onPressed: GlobalStates.launcherOpen = true
+    }
+    GlobalShortcut {
+        name: "launcherClose"
+        description: "Closes launcher on press"
+        onPressed: GlobalStates.launcherOpen = false
+    }
 }

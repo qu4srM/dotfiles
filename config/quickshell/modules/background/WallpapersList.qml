@@ -85,4 +85,11 @@ PathView {
         PathAttribute { name: "z"; value: 1 }
         PathLine { x: root.width; relativeY: 0 }
     }
+    Connections {
+        target: GlobalStates ?? null
+        function onWallSelectorOpenChanged() {
+            if (GlobalStates?.wallSelectorOpen)
+                root.forceActiveFocus()
+        }
+    }
 }

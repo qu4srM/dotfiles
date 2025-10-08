@@ -62,7 +62,7 @@ Item {
         anchors.bottom: parent.bottom
 
         sourceComponent: Content {
-            styledWindow: root.styledWindow
-        }
+             styledWindow: root.styledWindow
+       }
     }
 }

@@ -41,7 +41,10 @@ Scope {
             margins.top: drawers.topMargin()
 
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+            WlrLayershell.keyboardFocus: (GlobalStates.launcherOpen || GlobalStates.overviewOpen || GlobalStates.wallSelectorOpen)
+                ? WlrKeyboardFocus.OnDemand
+                : WlrKeyboardFocus.None
+
 
             mask: Region {
                 x: 0

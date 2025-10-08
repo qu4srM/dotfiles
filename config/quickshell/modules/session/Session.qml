@@ -227,10 +227,10 @@ Scope {
             }
 
             RowLayout {
+                y: contentColumn.y + contentColumn.height + 10
                 anchors {
-                    top: contentColumn.bottom
                     topMargin: 10
-                    horizontalCenter: contentColumn.horizontalCenter
+                    horizontalCenter: parent.horizontalCenter
                 }
                 spacing: 10
 

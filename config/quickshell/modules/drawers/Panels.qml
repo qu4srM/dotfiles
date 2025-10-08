@@ -31,6 +31,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
     }
+    
     WallSelector {
         id: wallSelector 
         anchors.horizontalCenter: parent.horizontalCenter

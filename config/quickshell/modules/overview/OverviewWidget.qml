@@ -255,4 +255,12 @@ Item {
             }
         }
     }
+    Connections {
+        target: GlobalStates ?? null
+        function onOverviewOpenChanged() {
+            if (GlobalStates?.overviewOpen)
+                root.forceActiveFocus()
+        }
+    }
+
 }

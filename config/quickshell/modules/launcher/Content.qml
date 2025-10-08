@@ -36,12 +36,6 @@ Item {
         ColumnLayout {
             id: columnLayout
             anchors.fill: parent
-
-            StyledText {
-                id: textItem
-                Layout.alignment: Qt.AlignHCenter
-                text: "-"
-            }
             Rectangle {
                 id: searchContainer
                 Layout.alignment: Qt.AlignHCenter
@@ -51,13 +45,13 @@ Item {
                 color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                 radius: 4
 
-                Row {
+                RowLayout {
                     id: searchbox
                     anchors.fill: parent
                     anchors.leftMargin: 10
 
                     StyledMaterialSymbol {
-                        anchors.verticalCenter: parent.verticalCenter
+                        Layout.alignment: Qt.AlignVCenter
                         text: "search"
                         font.pixelSize: 20
                         color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
@@ -67,12 +61,16 @@ Item {
                         id: search
                         Layout.fillWidth: true
                         color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
-                        placeholderText: "Applications"
+                        placeholderText: Translation.tr("Apps")
+                        
                         background: Rectangle {
                             anchors.fill: parent
                             color: "transparent"
                         }
-
+                        Keys.onEscapePressed: () => {
+                            GlobalStates.launcherOpen = false
+                            text = ""
+                        }
                         Keys.onPressed: (event) => {
                             const cols = Math.max(1, Math.floor(grid.width / grid.cellWidth))
                             if (event.modifiers & Qt.ControlModifier) {
@@ -86,6 +84,7 @@ Item {
                                     return
                                 }
                             }
+
                             switch (event.key) {
                             case Qt.Key_Right:
                                 grid.currentIndex = (grid.currentIndex + 1) % grid.count
@@ -107,9 +106,9 @@ Item {
                         }
 
                         onAccepted: {
-                            grid.forceActiveFocus()
                             if (grid.currentItem?.modelData)
                                 grid.currentItem.modelData.execute()
+                                GlobalStates.launcherOpen = false
                             text = ""
                         }
 
@@ -124,7 +123,6 @@ Item {
                 implicitHeight: cellHeight * 4 + 10
                 keyNavigationWraps: true
                 keyNavigationEnabled: true
-                focus: GlobalStates.launcherOpen
                 cellWidth: 100
                 cellHeight: 100
                 snapMode: GridView.SnapToRow
@@ -150,7 +148,6 @@ Item {
                 delegate: MouseArea {
                     id: appItem
                     required property DesktopEntry modelData
-                    property string shape: Config.options.appearance.shape
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     implicitWidth: grid.cellWidth
@@ -158,6 +155,7 @@ Item {
 
                     onClicked: {
                         modelData.execute()
+                        GlobalStates.launcherOpen = false
                     }
                     ShapesIcons {
                         id: shapes
@@ -259,4 +257,18 @@ Item {
             }
         }
     }
+    Component.onCompleted: {
+    if (GlobalStates.launcherOpen)
+            search.forceActiveFocus()
+    }
+
+    Connections {
+        target: GlobalStates ?? null
+        function onLauncherOpenChanged() {
+            if (GlobalStates?.launcherOpen)
+                search.forceActiveFocus()
+        }
+    }
+
+
 }
