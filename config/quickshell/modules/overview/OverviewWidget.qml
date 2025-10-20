@@ -76,7 +76,7 @@ Item {
                     spacing: root.workspaceSpacing
                     Repeater {
                         model: 5
-                        Rectangle {
+                        ClippingRectangle {
                             id: workspace
                             property int colIndex: index
                             property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * 5 + colIndex + 1
@@ -86,16 +86,11 @@ Item {
                             implicitWidth: root.workspaceImplicitWidth
                             implicitHeight: root.workspaceImplicitHeight - Appearance.margins.panelMargin
                             color: "transparent"
-                            ClippingRectangle {
+                            radius: Appearance.rounding.small
+                            Image {
                                 anchors.fill: parent
-                                color: "transparent"
-                                radius: 10
-                                Image {
-                                    anchors.fill: parent
-                                    source: Config.options.background.wallpaperPath
-                                    fillMode: Image.PreserveAspectCrop
-                                    cache: true
-                                }
+                                source: Config.options.background.wallpaperPath
+                                fillMode: Image.PreserveAspectCrop
                             }
                         
                             Text {

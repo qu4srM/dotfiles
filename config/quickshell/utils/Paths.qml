@@ -21,6 +21,7 @@ QtObject {
     property string todoPath: state + "/user/todo.json"
     property string hackingPath: state + "/Machines/"
     property string avatarPath: assetsPath + "/avatar.jpg"
+    property string notificationsPath: cache + "/notifications/notifications.json"
 
     readonly property string imagecache: cache + "/imagecache"
 

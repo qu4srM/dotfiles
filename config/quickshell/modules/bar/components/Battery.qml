@@ -15,92 +15,65 @@ import Quickshell.Wayland
 
 Item {
     id: root 
+    property real batteryLevel: BatteryData.batteryLevel
+    property bool isCharging: BatteryData.isCharging
+    property color fillColor: batteryLevel > 0.2 ? (isCharging ? Appearance.colors.colPrimary : Appearance.colors.colprimarytext) : "red"
+    
     Layout.alignment: Qt.AlignVCenter
-    implicitWidth: icon.active ? 60 : 50
+    implicitWidth: isCharging ? 50 : 40
     implicitHeight: parent.height
 
-    property bool materialIconFill: true
-    property real batteryLevel: 0.0
-    property bool isCharging
-    Behavior on width {
-        NumberAnimation { duration: 300; }
+    Behavior on implicitWidth  {
+        animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
     }
     Rectangle {
         id: background
         anchors.fill: parent
         color: Appearance.colors.colsecondary
-        radius: 9999
+        radius: Appearance.rounding.full
     }
     Rectangle {
         id: fillBar
         anchors.verticalCenter: parent.verticalCenter
         width: Math.floor(root.batteryLevel * parent.width)
-        height: parent.height - 2
-        color: root.batteryLevel > 0.2 ? Appearance.colors.colprimarytext : "red"
+        height: parent.height
+        color: root.fillColor
         topLeftRadius: Appearance.rounding.full
         bottomLeftRadius: Appearance.rounding.full
         topRightRadius: Math.max(0, Math.min(1, (root.batteryLevel - 0.88) / (0.99 - 0.88))) * Math.min(fillBar.height / 2, fillBar.width / 2)
         bottomRightRadius: Math.max(0, Math.min(1, (root.batteryLevel - 0.88) / (0.99 - 0.88))) * Math.min(fillBar.height / 2, fillBar.width / 2)
 
         Behavior on width {
-            NumberAnimation { duration: 300; }
+            animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
         }
-        Behavior on topRightRadius {
-            NumberAnimation { duration: 300; }
-        }
-        Behavior on bottomRightRadius {
-            NumberAnimation { duration: 300; }
-        }
-
     }
 
-    RowLayout {
+    Loader {
+        id: rowLayout 
         anchors.centerIn: parent
-        spacing: icon.active ? -root.implicitWidth / 8 + 1 : -12
-        Loader {
-            id: icon
-            active: root.isCharging || root.batteryLevel <= 0.2
-            sourceComponent: StyledMaterialSymbol {
+        active: root.isCharging || root.batteryLevel <= 0.2
+        sourceComponent: RowLayout {
+            spacing: 0
+            StyledMaterialSymbol {
                 text: root.isCharging ? "bolt" : "exclamation"
-                size: 14
+                size: 16
                 color: Appearance.colors.colBackground
-                fill: root.materialIconFill ? 1 : 0
-                anchors.verticalCenter: parent.verticalCenter
+                fill: 1
+            }
+            StyledText {
+                font.weight: Font.Bold
+                color: Appearance.colors.colBackground
+                text: BatteryData.batteryLevelStr
             }
         }
-        StyledText {
-            id: textItem
+    }
+    Loader {
+        anchors.centerIn: parent
+        active: !rowLayout.active
+        sourceComponent: StyledText {
             font.weight: Font.Bold
             color: Appearance.colors.colBackground
-        }  
-
-    }
-    
-    Process {
-        id: multiProcess
-        command: ["bash", "-c",
-            "charge=$(cat /sys/class/power_supply/BAT*/capacity); " +
-            "plugged=$(cat /sys/class/power_supply/AC*/online); " +
-            "echo \"$charge|$plugged\""
-        ]
-        running: true
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const parts = this.text.trim().split("|")
-                const levelStr = parts[0] || "0"
-                const levelInt = parseInt(levelStr)
-                root.batteryLevel = levelInt / 100.0
-                textItem.text = levelStr
-                root.isCharging = parts[1]?.trim() === "1"
-            }
-        }
-    }
-
-
-    Timer {
-        interval: 10000
-        running: true
-        repeat: true
-        onTriggered: multiProcess.running = true
+            text: BatteryData.batteryLevelStr
+        } 
     }
 }

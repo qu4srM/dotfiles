@@ -1,14 +1,21 @@
 import qs
 import qs.configs
-import "root:/widgets/"
-import "root:/services/"
-
+import qs.widgets
+import qs.services
 import QtQuick
 import Quickshell
 
 StyledListView { // Scrollable window
     id: root
     property bool popup: false
+    property real dragDistance: 0
+    property int dragIndex: -1
+
+    function resetDrag() {
+        dragDistance = 0
+        dragIndex = -1
+    }
+
 
     spacing: 3
 

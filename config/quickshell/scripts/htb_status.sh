@@ -13,7 +13,4 @@ get_status () {
 
 case $1 in
     status) get_status ;;
-	target)
-		cat $HOME/Machines/target
-	;;
 esac

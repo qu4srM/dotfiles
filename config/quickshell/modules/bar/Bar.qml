@@ -72,7 +72,7 @@ Scope {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: Appearance.margins.panelMargin
-                        spacing: 6
+                        spacing: 0
                         width: Math.min(implicitWidth, parent.width * 0.35)
                         ActionButton {
                             colBackground: "transparent"
@@ -90,8 +90,9 @@ Scope {
                                 }
                             }
                         }
-                        Separator { implicitWidth: 0 }
+                        Separator { implicitWidth: 10 }
                         AppLabel {}
+                        Separator { implicitWidth: 6 }
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colPrimaryHover
@@ -128,12 +129,23 @@ Scope {
                                 //Wallpapers.updateOverlay(`${Paths.strip(Paths.cache)}/quickshell/overlay/${Paths.getName(Config.options.background.wallpaperPath)}`)
                             }
                         }*/
+                        /*
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colPrimaryHover
                             buttonText: Translation.tr("Wallpapers")
                             implicitHeight: bar.implicitHeight 
                             releaseAction: () => GlobalStates.wallSelectorOpen = true
+                        }*/
+                        IconTextButton {
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colSecondaryHover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+                            implicitWidth: 120
+                            implicitHeight: parent.height - 12
+                            buttonRadius: Appearance.rounding.full
+                            buttonIcon: "host"
+                            buttonText: HackingData.hostIp
+                            releaseAction: Execute.copyTextToClipboard(HackingData.hostIp)
                         }
                     }
 
@@ -154,10 +166,8 @@ Scope {
                             implicitHeight: parent.height
                             buttonRadius: Appearance.rounding.full
                             buttonIcon: "deployed_code"
-                            command: "~/.config/quickshell/scripts/htb_status.sh status"
-                            releaseAction: () => {
-                                Quickshell.execDetached(["bash", "-c", `echo "${ipHost.commandText}" | wl-copy -n`])
-                            }
+                            buttonText: HackingData.vpnIp
+                            releaseAction: Execute.copyTextToClipboard(HackingData.vpnIp)
                         }
 
                         ActionButtonIcon {
@@ -170,7 +180,7 @@ Scope {
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
-                            onPressed: Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
+                            onPressed: Execute.openScreenshot()
                         }
 
                         Workspaces {
@@ -187,7 +197,7 @@ Scope {
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
-                            onPressed: Quickshell.execDetached(["bash", "-c", "hyprpicker | wl-copy -n"])
+                            onPressed: Execute.openHyprpicker()
                         }
                         IconTextButton {
                             id: targetIp
@@ -197,10 +207,8 @@ Scope {
                             implicitHeight: parent.height
                             buttonRadius: Appearance.rounding.full
                             buttonIcon: "view_in_ar"
-                            command: "~/.config/quickshell/scripts/htb_status.sh target"
-                            releaseAction: () => {
-                                Quickshell.execDetached(["bash", "-c", `echo "${targetIp.commandText}" | wl-copy -n`])
-                            }
+                            buttonText: HackingData.targetIp
+                            releaseAction: Execute.copyTextToClipboard(HackingData.targetIp)
                         }
                     }
 
@@ -219,22 +227,6 @@ Scope {
                         Battery {
                             implicitHeight: parent.height -6
                         }
-                        /*
-                        ActionButtonMultiIcon {
-                            Layout.preferredHeight: bar.implicitHeight
-                            Layout.alignment: Qt.AlignVCenter
-                            iconList: [
-                                Icons.getNetworkIcon(50),
-                                Icons.getBluetoothIcon(true),
-                                "volume_up"
-                            ]
-                            columns: iconList.length
-                            colBackground: "transparent"
-                            colBackgroundHover: Appearance.colors.colPrimaryHover
-                            iconSize: Appearance.font.pixelSize.small
-                            buttonRadius: Appearance.rounding.verysmall
-                            releaseAction: () => GlobalStates.sidebarRightOpen = true
-                        }*/
                         MultiIconButton {
                             Layout.alignment: Qt.AlignVCenter
                             implicitHeight: parent.height
@@ -247,7 +239,9 @@ Scope {
                             colBackgroundHover: Appearance.colors.colPrimaryHover
                             iconSize: Appearance.font.pixelSize.normal
                             buttonRadius: Appearance.rounding.full
-                            releaseAction: () => {GlobalStates.sidebarRightOpen = true}
+                            releaseAction: () => {
+                                GlobalStates.sidebarRightOpen = true
+                            }
                         }
                         StyledText {
                             id: clock

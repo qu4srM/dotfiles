@@ -68,7 +68,7 @@ Item {
         id: windowPreview
         anchors.fill: parent
         captureSource: root.toplevel
-        live: true
+        live: GlobalStates.overviewOpen
 
         Rectangle {
             anchors.fill: parent

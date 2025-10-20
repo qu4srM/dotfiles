@@ -2,6 +2,7 @@ import qs
 import qs.configs
 import qs.modules.sidebarleft
 import qs.modules.sidebarleft.study
+import qs.modules.sidebarleft.hack
 import qs.widgets 
 
 import Qt5Compat.GraphicalEffects
@@ -18,7 +19,7 @@ Item {
     property var tabButtonList: [
         { "icon": "dashboard", "name": Translation.tr("Dashboard") },
         { "icon": "book", "name": Translation.tr("Study") },
-        //{ "icon": "deployed_code", "name": Translation.tr("Hacking") },
+        { "icon": "deployed_code", "name": Translation.tr("Hacking") },
         { "icon": "queue_music", "name": Translation.tr("Media") },
         //{ "icon": "speed", "name": Translation.tr("Performance") }
     ]
@@ -69,7 +70,7 @@ Item {
 
                 Dash { Layout.fillWidth: true; Layout.fillHeight: true }
                 Study { Layout.fillWidth: true; Layout.fillHeight: true }
-                //Hacking { Layout.fillWidth: true; Layout.fillHeight: true }
+                Hack { Layout.fillWidth: true; Layout.fillHeight: true }
                 Media { Layout.fillWidth: true; Layout.fillHeight: true }
             }
         }

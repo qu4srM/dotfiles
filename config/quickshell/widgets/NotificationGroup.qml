@@ -1,7 +1,7 @@
-import qs.configs
+import qs
 import qs.services
-//import qs.modules.common.functions
-//import "./notification_utils.js" as NotificationUtils
+import qs.configs
+import "../utils/NotificationUtils.js" as NotificationUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -10,7 +10,7 @@ import Quickshell
  * A group of notifications from the same app.
  * Similar to Android's notifications
  */
-Item { // Notification group area
+MouseArea { // Notification group area
     id: root
     property var notificationGroup
     property var notifications: notificationGroup?.notifications ?? []
@@ -36,6 +36,17 @@ Item { // Notification group area
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
         destroyAnimation.running = true;
+    }
+
+    hoverEnabled: true
+    onContainsMouseChanged: {
+        if (!root.popup) return;
+        if (root.containsMouse) root.notifications.forEach(notif => {
+            Notifications.cancelTimeout(notif.notificationId);
+        });
+        else root.notifications.forEach(notif => {
+            Notifications.timeoutNotification(notif.notificationId);
+        });
     }
 
     SequentialAnimation { // Drag finish animation
@@ -105,7 +116,7 @@ Item { // Notification group area
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: Appearance.colors.colSurfaceContainer
+        color: popup ? '#6fffffff' : Appearance.colors.colSurfaceContainer
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 
@@ -160,12 +171,12 @@ Item { // Notification group area
                     Layout.fillWidth: true
                     property real fontSize: Appearance.font.pixelSize.smaller
                     property bool showAppName: root.multipleNotifications
-                    implicitHeight: Math.max(topTextRow.implicitHeight, expandButton.implicitHeight)
+                    implicitHeight: topTextRow.implicitHeight //Math.max(topTextRow.implicitHeight, expandButton.implicitHeight)
 
                     RowLayout {
                         id: topTextRow
                         anchors.left: parent.left
-                        anchors.right: expandButton.left
+                        //anchors.right: expandButton.left
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 5
                         StyledText {
@@ -179,8 +190,8 @@ Item { // Notification group area
                                 topRow.fontSize :
                                 Appearance.font.pixelSize.small
                             color: topRow.showAppName ?
-                                Appearance.colors.colSubtext :
-                                Appearance.colors.colOnLayer2
+                                Appearance.colors.colText :
+                                Appearance.colors.colOnSecondary
                         }
                         StyledText {
                             id: timeText
@@ -189,17 +200,22 @@ Item { // Notification group area
                             horizontalAlignment: Text.AlignLeft
                             text: NotificationUtils.getFriendlyNotifTimeString(notificationGroup?.time)
                             font.pixelSize: topRow.fontSize
-                            color: Appearance.colors.colSubtext
+                            color: Appearance.colors.colText
                         }
                     }
-                    NotificationGroupExpandButton {
+                    ActionButton {
                         id: expandButton
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        count: root.notificationCount
-                        expanded: root.expanded
-                        fontSize: topRow.fontSize
+                        colBackground: "transparent"
+                        colBackgroundHover: Appearance.colors.colPrimaryHover
+                        buttonText: Translation.tr("Expand")
+                        implicitHeight: 20
                         onClicked: { root.toggleExpanded() }
+                        altAction: () => { root.toggleExpanded() }
+                        StyledToolTip {
+                            text: Translation.tr("Tip: right-clicking a group\nalso expands it")
+                        }
                     }
                 }
 

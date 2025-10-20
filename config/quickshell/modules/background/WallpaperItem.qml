@@ -22,14 +22,19 @@ Rectangle {
 
     function apply() {
         const path = Paths.expandTilde(modelData);
-        const pathFile = Config.options.background.wallpaperPath
-        PathView.view.currentIndex = root.index
+        const pathFile = Paths.strip(path);
+
+        Config.options.background.wallpaperPath = pathFile;
+        PathView.view.currentIndex = root.index;
+
+        console.log("Change Background:", pathFile);
+
+        Wallpapers.updateMaterialColor();
+        /*
         Quickshell.execDetached([
             "bash", "-c",
             `~/.local/share/pipx/venvs/rembg/bin/python ~/.config/quickshell/scripts/create_depth_image_rembg.py ${pathFile} ~/.cache/quickshell/overlay/output.png`
-        ])
-        Config.options.background.wallpaperPath = Paths.strip(path)
-        console.log("Change Background");
+        ])*/
     }
 
     scale: 0.5

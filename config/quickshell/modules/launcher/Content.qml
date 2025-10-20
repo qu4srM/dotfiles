@@ -29,44 +29,49 @@ Item {
     Rectangle {
         id: content
         anchors.fill: parent
-        color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colbackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+        color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colBackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
         radius: 10
         border.width: Config.options.bar.showBackground ? 0 : 1
         border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
         ColumnLayout {
             id: columnLayout
             anchors.fill: parent
+            spacing: 0
             Rectangle {
                 id: searchContainer
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: parent.width - 30
+                Layout.preferredWidth: parent.width - 60
                 Layout.preferredHeight: searchbox.implicitHeight
                 Layout.topMargin: 20
-                color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                radius: 4
+                color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                radius: Appearance.rounding.full
 
                 RowLayout {
                     id: searchbox
                     anchors.fill: parent
                     anchors.leftMargin: 10
+                    spacing: 0
 
                     StyledMaterialSymbol {
                         Layout.alignment: Qt.AlignVCenter
                         text: "search"
                         font.pixelSize: 20
-                        color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+                        color: Config.options.bar.showBackground ? Appearance.colors.colText : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
                     }
 
                     TextField {
                         id: search
                         Layout.fillWidth: true
-                        color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
-                        placeholderText: Translation.tr("Apps")
-                        
+                        renderType: Text.NativeRendering
+                        implicitHeight: 36
+                        color: Config.options.bar.showBackground ? Appearance.colors.colText : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)   
                         background: Rectangle {
                             anchors.fill: parent
                             color: "transparent"
                         }
+                        placeholderText: Translation.tr("Search")
+                        placeholderTextColor: Appearance.colors.colOutline
+                        
                         Keys.onEscapePressed: () => {
                             GlobalStates.launcherOpen = false
                             text = ""
@@ -123,7 +128,7 @@ Item {
                 implicitHeight: cellHeight * 4 + 10
                 keyNavigationWraps: true
                 keyNavigationEnabled: true
-                cellWidth: 100
+                cellWidth: 80
                 cellHeight: 100
                 snapMode: GridView.SnapToRow
                 clip: true
@@ -135,8 +140,7 @@ Item {
                 highlight: Rectangle {
                     width: grid.cellWidth
                     height: grid.cellHeight
-                    radius: 8
-                    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                    color: "transparent"
                 }
 
                 highlightFollowsCurrentItem: true
@@ -148,6 +152,7 @@ Item {
                 delegate: MouseArea {
                     id: appItem
                     required property DesktopEntry modelData
+                    required property real index
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     implicitWidth: grid.cellWidth
@@ -159,33 +164,40 @@ Item {
                     }
                     ShapesIcons {
                         id: shapes
-                        anchors.top: parent.top
-                        anchors.topMargin: 8
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.centerIn: parent
                         implicitWidth: iconImage.width + 12
                         implicitHeight: iconImage.height + 12
+                        scale: grid.currentIndex === index ? 1.2 : 1.0
+                        color: grid.currentIndex === index ? Appearance.colors.colSuccess : Appearance.colors.colPrimary
+                        Behavior on scale {
+                            animation: Appearance.animation.elementExpand.numberAnimation.createObject(this)
+                        }
                     }
 
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 12
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.topMargin: 20
+                        spacing: 0
 
                         IconImage {
                             id: iconImage
                             source: Quickshell.iconPath(modelData.icon)
                             asynchronous: true
-                            width: 45
-                            height: 45
+                            Layout.alignment: Qt.AlignHCenter
+                            width: 40
+                            height: 40
+                            scale: grid.currentIndex === index ? 1.2 : 1.0
+                            Behavior on scale {
+                                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                            }
                         }
 
                         Text {
                             text: modelData.name.length > 12 ? modelData.name.slice(0, 12) + "…" : modelData.name
                             font.pixelSize: 12
                             color: "#f0f0f0"
-                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
                             wrapMode: Text.NoWrap
-                            elide: Text.ElideRight
-                            anchors.horizontalCenter: parent.horizontalCenter
                             width: parent.width
                         }
                     }
@@ -243,18 +255,19 @@ Item {
                     NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 100 }
                 }
                 displaced: Transition {
-                    NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "y"; duration: 200; easing.type: Easing.BezierSpline; easing.bezierCurve: Appearance.animationCurves.standardDecel }
                     NumberAnimation { property: "opacity"; to: 1; duration: 100 }
                 }
                 move: Transition {
-                    NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "y"; duration: 200; easing.type: Easing.BezierSpline; easing.bezierCurve: Appearance.animationCurves.standardDecel }
                     NumberAnimation { property: "opacity"; to: 1; duration: 100 }
                 }
                 remove: Transition {
-                    NumberAnimation { property: "y"; duration: 200; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "y"; duration: 200; easing.type: Easing.BezierSpline; easing.bezierCurve: Appearance.animationCurves.standardDecel }
                     NumberAnimation { property: "opacity"; to: 0; duration: 100 }
                 }
             }
+            
         }
     }
     Component.onCompleted: {

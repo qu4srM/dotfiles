@@ -472,6 +472,30 @@ Singleton {
                     easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
         }
+        property QtObject elementResize: QtObject {
+            property int duration: 400
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.emphasized
+            property int velocity: 650
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementResize.duration
+                    easing.type: root.animation.elementResize.type
+                    easing.bezierCurve: root.animation.elementResize.bezierCurve
+                }
+            }
+        }
+        property QtObject clickBounce: QtObject {
+            property int duration: 200
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.expressiveFastSpatial
+            property int velocity: 850
+            property Component numberAnimation: Component { NumberAnimation {
+                    duration: root.animation.clickBounce.duration
+                    easing.type: root.animation.clickBounce.type
+                    easing.bezierCurve: root.animation.clickBounce.bezierCurve
+            }}
+        }
         property QtObject scroll: QtObject {
             property int duration: 200
             property int type: Easing.BezierSpline

@@ -1,4 +1,4 @@
-#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+#!/usr/bin/env -S_/bin/sh_-c_"source_$(eval_echo_$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec_python_-E_"$0"_"$@""
 import argparse
 import math
 import json
@@ -32,19 +32,15 @@ argb_to_hex = lambda argb: "#{:02X}{:02X}{:02X}".format(*map(round, rgba_from_ar
 hex_to_argb = lambda hex_code: argb_from_rgb(int(hex_code[1:3], 16), int(hex_code[3:5], 16), int(hex_code[5:], 16))
 display_color = lambda rgba : "\x1B[38;2;{};{};{}m{}\x1B[0m".format(rgba[0], rgba[1], rgba[2], "\x1b[7m   \x1b[7m")
 
-def calculate_optimal_size (width: int, height: int, bitmap_size: int) -> (int, int):
-    image_area = width * height;
+def calculate_optimal_size(width: int, height: int, bitmap_size: int) -> (int, int):
+    image_area = width * height
     bitmap_area = bitmap_size ** 2
-    scale = math.sqrt(bitmap_area/image_area) if image_area > bitmap_area else 1
+    scale = math.sqrt(bitmap_area / image_area) if image_area > bitmap_area else 1
     new_width = round(width * scale)
     new_height = round(height * scale)
-    if new_width == 0:
-        new_width = 1
-    if new_height == 0:
-        new_height = 1
-    return new_width, new_height
+    return max(1, new_width), max(1, new_height)
 
-def harmonize (design_color: int, source_color: int, threshold: float = 35, harmony: float = 0.5) -> int:
+def harmonize(design_color: int, source_color: int, threshold: float = 35, harmony: float = 0.5) -> int:
     from_hct = Hct.from_int(design_color)
     to_hct = Hct.from_int(source_color)
     difference_degrees_ = difference_degrees(from_hct.hue, to_hct.hue)
@@ -54,7 +50,7 @@ def harmonize (design_color: int, source_color: int, threshold: float = 35, harm
     )
     return Hct.from_hct(output_hue, from_hct.chroma, from_hct.tone).to_int()
 
-def boost_chroma_tone (argb: int, chroma: float = 1, tone: float = 1) -> int:
+def boost_chroma_tone(argb: int, chroma: float = 1, tone: float = 1) -> int:
     hct = Hct.from_int(argb)
     return Hct.from_hct(hct.hue, hct.chroma * chroma, hct.tone * tone).to_int()
 
@@ -63,10 +59,8 @@ transparent = (args.transparency == 'transparent')
 
 if args.path is not None:
     image = Image.open(args.path)
-
     if image.format == "GIF":
         image.seek(1)
-
     if image.mode in ["L", "P"]:
         image = image.convert('RGB')
     wsize, hsize = image.size
@@ -75,18 +69,17 @@ if args.path is not None:
         image = image.resize((wsize_new, hsize_new), Image.Resampling.BICUBIC)
     colors = QuantizeCelebi(list(image.getdata()), 128)
     argb = Score.score(colors)[0]
-
     if args.cache is not None:
         with open(args.cache, 'w') as file:
             file.write(argb_to_hex(argb))
     hct = Hct.from_int(argb)
-    if(args.smart):
-        if(hct.chroma < 20):
-            args.scheme = 'neutral'
+    if args.smart and hct.chroma < 20:
+        args.scheme = 'neutral'
 elif args.color is not None:
     argb = hex_to_argb(args.color)
     hct = Hct.from_int(argb)
 
+# Elegir esquema
 if args.scheme == 'scheme-fruit-salad':
     from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
 elif args.scheme == 'scheme-expressive':
@@ -107,9 +100,9 @@ elif args.scheme == 'scheme-vibrant':
     from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
 else:
     from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
-# Generate
-scheme = Scheme(hct, darkmode, 0.0)
 
+# Generar esquema
+scheme = Scheme(hct, darkmode, 0.0)
 material_colors = {}
 term_colors = {}
 
@@ -117,51 +110,48 @@ for color in vars(MaterialDynamicColors).keys():
     color_name = getattr(MaterialDynamicColors, color)
     if hasattr(color_name, "get_hct"):
         rgba = color_name.get_hct(scheme).to_rgba()
-        # prefijo col + capitalizar primera letra
         key = f"col{color[0].upper()}{color[1:]}"
         material_colors[key] = rgba_to_hex(rgba)
 
-
-# Extended material
+# Colores extendidos
 if darkmode:
-    material_colors['colSuccess'] = '#B5CCBA'
-    material_colors['colOnSuccess'] = '#213528'
-    material_colors['colSuccessContainer'] = '#374B3E'
-    material_colors['colOnSuccessContainer'] = '#D1E9D6'
+    material_colors.update({
+        'colSuccess': '#B5CCBA',
+        'colOnSuccess': '#213528',
+        'colSuccessContainer': '#374B3E',
+        'colOnSuccessContainer': '#D1E9D6'
+    })
 else:
-    material_colors['colSuccess'] = '#4F6354'
-    material_colors['colOnSuccess'] = '#FFFFFF'
-    material_colors['colSuccessContainer'] = '#D1E8D5'
-    material_colors['colOnSuccessContainer'] = '#0C1F13'
+    material_colors.update({
+        'colSuccess': '#4F6354',
+        'colOnSuccess': '#FFFFFF',
+        'colSuccessContainer': '#D1E8D5',
+        'colOnSuccessContainer': '#0C1F13'
+    })
 
-# Terminal Colors
+# Terminal colors
 if args.termscheme is not None:
     with open(args.termscheme, 'r') as f:
         json_termscheme = f.read()
     term_source_colors = json.loads(json_termscheme)['dark' if darkmode else 'light']
-
-    primary_color_argb = hex_to_argb(material_colors['primary_paletteKeyColor'])
+    primary_color_argb = hex_to_argb(material_colors['colPrimary_paletteKeyColor'])
     for color, val in term_source_colors.items():
-        if(args.scheme == 'monochrome') :
+        if args.scheme == 'monochrome':
             term_colors[color] = val
             continue
         if args.blend_bg_fg and color == "term0":
-            harmonized = boost_chroma_tone(hex_to_argb(material_colors['surfaceContainerLow']), 1.2, 0.95)
+            harmonized = boost_chroma_tone(hex_to_argb(material_colors['colSurfaceContainerLow']), 1.2, 0.95)
         elif args.blend_bg_fg and color == "term15":
-            harmonized = boost_chroma_tone(hex_to_argb(material_colors['onSurface']), 3, 1)
+            harmonized = boost_chroma_tone(hex_to_argb(material_colors['colOnSurface']), 3, 1)
         else:
             harmonized = harmonize(hex_to_argb(val), primary_color_argb, args.harmonize_threshold, args.harmony)
             harmonized = boost_chroma_tone(harmonized, 1, 1 + (args.term_fg_boost * (1 if darkmode else -1)))
         term_colors[color] = argb_to_hex(harmonized)
 
-if args.debug == False:
-    print(f"$darkmode: {darkmode};")
-    print(f"$transparent: {transparent};")
-    for color, code in material_colors.items():
-        print(f"${color}: {code};")
-    for color, code in term_colors.items():
-        print(f"${color}: {code};")
-else:
+# --------------------------
+# 🧹 SOLO DEBUG O JSON LIMPIO
+# --------------------------
+if args.debug:
     if args.path is not None:
         print('\n--------------Image properties-----------------')
         print(f"Image size: {wsize} x {hsize}")
@@ -175,25 +165,25 @@ else:
     for color, code in material_colors.items():
         rgba = rgba_from_argb(hex_to_argb(code))
         print(f"{color.ljust(32)} : {display_color(rgba)}  {code}")
-    print('\n----------Harmonize terminal colors------------')
-    for color, code in term_colors.items():
-        rgba = rgba_from_argb(hex_to_argb(code))
-        code_source = term_source_colors[color]
-        rgba_source = rgba_from_argb(hex_to_argb(code_source))
-        print(f"{color.ljust(6)} : {display_color(rgba_source)} {code_source} --> {display_color(rgba)} {code}")
+    if term_colors:
+        print('\n----------Harmonize terminal colors------------')
+        for color, code in term_colors.items():
+            rgba = rgba_from_argb(hex_to_argb(code))
+            code_source = term_source_colors[color]
+            rgba_source = rgba_from_argb(hex_to_argb(code_source))
+            print(f"{color.ljust(6)} : {display_color(rgba_source)} {code_source} --> {display_color(rgba)} {code}")
     print('-----------------------------------------------')
-
-output = {
-    "darkmode": darkmode,
-    "transparent": transparent,
-    "scheme": args.scheme,
-    "material_colors": material_colors,
-    "term_colors": term_colors
-}
-
-if args.cache is not None:
-    with open(args.cache, 'w') as f:
-        json.dump(output, f, indent=4)
-    print(f"Esquema exportado a {args.cache}")
 else:
-    print(json.dumps(output, indent=4))
+    output = {
+        "darkmode": darkmode,
+        "transparent": transparent,
+        "scheme": args.scheme,
+        "material_colors": material_colors,
+        "term_colors": term_colors
+    }
+    if args.cache is not None:
+        with open(args.cache, 'w') as f:
+            json.dump(output, f, indent=4)
+        # Silencioso (sin print)
+    else:
+        print(json.dumps(output, indent=4))

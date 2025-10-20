@@ -81,9 +81,9 @@ Scope {
                     drawers.hide()
                 }
             }
-
             Item {
                 anchors.fill: parent
+                
                 layer.enabled: true
                 layer.effect: MultiEffect {
                     shadowEnabled: true
@@ -92,13 +92,12 @@ Scope {
                 }
                 Border {
                     id: border
-                }
+                }   
                 
                 Backgrounds {
                     anchors.topMargin: Config.options.bar.floating ? Appearance.sizes.barHeight + Appearance.margins.panelMargin : 0
                     panels: panels
                 }
-                
             }
             Interactions {
                 id: interactions

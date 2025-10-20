@@ -16,7 +16,7 @@ Singleton {
     property bool wallSelectorOpen: false
     property bool launcherOpen: false
     property bool overviewOpen: false
-    property bool osdOpen: false
+    property bool osdVolumeOpen: false
     property bool sessionOpen: false 
     property bool screenLock: false
     property bool screenLockContainsCharacters: false

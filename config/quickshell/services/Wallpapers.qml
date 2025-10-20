@@ -16,6 +16,18 @@ Singleton {
     property string actualCurrentOverlay
     property string namePathWallpaper
 
+    Process {
+        id: setProc
+    }
+
+    function updateMaterialColor() {
+        const wall = Config.options.background.wallpaperPath
+        const cmd = `python3 ~/.config/quickshell/scripts/generate_colors.py --path "${wall}" --mode dark > ~/.config/quickshell/theme.json`
+        setProc.command = ["bash", "-c", cmd]
+        setProc.startDetached()
+    }
+
+
     function updateWallpapers () {
         wallpapersList.running = true
     }

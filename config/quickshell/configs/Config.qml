@@ -45,7 +45,7 @@ Singleton {
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                 }
-                property string shape: ""
+                property string shape: "circle"
             }
 
             property JsonObject audio: JsonObject {
@@ -86,7 +86,7 @@ Singleton {
                 property int cornerStyle: 0 // 0: Hug | 1: Float | 2: Plain rectangle
                 property bool borderless: false // true for no grouping of items
                 property string topLeftIcon: "spark" // Options: distro, spark
-                property bool showBackground: false
+                property bool showBackground: true
                 property bool verbose: true
                 property JsonObject resources: JsonObject {
                     property bool alwaysShowSwap: true
@@ -129,7 +129,7 @@ Singleton {
 
             property JsonObject dock: JsonObject {
                 property bool enable: false
-                property bool monochromeIcons: true
+                property bool monochromeIcons: false
                 property real height: 60
                 property real hoverRegionHeight: 2
                 property bool pinnedOnStartup: false
@@ -200,6 +200,12 @@ Singleton {
                     property int focus: 1500
                     property int longBreak: 900
                 }
+            }
+            property JsonObject hacking: JsonObject {
+                property string platform: "hackthebox" // hackthebox, hacktheboxacademy and tryhackme
+                property string vpn: ""
+                property string targetIp: ""
+                property string folder: ""
             }
 
             property JsonObject windows: JsonObject {

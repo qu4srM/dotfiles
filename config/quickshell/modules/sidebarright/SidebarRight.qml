@@ -1,6 +1,7 @@
 import qs 
 import qs.configs
 import qs.modules.sidebarright
+import qs.modules.sidebarright.notifications
 import qs.widgets 
 import qs.utils
 
@@ -66,36 +67,34 @@ Scope {
                     }
                 }
                 sourceComponent: Rectangle {
-                    color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                    implicitWidth: 200
+                    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                    implicitWidth: sidebarLoader.width 
+                    implicitHeight: sidebarLoader.height
                     radius: Appearance.rounding.normal
+                    /*
                     StyledRectangularShadow {
                         visible: Config.options.bar.showBackground
                         target: content
                         radius: parent.radius
-                    }
-                    Rectangle {
-                        id: content
-                        anchors.fill: parent 
-                        color: Config.options.bar.showBackground ? Appearance.colors.colSurface : "transparent"
-                        radius: parent.radius
-                        border.width: Config.options.bar.showBackground ? 0 : 1
-                        border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
-                        GridLayout {
-                            id: grid
-                            anchors.fill: parent
-                            columns: 1
-                            rowSpacing: 0
-                            columnSpacing: 0
-                            StatusPanel {}
-                            PanelButtons {}
-                            Rectangle {
-                                color: "transparent"
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
+                    }*/
+                    ColumnLayout {
+                        id: columnLayout
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        spacing: 10
+                        StatusPanel {}
+                        PanelButtons {}
+                        Rectangle {
+                            color: "transparent"
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            NotificationList {
+                                anchors.fill: parent
                             }
+
                         }
                     }
+                
                     
                 }
             }

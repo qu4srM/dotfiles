@@ -18,13 +18,12 @@ import Quickshell.Hyprland
 Item {
     id: root
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
-    width: parent.width
-    height: 60
+    Layout.fillWidth: true
+    implicitHeight: 40
 
     RowLayout {
         id: layout
         anchors.fill: parent
-        anchors.margins: 10
         spacing: 10
         Row {
             Layout.fillWidth: true

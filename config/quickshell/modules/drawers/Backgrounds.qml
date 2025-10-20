@@ -18,7 +18,6 @@ Shape {
 
     anchors.fill: parent 
     preferredRendererType: Shape.CurveRenderer
-
     Overview.Background {
         id: overviewBackground
         component: panels.overview

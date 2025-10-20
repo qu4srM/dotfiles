@@ -27,19 +27,19 @@ Rectangle {
         : mouseArea.containsMouse ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6) : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
 
     Layout.fillWidth: true
-    Layout.fillHeight: true
+    implicitHeight: 50
     radius: Appearance.rounding.verysmall
 
-    Row {
+    RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 6
         spacing: 4
         z: 10
-
+        
         ActionButtonIcon {
             implicitHeight: parent.height - 10
             implicitWidth: parent.height - 10
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignVCenter
             colBackground: root.toggled ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colSurfaceContainer, 0.8)
             colBackgroundHover: Appearance.colors.colPrimaryActive
             iconMaterial: root.icon
@@ -58,9 +58,7 @@ Rectangle {
         }
 
         StyledText {
-            anchors.verticalCenter: parent.verticalCenter
             text: root.text
-            elide: Text.ElideRight
         }
     } 
 

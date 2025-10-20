@@ -54,6 +54,7 @@ PathView {
     Keys.onReturnPressed: (event) => {
         if (currentItem && currentItem.apply) {
             currentItem.apply();
+            Wallpapers.updateMaterialColor()
             event.accepted = true;
         } else {
             const path = Paths.expandTilde(model[currentIndex]);

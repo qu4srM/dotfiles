@@ -130,20 +130,26 @@ Scope {
                         property real maxDist: 100
                         property real maxBoost: 0.7
 
+                        property real lastUpdateTime: 0
                         onPositionChanged: function(mouse) {
-                            let nearest = null
-                            let best = 1e9
+                            const now = Date.now()
+                            if (now - lastUpdateTime < 16) return // limita a ~60fps
+                            lastUpdateTime = now
+
                             for (let i = 0; i < list.count; i++) {
-                                let item = list.itemAtIndex(i)
-                                if (item) {
-                                    let centerX = item.x + item.implicitWidth / 2
-                                    let dist = Math.abs(mouse.x - centerX)
-                                    if (dist < best) { best = dist; nearest = item }
-                                    let scaleFactor = 1 + Math.max(0, (maxDist - dist) / maxDist) * maxBoost
+                                const item = list.itemAtIndex(i)
+                                if (!item) continue
+
+                                const centerX = item.x + item.implicitWidth / 2
+                                const dist = Math.abs(mouse.x - centerX)
+                                const scaleFactor = 1 + Math.max(0, (maxDist - dist) / maxDist) * maxBoost
+
+                                // 🔹 Evita recalcular si no hay cambios notables
+                                if (Math.abs(item.hoverScale - scaleFactor) > 0.05)
                                     item.hoverScale = scaleFactor
-                                }
                             }
                         }
+
 
 
                         onExited: {

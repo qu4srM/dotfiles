@@ -1,37 +1,85 @@
-import "root:/"
-import "root:/modules/common/"
-import "root:/modules/bar/components/"
-import "root:/modules/drawers/"
-import "root:/modules/sidebar/"
-import "root:/widgets/"
-import "root:/utils/"
-import "root:/modules/drawers/shapes/" as Shapes
-import "root:/services/"
+import qs 
+import qs.configs 
+import qs.widgets 
+import qs.utils
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Shapes
 import QtQuick.Layouts
-import QtQuick.Effects
-import Qt5Compat.GraphicalEffects
-import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
+import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
+
 
 Scope {
     id: root
 
-    Variants {
-        model: Quickshell.screens
+    property string currentIndicator: "volume"
+    property var indicators: [
+        {
+            id: "volume",
+            sourceUrl: "./VolumeIndicator.qml"
+        },
+        {
+            id: "brightness",
+            sourceUrl: "./BrightnessIndicator.qml"
+        },
+    ]
 
-        StyledWindow {
+    function hide () {
+        GlobalStates.osdVolumeOpen = false;
+    }
+
+
+    function triggerOsd() {
+        GlobalStates.osdVolumeOpen = true;
+        osdTimeout.restart();
+    }
+
+    Timer {
+        id: osdTimeout
+        interval: 3000
+        repeat: false
+        onTriggered: root.hide()
+    }
+    Connections {
+        target: Brightness
+        function onBrightnessChanged() {
+            root.currentIndicator = "brightness";
+            root.triggerOsd();
+        }
+    }
+
+    Connections {
+        target: Audio.sink?.audio ?? null
+        function onVolumeChanged() {
+            if (!Audio.ready)
+                return;
+            root.currentIndicator = "volume";
+            root.triggerOsd();
+        }
+        function onMutedChanged() {
+            if (!Audio.ready)
+                return;
+            root.currentIndicator = "volume";
+            root.triggerOsd();
+        }
+    }
+    Connections {
+        target: Audio
+        function onSinkProtectionTriggered(reason) {
+            root.currentIndicator = "volume";
+            root.triggerOsd();
+        }
+    }
+    Loader {
+        id: osdLoader
+        active: GlobalStates.osdVolumeOpen
+        sourceComponent: StyledWindow {
             id: volume
-            required property ShellScreen screen
-
-            visible: GlobalStates.osdOpen
-            screen: screen
+            visible: osdLoader.active
             name: "osd"
             color: "transparent"
             exclusiveZone: 0
@@ -40,44 +88,29 @@ Scope {
                 left: true
             }
 
-            function hide() {
-                GlobalStates.osdOpen = false
-            }
-
-            implicitWidth: Appearance.sizes.volumeWidth
-            implicitHeight: 400
+            implicitWidth: 70
+            implicitHeight: 300
 
             property string pathIcons: "root:/assets/icons/"
             property string colorMain: "transparent"
             property string pathScripts: "~/.config/quickshell/scripts/"
+            /*
 
             HyprlandFocusGrab {
                 id: grab
                 windows: [ volume ]
-                active: GlobalStates.osdOpen
+                active: GlobalStates.osdVolumeOpen
                 onCleared: () => {
                     if (!active) volume.hide()
                 }
-            }
-
-            Timer {
-                id: autoHideTimer
-                interval: 3000
-                repeat: false
-                onTriggered: volume.hide()
-            }
-
-            Connections {
-                target: Audio.sink?.audio
-                function onVolumeChanged() {
-                    GlobalStates.osdOpen = true
-                    autoHideTimer.restart()
-                }
-            }
+            }*/
             
+
+            /*
             Column {
                 anchors.fill: parent
                 spacing: 0
+                
                 Loader {
                     id: brightnessLoader
                     active: GlobalStates.osdOpen
@@ -168,15 +201,6 @@ Scope {
                             anchors.fill: parent 
                             preferredRendererType: Shape.CurveRenderer
 
-                            Shapes.Left {
-                                w: parent.width - 20
-                                h: parent.height - 40
-                                rounding: 10
-                                colorMain: "#000000"
-                                startX: 0 + rounding
-                                startY: 10
-                            }
-
                             Column {
                                 anchors.fill: parent
                                 spacing: 0
@@ -213,7 +237,22 @@ Scope {
                         }
                     }
                 }
+                StyledText {
+                    text: "Hola"
+                }
+            }*/
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 10
+                color: Appearance.colors.colBackground
+                radius: Appearance.rounding.full
+                Loader {
+                    id: osdIndicatorLoader
+                    anchors.fill: parent
+                    source: root.indicators.find(i => i.id === root.currentIndicator)?.sourceUrl
+                }
             }
         }
     }
 }
+
