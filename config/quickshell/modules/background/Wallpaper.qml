@@ -1,19 +1,9 @@
 import qs 
 import qs.configs
 import qs.widgets 
-import qs.utils
 import qs.services
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Effects
-import Qt5Compat.GraphicalEffects
-import Quickshell.Io
-import Quickshell
-import Quickshell.Widgets
-import Quickshell.Wayland
-import Quickshell.Hyprland
 
 Item {
     id: root

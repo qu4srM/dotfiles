@@ -1,7 +1,6 @@
 import qs 
 import qs.configs
 import qs.utils
-import qs.services
 
 import QtQuick
 import QtQuick.Shapes
@@ -10,7 +9,7 @@ ShapePath {
     id: root
 
     required property Item component
-    readonly property real rounding: 20
+    readonly property real rounding: Appearance.rounding.normal
     readonly property bool flatten: component.height < rounding * 2
     readonly property real roundingY: flatten ? component.height / 2 : rounding
 

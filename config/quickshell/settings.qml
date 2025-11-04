@@ -85,11 +85,11 @@ ApplicationWindow {
     onClosing: Qt.quit()
     title: "shell Settings"
 
-    minimumWidth: 300 // 600
-    minimumHeight: 200 // 400
-    width: 600
-    height: 468
-    color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+    minimumWidth: 600
+    minimumHeight: 400
+    width: 700
+    height: 500
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerLowest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
     
     ColumnLayout {
         anchors {
@@ -163,13 +163,13 @@ ApplicationWindow {
                                     RowLayout {
                                         anchors.fill: parent 
                                         StyledMaterialSymbol {
-                                            anchors.left: parent.left 
-                                            anchors.margins: 10
+                                            Layout.alignment: Qt.AlignLeft
+                                            Layout.leftMargin: 10
                                             text: modelData.icon
                                             color: "white"
                                         }
                                         Text {
-                                            anchors.centerIn: parent
+                                            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
                                             text: modelData.name
                                             color: "white"
                                         }

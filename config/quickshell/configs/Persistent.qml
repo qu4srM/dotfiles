@@ -64,6 +64,9 @@ Singleton {
                     property bool collapsed: false
                     property int tab: 0
                 }
+                property JsonObject calendar: JsonObject {
+                    property bool collapsed: false
+                }
                 property int currentTab: 0
             }
 

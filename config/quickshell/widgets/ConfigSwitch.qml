@@ -14,8 +14,10 @@ import Quickshell.Widgets
 
 ActionButton {
     id: root 
+    colBackground: Appearance.colors.colBackground
     property string buttonIcon: ""
     buttonRadius: Appearance.rounding.unsharpen
+    onClicked: checked = !checked
     contentItem: RowLayout {
         spacing: 10
         StyledText {

@@ -4,10 +4,7 @@ import qs.widgets
 import qs.services
 
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 

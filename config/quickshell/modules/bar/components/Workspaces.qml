@@ -1,17 +1,11 @@
 import qs 
 import qs.configs
-import qs.modules.bar.components
 import qs.services
 import qs.widgets 
-import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
-import Quickshell.Wayland
 
 Rectangle {
     id: root
@@ -81,7 +75,7 @@ Rectangle {
         Loader {
             id: shapeLoader
             anchors.verticalCenter: parent.verticalCenter
-            active: Config.options.appearance.shape ? true : false 
+            active: Config.options.appearance.shapes.enable
             sourceComponent: ShapesIcons {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 20 
@@ -107,7 +101,7 @@ Rectangle {
 
         Repeater {
             id: repeater
-            model: Hyprland.workspaces.values
+            model: Config.options.bar.workspaces.shown
             Workspace {
                 required property var modelData
                 required property int index

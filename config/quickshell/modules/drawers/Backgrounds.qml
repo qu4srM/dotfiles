@@ -1,15 +1,9 @@
-import qs
-import qs.configs
 import qs.modules.overview as Overview
 import qs.modules.launcher as Launcher
 import qs.modules.background as Backgrounds
 
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Shapes
-import QtQuick.Layouts
-import QtQuick.Effects
-import Quickshell
 
 Shape {
     id: root

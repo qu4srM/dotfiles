@@ -13,31 +13,62 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    property real value: 0.5
-    property real progress: root.implicitWidth * value
+    property string orientation: "horizontal"
+    property real value: 0.6
+    property real progress: (root.implicitWidth - 10) * value
+    property string colorMain: "white"
+    property string colorBg: "green"
     property var motionAction
-    property real radius: 2
+    property real radius: 10
+    property real size: 16
+    property string icon
+    property bool rotateIcon: false
 
-    implicitWidth: 100
-    implicitHeight: 20
+    implicitWidth: parent.width
+    implicitHeight: parent.height
 
-    Behavior on progress {
-        NumberAnimation {
-            duration: 100
-            easing.type: Easing.BezierSpline
+    Item {
+        id: content 
+        width: parent.implicitWidth - 10
+        height: parent.implicitHeight - 10
+        anchors.centerIn: parent
+        HorizontalSlider {}
+        DragAreaSlider {
+            id: horizontalDragArea
+            component: root
+            axis: "x"
+        }
+        Loader{
+            anchors.left: parent.left
+            anchors.leftMargin: (parent.height / 2) - 10
+            anchors.verticalCenter: parent.verticalCenter
+            active: root.icon
+            sourceComponent: StyledMaterialSymbol {
+                text: root.icon
+                size: root.size
+                color: Appearance.colors.colBackground
+                fill: 1
+                rotation: root.rotateIcon ? root.value * 360 : 0
+                Behavior on rotation {
+                    NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+                }
+            }
         }
     }
+    component HorizontalSlider: Item {
+        width: content.width 
+        height: content.height
 
-    Row {
-        anchors.fill: parent 
-        spacing: 0
-        
-        Rectangle {
+        Rectangle{
             id: start
-            implicitWidth: progress
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                
+            }
+            implicitWidth: progress - 8
             implicitHeight: parent.height - 10
-            anchors.verticalCenter: parent.verticalCenter
-            color: Appearance.colors.colPrimary
+            color: root.colorMain
             topLeftRadius: root.radius
             bottomLeftRadius: root.radius
         }
@@ -45,44 +76,41 @@ Item {
         Item {
             implicitWidth: 12
             implicitHeight: parent.height
+            x: start.implicitWidth + 8 - 6
             Rectangle {
-                implicitWidth: 4
+                implicitWidth: horizontalDragArea.containsPress ? 2 : 4
                 implicitHeight: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: 10
-                color: dragArea.containsMouse ? Appearance.colors.colPrimaryHover : Appearance.colors.colPrimary
+                color: root.colorMain
             }
         }
 
-        Rectangle {
-            id: end
-            implicitWidth: parent.width - progress
+        Rectangle{
+            id: end 
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+                
+            }
+            implicitWidth: parent.width - progress - 8
             implicitHeight: parent.height - 10
-            anchors.verticalCenter: parent.verticalCenter
-            color: "white"
+            color: root.colorBg
             topRightRadius: root.radius
             bottomRightRadius: root.radius
+
+        }
+
+        Rectangle {
+            opacity: value >= 0.98 ? 0 : 1
+            anchors.right: parent.right 
+            anchors.rightMargin: 4
+            anchors.verticalCenter: parent.verticalCenter
+            width: 4
+            height: 4
+            radius: Appearance.rounding.full
+            z: 9999
+            color: root.colorMain
         }
     }
-
-    MouseArea {
-        id: dragArea
-        anchors.fill: parent
-        hoverEnabled: true
-        drag.target: null
-        cursorShape: Qt.PointingHandCursor
-
-        onPressed: (mouse) => updateValue(mouse.x)
-        onPositionChanged: (mouse) => {
-            if (mouse.buttons & Qt.LeftButton)
-                updateValue(mouse.x)
-        }
-
-        function updateValue(xPos) {
-            let clamped = Math.max(0, Math.min(1, xPos / root.width)); // ← no invertimos
-            root.value = clamped;
-            if (root.motionAction) root.motionAction(clamped);
-        }
-    }
-
 }

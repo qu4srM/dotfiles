@@ -29,7 +29,14 @@ Rectangle {
     function lengthStr(length: int): string {
         if (length < 0)
             return "-1:-1";
-        return `${Math.floor(length / 60)}:${Math.floor(length % 60).toString().padStart(2, "0")}`;
+
+        const hours = Math.floor(length / 3600);
+        const mins = Math.floor((length % 3600) / 60);
+        const secs = Math.floor(length % 60).toString().padStart(2, "0");
+
+        if (hours > 0)
+            return `${hours}:${mins.toString().padStart(2, "0")}:${secs}`;
+        return `${mins}:${secs}`;
     }
 
     ColumnLayout {
@@ -93,42 +100,56 @@ Rectangle {
                 id: control 
                 anchors.fill: parent
 
-                Column {
+                ColumnLayout {
                     id: column
                     anchors.centerIn: parent
                     width: parent.width - 20
-                    spacing: 10
+                    spacing: 0
 
                     StyledText {
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter
                         text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
                         color: "white"
                     }
 
                     StyledText {
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter
                         text: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
                         color: "white"
                     }
 
                     StyledText {
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter
                         text: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
                         color: "white"
                     }
 
                     
-
-                    ProgressBarH {
-                        implicitWidth: parent.width - 12
-                        value: root.playerProgress
+                    Item {
+                        id: slider 
+                        implicitWidth: parent.width
+                        implicitHeight: 40
+                        ProgressBarH {
+                            value: root.playerProgress
+                            colorMain: Appearance.colors.colPrimary 
+                            colorBg: Appearance.colors.colSurfaceContainer
+                            implicitWidth: parent.width
+                            implicitHeight: parent.height
+                            icon: "music_note"
+                            rotateIcon: true
+                            size: 18
+                            motionAction: (value) => {
+                                const active = Players.active;
+                                if (active?.canSeek && active?.positionSupported)
+                                    active.position = value * active.length;
+                            }
+                        }
                     }
 
                     Row {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter
                         height: 10
-                        spacing: parent.width - 55
+                        spacing: parent.width / 2
 
                         StyledText {
                             text: root.lengthStr(Players.active?.position ?? -1)
@@ -138,7 +159,7 @@ Rectangle {
                         }
                     }
                     RowLayout {
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter
                         Layout.fillWidth: true
                         height: 20
                         spacing: 10

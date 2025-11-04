@@ -1,17 +1,11 @@
-import qs 
-import qs.configs
+import qs
+import qs.configs 
 import qs.modules.drawers
 import qs.widgets 
-import qs.utils
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 import QtQuick.Effects
 import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 Scope {
@@ -90,8 +84,12 @@ Scope {
                     blurMax: 15
                     shadowColor: "#eb000000"
                 }
-                Border {
-                    id: border
+                ScreenCorner {
+                    color: Appearance.colors.colBackground
+                    topLeftRadius: Appearance.rounding.normal 
+                    topRightRadius: Appearance.rounding.normal
+                    bottomLeftRadius: 0
+                    bottomRightRadius: 0
                 }   
                 
                 Backgrounds {

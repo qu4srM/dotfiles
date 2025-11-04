@@ -45,7 +45,10 @@ Singleton {
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                 }
-                property string shape: "circle"
+                property JsonObject shapes: JsonObject {
+                    property bool enable: true 
+                    property string shape: "circle"
+                }
             }
 
             property JsonObject audio: JsonObject {
@@ -168,6 +171,11 @@ Singleton {
             property JsonObject media: JsonObject {
                 // Attempt to remove dupes (the aggregator playerctl one and browsers' native ones when there's plasma browser integration)
                 property bool filterDuplicatePlayers: true
+            }
+            property JsonObject notion: JsonObject {
+                property string token: ""
+                property string database_id: ""
+                property string data_source_id: ""
             }
 
             property JsonObject osd: JsonObject {

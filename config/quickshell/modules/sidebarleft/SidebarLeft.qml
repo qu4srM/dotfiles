@@ -23,6 +23,7 @@ Scope {
         StyledWindow {
             id: sidebarleft
             required property var modelData
+            property bool preventAutoHide: false
             screen: modelData
             visible: GlobalStates.sidebarLeftOpen
             name: "sidebarLeft"
@@ -35,8 +36,10 @@ Scope {
             }
             
             function hide() {
-                GlobalStates.sidebarLeftOpen = false
+                if (!sidebarleft.preventAutoHide)
+                    GlobalStates.sidebarLeftOpen = false
             }
+
             implicitWidth: Appearance.sizes.sidebarLeftWidth
             property string pathIcons: "root:/assets/icons/"
             property string pathScripts: "~/.config/quickshell/scripts/"
@@ -46,7 +49,8 @@ Scope {
                 windows: [ sidebarleft ]
                 active: GlobalStates.sidebarLeftOpen
                 onCleared: () => {
-                    if (!active) sidebarleft.hide()
+                    if (!sidebarleft.preventAutoHide && !active)
+                        sidebarleft.hide()
                 }
             }
 
@@ -69,7 +73,13 @@ Scope {
                 }
             }
 
-            
+            Component.onCompleted: {
+                GlobalStates.sidebarLeftRef = sidebarleft
+            }
+            Component.onDestruction: {
+                if (GlobalStates.sidebarLeftRef === sidebarleft)
+                    GlobalStates.sidebarLeftRef = null
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 import qs
 import qs.configs
-import qs.widgets 
+import qs.widgets
 import qs.utils
 
 import QtQuick
@@ -17,6 +17,9 @@ Rectangle {
     property string cmd
     property string text
     property bool toggled: false
+    property bool activeText: true
+
+    property var releaseAction
 
     // 🔹 Tamaños base y expandido
     property real expandedWidth: parent.width / 2
@@ -25,7 +28,7 @@ Rectangle {
     Layout.fillWidth: true
     implicitWidth: isExpanded ? expandedWidth : expandedWidth - 50
     implicitHeight: 50
-    radius: toggled ? Appearance.rounding.normal : Appearance.rounding.verysmall
+    radius: toggled ? Appearance.rounding.normal : Appearance.rounding.full
 
     color: Config.options.bar.showBackground
         ? (mouseArea.containsMouse
@@ -46,7 +49,7 @@ Rectangle {
 
         StyledMaterialSymbol {
             id: symbol
-            Layout.alignment: Qt.AlignVCenter
+            Layout.alignment: root.activeText ? Qt.AlignVCenter : Qt.AlignVCenter | Qt.AlignHCenter
             text: root.icon
             size: 20
             color: Appearance.colors.colText
@@ -60,10 +63,13 @@ Rectangle {
             }
         }
 
-        StyledText {
-            text: root.text
-            Layout.alignment: Qt.AlignVCenter
-            elide: Text.ElideRight
+        Loader {
+            active: root.activeText
+            sourceComponent: StyledText {
+                text: root.text
+                Layout.alignment: Qt.AlignVCenter
+                elide: Text.ElideRight
+            }
         }
     }
 
@@ -80,7 +86,14 @@ Rectangle {
 
         onClicked: {
             toggled = !toggled
-            runCommand.startDetached()
+
+            if (root.releaseAction) {
+                // 🧠 Ejecuta la función si está definida
+                root.releaseAction()
+            } else if (root.cmd && root.cmd !== "") {
+                // 🖥️ Si no hay función, ejecuta el comando
+                runCommand.startDetached()
+            }
 
             // 🔹 Contrae los demás botones
             if (root.parent && root.parent.children) {
@@ -100,24 +113,19 @@ Rectangle {
     // 🔹 Temporizador para volver a fillWidth
     Timer {
         id: revertTimer
-        interval: 100
+        interval: 200
         repeat: false
         onTriggered: root.isExpanded = false
     }
 
-    // 🔹 Transición suave entre anchos
+    // 🔹 Transiciones suaves
     Behavior on implicitWidth {
-        NumberAnimation {
-            duration: 250
-            easing.type: Easing.OutCubic
-        }
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) 
     }
-
     Behavior on color {
-        ColorAnimation { duration: 300; easing.type: Easing.InOutQuad }
+        ColorAnimation { duration: 300; easing.type: Easing.InOutQuad; }
     }
-
     Behavior on radius {
-        NumberAnimation { duration: 300; easing.type: Easing.InOutQuad }
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this) 
     }
 }

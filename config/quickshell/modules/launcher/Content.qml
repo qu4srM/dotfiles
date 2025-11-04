@@ -2,18 +2,12 @@ import qs
 import qs.configs
 import qs.widgets 
 import qs.utils
-import qs.services
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Effects
 import Quickshell
-import Quickshell.Io
 import Quickshell.Widgets
-import Quickshell.Wayland
-import Quickshell.Hyprland
 
 Item {
     id: root 
@@ -124,8 +118,8 @@ Item {
             GridView {
                 id: grid
                 Layout.alignment: Qt.AlignHCenter
-                implicitWidth: cellWidth * 6
-                implicitHeight: cellHeight * 4 + 10
+                implicitWidth: cellWidth * Config.options.launcher.columnsApps
+                implicitHeight: cellHeight * Config.options.launcher.rowsApps + 10
                 keyNavigationWraps: true
                 keyNavigationEnabled: true
                 cellWidth: 80

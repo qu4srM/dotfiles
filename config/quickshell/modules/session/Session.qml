@@ -2,10 +2,8 @@ import qs
 import qs.configs 
 import qs.widgets
 import qs.utils
-import qs.services
 
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io

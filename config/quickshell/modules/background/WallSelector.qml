@@ -61,4 +61,21 @@ Item {
         anchors.top: parent.top
         sourceComponent: Content {}
     }
+    function toggleWallpaperSelector() {
+        GlobalStates.wallSelectorOpen = !GlobalStates.wallSelectorOpen
+    }
+    IpcHandler {
+        target: "wallpaperSelector"
+
+        function toggle(): void {
+            root.toggleWallpaperSelector();
+        }
+    }
+    GlobalShortcut {
+        name: "wallpaperSelectorToggle"
+        description: "Toggle wallpaper selector"
+        onPressed: {
+            root.toggleWallpaperSelector();
+        }
+    }
 }

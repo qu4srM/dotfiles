@@ -40,7 +40,7 @@ Rectangle {
             implicitHeight: parent.height - 10
             implicitWidth: parent.height - 10
             Layout.alignment: Qt.AlignVCenter
-            colBackground: root.toggled ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colSurfaceContainer, 0.8)
+            colBackground: root.toggled || root.text != "none" ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colSurfaceContainer, 0.8)
             colBackgroundHover: Appearance.colors.colPrimaryActive
             iconMaterial: root.icon
             iconSize: 20

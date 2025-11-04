@@ -15,7 +15,8 @@ import "./modules/osd/"
 import "./modules/sidebarright/"
 import "./modules/sidebarleft/"
 import "./modules/session/"
-import "./modules/notificationPopup/"
+//import "./modules/notificationPopup/"
+import "./modules/screenCorners"
 
 
 import QtQuick
@@ -35,17 +36,19 @@ ShellRoot {
     property bool enableNotificationPopup: true
     property bool enableSession: true
     property bool enableLock: true
+    property bool enableScreenCorners: true
 
-    LazyLoader { active: enableDrawers; component: Drawers{} }
-    LazyLoader { active: enableBar; component: Bar {} }
+    //LazyLoader { active: enableDrawers; component: Drawers{} }
+    //LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
+    //LazyLoader { active: enableBar; component: Bar {} }
     //LazyLoader { active: enableLauncher2; component: Launcher2 {} }
-    LazyLoader { active: enableDock; component: Dock {} }
+    //LazyLoader { active: enableDock; component: Dock {} }
     LazyLoader { active: enableSidebarRight; component:  SidebarRight{} }
-    LazyLoader { active: enableSidebarLeft; component:  SidebarLeft{} }
-    LazyLoader { active: enableSession; component: Session {} }
-    LazyLoader { active: enableLock; component: Lock {} }
-    LazyLoader { active: enableBackground; component: Background {} }
-    LazyLoader { active: enableVolumenOsd; component: Osd {} }
+    //LazyLoader { active: enableSidebarLeft; component:  SidebarLeft{} }
+    //LazyLoader { active: enableSession; component: Session {} }
+    //LazyLoader { active: enableLock; component: Lock {} }
+    //LazyLoader { active: enableBackground; component: Background {} }
+    //LazyLoader { active: enableVolumenOsd; component: Osd {} }
     //LazyLoader { active: enableNotificationPopup; component:  NotificationPopup{} }
 
 }

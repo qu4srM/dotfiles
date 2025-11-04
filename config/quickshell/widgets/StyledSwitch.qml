@@ -28,7 +28,7 @@ Switch {
         radius: Appearance?.rounding.full ?? 9999
         color: root.checked ? root.activeColor : root.inactiveColor
         border.width: 2 * root.scale
-        border.color: root.checked ? root.activeColor : Appearance.m3colors.m3outline
+        border.color: root.checked ? root.activeColor : Appearance.colors.colOutline
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

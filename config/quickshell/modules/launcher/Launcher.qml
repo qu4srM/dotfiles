@@ -1,18 +1,8 @@
 import qs 
-import qs.configs
 import qs.modules.launcher
-import qs.widgets 
-import qs.utils
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Effects
 import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
-import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Item {

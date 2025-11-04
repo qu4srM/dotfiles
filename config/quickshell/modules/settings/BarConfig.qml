@@ -22,28 +22,42 @@ Flickable {
 
     anchors.fill: parent 
     anchors.rightMargin: 10
-    contentHeight: parent.implicitHeight
+    contentHeight: content.implicitHeight + 100
     clip: true
-    
-    ContentSection{
-        width: root.width
-        icon: "spoke"
-        title: Translation.tr("Positioning")
-        spacing: 5
-        ConfigSwitch {
-            implicitWidth: root.width
-            implicitHeight: 40
-            text: Translation.tr("Enable")
+    ColumnLayout {
+        id: content
+        width: parent.width
+        anchors {
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+            margins: 20
         }
-        ConfigSwitch {
-            implicitWidth: root.width
-            implicitHeight: 40
-            text: Translation.tr("Hover to reveal")
-        }
-        ConfigSwitch {
-            implicitWidth: root.width
-            implicitHeight: 40
-            text: Translation.tr("Pinned on startup")
+        spacing: 30
+        ContentSection{
+            width: root.width
+            icon: "spoke"
+            title: Translation.tr("Positioning")
+            spacing: 5
+
+            ConfigSwitch {
+                implicitWidth: root.width
+                implicitHeight: 40
+                text: Translation.tr("Show background")
+                checked: Config.options.bar.showBackground
+                onCheckedChanged: {
+                    Config.options.bar.showBackground = checked;
+                }
+            }
+            
+            ConfigSwitch {
+                implicitWidth: root.width
+                implicitHeight: 40
+                text: Translation.tr("Floating")
+                checked: Config.options.bar.floating
+                onCheckedChanged: {
+                    Config.options.bar.floating = checked;
+                }
+            } 
         }
     }
 }

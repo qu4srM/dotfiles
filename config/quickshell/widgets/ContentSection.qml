@@ -50,6 +50,7 @@ ColumnLayout {
         
         ColumnLayout {
             id: sectionContent
+            width: parent.width
             spacing: 2
         }
     }

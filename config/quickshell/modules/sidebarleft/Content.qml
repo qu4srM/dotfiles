@@ -1,6 +1,7 @@
 import qs
 import qs.configs
 import qs.modules.sidebarleft
+import qs.modules.sidebarleft.dash
 import qs.modules.sidebarleft.study
 import qs.modules.sidebarleft.hack
 import qs.widgets 

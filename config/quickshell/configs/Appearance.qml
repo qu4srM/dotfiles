@@ -189,7 +189,6 @@ Singleton {
         property color coloutlined: "white"
         property color colshadow: "#000000"
     }
-
     /*
     colors: QtObject {
         property bool darkmode: true
@@ -370,7 +369,7 @@ Singleton {
         property int unsharpenmore: 6
         property int verysmall: 10
         property int small: 12
-        property int normal: 15
+        property int normal: 14
         property int large: 23
         property int verylarge: 30
         property int full: 9999

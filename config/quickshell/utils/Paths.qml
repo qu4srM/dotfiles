@@ -22,6 +22,7 @@ QtObject {
     property string hackingPath: state + "/Machines/"
     property string avatarPath: assetsPath + "/avatar.jpg"
     property string notificationsPath: cache + "/notifications/notifications.json"
+    property string pdfImagesPath: cache + "/quickshell/pdfImages/pdf.json"
 
     readonly property string imagecache: cache + "/imagecache"
 

@@ -20,12 +20,14 @@ Singleton {
         id: setProc
     }
 
-    function updateMaterialColor() {
+    function updateMaterialColor(mode) {
         const wall = Config.options.background.wallpaperPath
-        const cmd = `python3 ~/.config/quickshell/scripts/generate_colors.py --path "${wall}" --mode dark > ~/.config/quickshell/theme.json`
+        let selectedMode = mode ? mode : (Theme.options.darkmode ? "dark" : "light")
+        const cmd = `python3 ~/.config/quickshell/scripts/generate_colors.py --path "${wall}" --mode ${selectedMode} > ~/.config/quickshell/theme.json`
         setProc.command = ["bash", "-c", cmd]
         setProc.startDetached()
     }
+
 
 
     function updateWallpapers () {

@@ -1,8 +1,5 @@
-import qs
-
 import Quickshell
 import QtQuick
-import QtQuick.Controls
 
 MouseArea {
     id: root
@@ -10,7 +7,7 @@ MouseArea {
     property point dragStart
     
     anchors.fill: parent 
-    hoverEnabled: true 
+    hoverEnabled: false
     /*
 
     property var edgeMargin: 10

@@ -47,36 +47,44 @@ Item {
             spacing: 10
             QuickButton {
                 id: darkmode 
+                property string mode: Theme.options.darkmode ? "light" : "dark"
                 toggled: Theme.options.darkmode
                 icon: "dark_mode"
                 text: Translation.tr("Dark mode")
+                releaseAction: () => {
+                    Wallpapers.updateMaterialColor(mode)
+                }
             }
             QuickButton {
                 id: dnd
+                toggled: Notifications.silent
                 icon: "do_not_disturb_on"
                 text: Translation.tr("Do not disturb")
+                releaseAction: () => {
+                    Notifications.silent = !Notifications.silent;
+                }
             }
         }
         RowLayout {
             Layout.fillWidth: true 
             spacing: 10 
             QuickButton {
+                activeText: false
                 icon: "gamepad"
                 text: Translation.tr("Game")
             }
             QuickButton {
+                activeText: false
                 icon: "night_sight_auto"
                 text: Translation.tr("Night")
             }
             QuickButton {
+                activeText: false
                 icon: "gamepad"
                 text: Translation.tr("Game")
             }
             QuickButton {
-                icon: "night_sight_auto"
-                text: Translation.tr("Night")
-            }
-            QuickButton {
+                activeText: false
                 icon: "night_sight_auto"
                 text: Translation.tr("Night")
             }

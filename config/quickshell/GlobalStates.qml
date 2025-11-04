@@ -12,6 +12,7 @@ Singleton {
     property bool drawersOpen: true
     property bool sidebarRightOpen: false
     property bool sidebarLeftOpen: false
+    property var sidebarLeftRef: null 
     property bool dashboardOpen: false
     property bool wallSelectorOpen: false
     property bool launcherOpen: false

@@ -1,20 +1,13 @@
 import qs
 import qs.configs
-import qs.modules.dock
 import qs.widgets
 import qs.utils
 
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
-import QtQuick.Shapes
-import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Quickshell
-import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Wayland
-import Quickshell.Hyprland
 
 Rectangle {
     id: root
@@ -67,8 +60,8 @@ Rectangle {
             id: iconImage 
             anchors.centerIn: parent
             anchors.verticalCenterOffset: root.jumpOffset
-            width: shapes.shape ? parent.width - 6 : parent.width - 3
-            height: shapes.shape ? width - 6 : width - 3
+            width: shapes.enable ? parent.width - 6 : parent.width - 3
+            height: shapes.enable ? width - 6 : width - 3
             source: Quickshell.iconPath(root.modelData?.icon ?? "")
         }
         
