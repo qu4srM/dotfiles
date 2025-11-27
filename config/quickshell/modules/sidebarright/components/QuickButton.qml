@@ -35,7 +35,7 @@ Rectangle {
             ? Appearance.colors.colPrimaryHover
             : (toggled
                 ? Appearance.colors.colPrimary
-                : Appearance.colors.colSurfaceContainer))
+                : Appearance.colors.colSurfaceContainerHigh))
         : (mouseArea.containsMouse
             ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
             : (toggled

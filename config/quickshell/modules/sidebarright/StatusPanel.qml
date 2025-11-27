@@ -3,6 +3,7 @@ import qs.configs
 import qs.modules.sidebarright.components
 import qs.widgets 
 import qs.utils
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
@@ -15,32 +16,54 @@ import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-Item {
+Rectangle {
     id: root
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     Layout.fillWidth: true
-    implicitHeight: 40
+    implicitHeight: 60
+    color: Appearance.colors.colSurfaceContainer
+    radius: Appearance.rounding.normal - 2
 
     RowLayout {
         id: layout
         anchors.fill: parent
-        spacing: 10
+        anchors.margins: Appearance.margins.itemPanelMargin
+        spacing: Appearance.margins.panelMargin
         Row {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 6
-            StyledIcon {
+            
+            ClippingRectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                iconSystem: "redhat"
-                size: 20
+                width: height
+                height: parent.height
+                color: "transparent"
+                radius: Appearance.rounding.full 
+                border.width: 2
+                border.color: Appearance.colors.colPrimary
+                Image {
+                    source: Config.options.user.avatar
+                    width: parent.width
+                    height: width
+                    fillMode: Image.PreserveAspectCrop
+                }
+
             }
-            Text {
+            Column {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Uptime: 27 min"
-                color: "white"
-                font.pixelSize: 12
+                StyledText {
+                    text: SystemInfo.username
+                    color: Appearance.colors.colPrimary
+                }
+                StyledText {
+                    text: Translation.tr("Uptime: ") + SystemInfo.uptime
+                    font.pixelSize: 14
+                }
+
             }
         }
+
         Row {
             spacing: 6
             Layout.alignment: Qt.AlignRight 
@@ -48,11 +71,11 @@ Item {
             Layout.fillHeight: true
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                 colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
                 iconMaterial: "restart_alt"
                 iconSize: 20
-                implicitWidth: 40
+                implicitWidth: implicitHeight
                 implicitHeight: parent.height - 2
                 buttonRadiusTopLeft: 30
                 buttonRadiusTopRight: 30
@@ -67,11 +90,11 @@ Item {
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                 colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
                 iconMaterial: "settings"
                 iconSize: 16
-                implicitWidth: 40
+                implicitWidth: implicitHeight
                 implicitHeight: parent.height - 2
                 buttonRadiusTopLeft: 30
                 buttonRadiusTopRight: 30
@@ -87,11 +110,11 @@ Item {
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
-                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                 colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
                 iconMaterial: "power_settings_new"
                 iconSize: 16
-                implicitWidth: 40
+                implicitWidth: implicitHeight
                 implicitHeight: parent.height - 2
                 buttonRadiusTopLeft: 30
                 buttonRadiusTopRight: 30

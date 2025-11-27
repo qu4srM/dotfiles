@@ -15,14 +15,19 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Services.UPower
 
-Item {
+Rectangle {
     id: root
     Layout.fillWidth: parent
-    implicitHeight: columnLayout.implicitHeight
+    implicitHeight: columnLayout.implicitHeight + 10 + 10
+    color: Appearance.colors.colSurfaceContainer
+    radius: Appearance.rounding.normal - 2
+    
     ColumnLayout {
         id: columnLayout
         anchors.fill: parent
+        anchors.margins: Appearance.margins.itemPanelMargin
         spacing: 10
         RowLayout {
             Layout.fillWidth: true
@@ -57,7 +62,7 @@ Item {
             }
             QuickButton {
                 id: dnd
-                toggled: Notifications.silent
+                toggled: !Notifications.silent
                 icon: "do_not_disturb_on"
                 text: Translation.tr("Do not disturb")
                 releaseAction: () => {
@@ -80,13 +85,36 @@ Item {
             }
             QuickButton {
                 activeText: false
-                icon: "gamepad"
-                text: Translation.tr("Game")
+                toggled: PowerProfiles.profile !== PowerProfile.Balanced
+                icon: switch(PowerProfiles.profile) {
+                    case PowerProfile.PowerSaver: return "energy_savings_leaf"
+                    case PowerProfile.Balanced: return "settings_slow_motion"
+                    case PowerProfile.Performance: return "local_fire_department"
+                }
+                text: switch(PowerProfiles.profile) {
+                    case PowerProfile.PowerSaver: return "Power Saver"
+                    case PowerProfile.Balanced: return "Balanced"
+                    case PowerProfile.Performance: return "Performance"
+                }
+                releaseAction: () => {
+                    if (PowerProfiles.hasPerformanceProfile) {
+                        switch(PowerProfiles.profile) {
+                            case PowerProfile.PowerSaver: PowerProfiles.profile = PowerProfile.Balanced
+                            break;
+                            case PowerProfile.Balanced: PowerProfiles.profile = PowerProfile.Performance
+                            break;
+                            case PowerProfile.Performance: PowerProfiles.profile = PowerProfile.PowerSaver
+                            break;
+                        }
+                    } else {
+                        PowerProfiles.profile = PowerProfiles.profile == PowerProfile.Balanced ? PowerProfile.PowerSaver : PowerProfile.Balanced
+                    }
+                }
             }
             QuickButton {
                 activeText: false
-                icon: "night_sight_auto"
-                text: Translation.tr("Night")
+                icon: "coffee"
+                text: Translation.tr("Keep awake")
             }
         }
     }

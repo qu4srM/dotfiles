@@ -1,59 +1,56 @@
 import qs.configs
-
 import QtQuick
 import QtQuick.Shapes
 
 Shape {
-    id: cookie7
-    width: parent.width 
-    height: parent.height
-    property int sides: 4           // número de ondulaciones reales
-    property real bulge: 0.35       // cuánto sobresalen/entran
-    property real baseScale: 1    // tamaño base
+    id: cookie
+    property int sides: 4
+    property real bulge: 0.35
+    property real baseScale: 1.0
     property color fillColor: Appearance.colors.colPrimaryActive
+
+    width: parent ? parent.width : 64
+    height: parent ? parent.height : 64
 
     preferredRendererType: Shape.CurveRenderer
 
+    property string cachedPath: ""
+
+    // recalcula solo cuando cambia algo relevante
+    function generatePath() {
+        const cx = width / 2
+        const cy = height / 2
+        const r = Math.min(width, height) / 2 * baseScale
+        let d = ""
+
+        const totalSegments = sides * 2
+        let startX = cx + r * Math.cos(0)
+        let startY = cy + r * Math.sin(0)
+        d += `M ${startX} ${startY} `
+
+        for (let i = 1; i <= totalSegments; i++) {
+            const angle = (2 * Math.PI * i) / totalSegments
+            const midAngle = angle - (Math.PI / totalSegments)
+            const x = cx + r * Math.cos(angle)
+            const y = cy + r * Math.sin(angle)
+            const factor = (i % 2 === 0) ? (1 - bulge) : (1 + bulge)
+            const ctrlX = cx + r * factor * Math.cos(midAngle)
+            const ctrlY = cy + r * factor * Math.sin(midAngle)
+            d += `Q ${ctrlX} ${ctrlY}, ${x} ${y} `
+        }
+        d += "Z"
+        cachedPath = d
+    }
+
+    onWidthChanged: generatePath()
+    onHeightChanged: generatePath()
+    onSidesChanged: generatePath()
+    onBulgeChanged: generatePath()
+    Component.onCompleted: generatePath()
+
     ShapePath {
         strokeWidth: 0
-        fillColor: cookie7.fillColor
-
-        PathSvg {
-            path: {
-                let cx = cookie7.width / 2
-                let cy = cookie7.height / 2
-                let r  = Math.min(cookie7.width, cookie7.height) / 2 * cookie7.baseScale
-                let d  = ""
-
-                // el ángulo base se divide en "sides * 2"
-                let totalSegments = cookie7.sides * 2
-
-                // punto inicial
-                let startX = cx + r * Math.cos(0)
-                let startY = cy + r * Math.sin(0)
-                d += `M ${startX} ${startY} `
-
-                for (let i = 1; i <= totalSegments; i++) {
-                    let angle = (2 * Math.PI * i) / totalSegments
-                    let midAngle = angle - (Math.PI / totalSegments)
-
-                    let x = cx + r * Math.cos(angle)
-                    let y = cy + r * Math.sin(angle)
-
-                    // alternar fuera/dentro
-                    let factor = (i % 2 === 0)
-                        ? (1 - cookie7.bulge)
-                        : (1 + cookie7.bulge)
-
-                    let ctrlX = cx + r * factor * Math.cos(midAngle)
-                    let ctrlY = cy + r * factor * Math.sin(midAngle)
-
-                    d += `Q ${ctrlX} ${ctrlY}, ${x} ${y} `
-                }
-
-                d += "Z"
-                return d
-            }
-        }
+        fillColor: cookie.fillColor
+        PathSvg { path: cookie.cachedPath }
     }
 }

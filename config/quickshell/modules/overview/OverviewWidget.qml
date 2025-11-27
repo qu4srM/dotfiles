@@ -23,7 +23,7 @@ Item {
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor?.id)
-    property real scale: 0.14
+    property real scale: 0.16
     property color activeBorderColor: Appearance.colors.colsecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 

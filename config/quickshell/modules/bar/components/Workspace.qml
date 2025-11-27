@@ -8,6 +8,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
+import Quickshell.Hyprland
 
 
 Item {

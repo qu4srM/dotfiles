@@ -85,6 +85,7 @@ Scope {
                     shadowColor: "#eb000000"
                 }
                 ScreenCorner {
+                    visible: !Config.options.bar.floating
                     color: Appearance.colors.colBackground
                     topLeftRadius: Appearance.rounding.normal 
                     topRightRadius: Appearance.rounding.normal

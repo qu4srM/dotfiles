@@ -14,7 +14,7 @@ Scope {
 
     StyledWindow {
         id: root
-        visible: (Notifications.popupList.length > 0) && !GlobalStates.screenLocked
+        visible: true//(Notifications.popupList.length > 0) && !GlobalStates.screenLocked
         screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
 
         name: "notificationPopup"
@@ -31,7 +31,7 @@ Scope {
             item: listview.contentItem
         }
 
-        color: "transparent"
+        color: "red"
         //implicitWidth: Appearance.sizes.notificationPopupWidth
         implicitWidth: 300
         

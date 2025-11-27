@@ -51,9 +51,9 @@ Rectangle {
         }
         Rectangle {
             implicitWidth: parent.width 
-            implicitHeight: 180
+            implicitHeight: 300 
             clip: true
-            color: Config.options.bar.showBackground ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+            color: Config.options.bar.showBackground ? Appearance.colors.colOnTertiary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
             radius: Appearance.rounding.normal
                 
             Item {
@@ -109,26 +109,35 @@ Rectangle {
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
                         text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
-                        color: "white"
+                        color: Appearance.colors.colInverseSurface
+                        font.family: Appearance.font.family.expressive
+                        font.pixelSize: Appearance.font.pixelSize.larger
+                        font.weight: Appearance.font.weight.bold
                     }
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
                         text: (Players.active?.trackAlbum ?? qsTr("No media")) || qsTr("Unknown album")
-                        color: "white"
+                        color: Appearance.colors.colText
+                        font.family: Appearance.font.family.expressive
+                        font.pixelSize: Appearance.font.pixelSize.large
+                        font.weight: Appearance.font.weight.normal
                     }
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
                         text: (Players.active?.trackArtist ?? qsTr("No media")) || qsTr("Unknown artist")
-                        color: "white"
+                        color: Appearance.colors.colText
+                        font.family: Appearance.font.family.expressive
+                        font.pixelSize: Appearance.font.pixelSize.normal
+                        font.weight: Appearance.font.weight.normal
                     }
 
                     
                     Item {
                         id: slider 
                         implicitWidth: parent.width
-                        implicitHeight: 40
+                        implicitHeight: 30
                         ProgressBarH {
                             value: root.playerProgress
                             colorMain: Appearance.colors.colPrimary 
@@ -149,7 +158,7 @@ Rectangle {
                     Row {
                         Layout.alignment: Qt.AlignHCenter
                         height: 10
-                        spacing: parent.width / 2
+                        spacing: (parent.width / 2) + 130
 
                         StyledText {
                             text: root.lengthStr(Players.active?.position ?? -1)
@@ -166,21 +175,25 @@ Rectangle {
 
                         ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter
-                            colBackground: "transparent"
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colTertiaryContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                             colBackgroundHover: "transparent"
-                            implicitHeight: iconSize + 10
+                            implicitWidth: implicitHeight + 30
+                            implicitHeight: iconSize + 30
+                            buttonRadius: Appearance.rounding.full
                             iconMaterial: "skip_previous"
-                            iconSize: 18
+                            iconSize: 30
                             releaseAction: () => Players.active?.previous()
                         }
 
                         ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colsecondary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                            implicitHeight: iconSize + 10
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colTertiary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colTertiaryActive : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+                            implicitWidth: implicitHeight + 30
+                            implicitHeight: iconSize + 30
+                            buttonRadius: Players.active?.isPlaying ? Appearance.rounding.unsharpenmore : Appearance.rounding.full
                             iconMaterial: Players.active?.isPlaying ? "pause" : "play_arrow"
-                            iconSize: 20
+                            iconSize: 30
                             releaseAction: () => Players.active?.togglePlaying()
                         }
 
@@ -188,9 +201,11 @@ Rectangle {
                             Layout.alignment: Qt.AlignVCenter
                             colBackground: "transparent"
                             colBackgroundHover: "transparent"
-                            implicitHeight: iconSize + 10
+                            implicitWidth: implicitHeight + 30
+                            implicitHeight: iconSize + 30
+                            buttonRadius: Appearance.rounding.full
                             iconMaterial: "skip_next"
-                            iconSize: 18
+                            iconSize: 30
                             releaseAction: () => Players.active?.next()
                         }
                     }

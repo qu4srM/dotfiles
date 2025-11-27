@@ -23,7 +23,7 @@ Rectangle {
 
 
     color: Config.options.bar.showBackground 
-        ? mouseArea.containsMouse ? Appearance.colors.colSurfaceContainerHighestHover : Appearance.colors.colSurfaceContainer
+        ? mouseArea.containsMouse ? Appearance.colors.colSurfaceContainerHighestHover : Appearance.colors.colSurfaceContainerHigh
         : mouseArea.containsMouse ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6) : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
 
     Layout.fillWidth: true

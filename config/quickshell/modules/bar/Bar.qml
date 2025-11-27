@@ -55,10 +55,9 @@ Scope {
                     blur: 30
                 }
 
-                // --- CONTENIDO PRINCIPAL ---
                 Rectangle {
                     anchors.fill: parent 
-                    color: Config.options.bar.showBackground ? Appearance.colors.colSurface : "transparent"
+                    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : "transparent"
                     radius: Config.options.bar.floating ? Appearance.rounding.normal : 0
 
                     // === IZQUIERDA ===
@@ -67,8 +66,9 @@ Scope {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: Appearance.margins.panelMargin
-                        spacing: 0
+                        spacing: Appearance.margins.panelMargin
                         width: Math.min(implicitWidth, parent.width * 0.35)
+                        Separator { implicitWidth: 6 }
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: "transparent"
@@ -78,23 +78,17 @@ Scope {
                                 width: parent.width
                                 CustomIcon {
                                     colorize: true 
-                                    color: Appearance.colors.colOutline
+                                    color: Appearance.colors.colOnPrimaryFixedVariant
                                     anchors.centerIn: parent 
                                     source: "gemini-symbolic"
                                     size: Appearance.font.pixelSize.large
                                 }
                             }
                         }
-                        Separator { implicitWidth: 10 }
-                        AppLabel {}
                         Separator { implicitWidth: 6 }
-                        ActionButton {
-                            colBackground: "transparent"
-                            colBackgroundHover: Appearance.colors.colPrimaryHover
-                            buttonText: Translation.tr("Apps")
-                            implicitHeight: bar.implicitHeight 
-                            releaseAction: () => GlobalStates.launcherOpen = true
-                        }
+                        AppLabel {}
+                        
+                        MediaControl {}
                         /*
                         ActionButton {
                             colBackground: "transparent"
@@ -117,21 +111,11 @@ Scope {
                         ActionButton {
                             colBackground: "transparent"
                             colBackgroundHover: Appearance.colors.colPrimaryHover
-                            //buttonText: Wallpapers.nameWallpaper
-                            //buttonText: `${Paths.strip(Paths.cache)}/quickshell/overlay/${Paths.getName(Config.options.background.wallpaperPath)}`
-                            implicitHeight: bar.implicitHeight 
-                            releaseAction: () => {
-                                //Wallpapers.updateOverlay(`${Paths.strip(Paths.cache)}/quickshell/overlay/${Paths.getName(Config.options.background.wallpaperPath)}`)
-                            }
-                        }*/
-                        /*
-                        ActionButton {
-                            colBackground: "transparent"
-                            colBackgroundHover: Appearance.colors.colPrimaryHover
                             buttonText: Translation.tr("Wallpapers")
                             implicitHeight: bar.implicitHeight 
                             releaseAction: () => GlobalStates.wallSelectorOpen = true
                         }*/
+                        /*
                         IconTextButton {
                             colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                             colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colSecondaryHover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
@@ -141,7 +125,8 @@ Scope {
                             buttonIcon: "host"
                             buttonText: HackingData.hostIp
                             releaseAction: Execute.copyTextToClipboard(HackingData.hostIp)
-                        }
+                        }*/
+                        
                     }
 
                     // === CENTRO ===
@@ -150,19 +135,25 @@ Scope {
                         anchors.horizontalCenter: parent.horizontalCenter 
                         anchors.top: parent.top 
                         anchors.bottom: parent.bottom
-                        anchors.margins: 6
-                        spacing: 4
+                        anchors.margins: Appearance.margins.panelMargin
+                        spacing: Appearance.margins.panelMargin
                         width: implicitWidth
-                        IconTextButton {
-                            id: ipHost
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colSecondaryHover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                            implicitWidth: 120
+
+                        ContainerRectangle {
+                            implicitWidth: 130
                             implicitHeight: parent.height
-                            buttonRadius: Appearance.rounding.full
-                            buttonIcon: "deployed_code"
-                            buttonText: HackingData.vpnIp
-                            releaseAction: Execute.copyTextToClipboard(HackingData.vpnIp)
+                            RowLayout {
+                                anchors.centerIn: parent 
+                                spacing: 4
+                                StyledMaterialSymbol {
+                                    text: "deployed_code"
+                                    size: 18
+                                    color: Appearance.colors.colText
+                                }
+                                StyledText {
+                                text: HackingData.vpnIp
+                                }
+                            }
                         }
 
                         ActionButtonIcon {
@@ -194,16 +185,21 @@ Scope {
                             buttonRadius: Appearance.rounding.full
                             onPressed: Execute.openHyprpicker()
                         }
-                        IconTextButton {
-                            id: targetIp
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colSecondaryHover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                            implicitWidth: 120
+                        ContainerRectangle {
+                            implicitWidth: 130
                             implicitHeight: parent.height
-                            buttonRadius: Appearance.rounding.full
-                            buttonIcon: "view_in_ar"
-                            buttonText: HackingData.targetIp
-                            releaseAction: Execute.copyTextToClipboard(HackingData.targetIp)
+                            RowLayout {
+                                anchors.centerIn: parent 
+                                spacing: 4
+                                StyledMaterialSymbol {
+                                    text: "view_in_ar"
+                                    size: 18
+                                    color: Appearance.colors.colText
+                                }
+                                StyledText {
+                                    text: HackingData.targetIp
+                                }
+                            }
                         }
                     }
 
@@ -213,35 +209,54 @@ Scope {
                         anchors.right: parent.right
                         anchors.top: parent.top 
                         anchors.bottom: parent.bottom
-                        anchors.margins: 6
-
-                        anchors.rightMargin: Appearance.margins.panelMargin
-                        spacing: 4
+                        anchors.margins: Appearance.margins.panelMargin
+                        spacing: Appearance.margins.panelMargin
                         width: implicitWidth
+
+                        ContainerRectangle {
+                            implicitWidth: 130
+                            implicitHeight: parent.height
+                            RowLayout {
+                                anchors.centerIn: parent 
+                                spacing: 4
+                                StyledMaterialSymbol {
+                                    text: "host"
+                                    size: 18
+                                    color: Appearance.colors.colText
+                                }
+                                StyledText {
+                                    text: HackingData.hostIp
+                                }
+                            }
+                        }
 
                         Battery {
                             implicitHeight: parent.height -6
                         }
-                        MultiIconButton {
+                        ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter
-                            implicitHeight: parent.height
-                            iconList: [
-                                Icons.getNetworkIcon(50),
-                                Icons.getBluetoothIcon(true),
-                                "volume_up"
-                            ]
-                            colBackground: "transparent"
-                            colBackgroundHover: Appearance.colors.colPrimaryHover
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+                            iconMaterial: "view_sidebar"
                             iconSize: Appearance.font.pixelSize.normal
+                            materialIconFill: true
+                            implicitHeight: parent.height
+                            implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
                             releaseAction: () => {
                                 GlobalStates.sidebarRightOpen = true
                             }
                         }
-                        StyledText {
-                            id: clock
-                            text: Time.date + " " + Time.time
+                        ContainerRectangle {
+                            implicitWidth: clock.implicitWidth + 14
+                            implicitHeight: parent.height
+                            StyledText {
+                                id: clock
+                                anchors.centerIn: parent
+                                text: Time.date + " " + Time.time
+                            }
                         }
+                        
                     }
                 }
             }

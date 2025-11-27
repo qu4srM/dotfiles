@@ -30,7 +30,7 @@ Button {
 
     property string colBackground
     property string colBackgroundHover
-    property color colText: Appearance.colors.colText
+    property color colText: Appearance.colors.colPrimary
     property color colTextHovered: Appearance.colors.colprimarytext
 
 

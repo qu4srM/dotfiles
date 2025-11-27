@@ -12,14 +12,14 @@ Shape {
 
     anchors.fill: parent 
     preferredRendererType: Shape.CurveRenderer
+    /*
     Overview.Background {
         id: overviewBackground
         component: panels.overview
 
         startX: (root.width - panels.overview.implicitWidth) / 2 - rounding
         startY: 0
-    }
-    
+    }*/
     Backgrounds.WallSelectorBackground {
         id: wallBackground
         component: panels.wallSelector

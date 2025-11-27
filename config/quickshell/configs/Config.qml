@@ -177,6 +177,9 @@ Singleton {
                 property string database_id: ""
                 property string data_source_id: ""
             }
+            property JsonObject notification: JsonObject {
+                property int timeout: 7000
+            }
 
             property JsonObject osd: JsonObject {
                 property int timeout: 1000
@@ -216,6 +219,10 @@ Singleton {
                 property string folder: ""
             }
 
+            property JsonObject user: JsonObject {
+                property string avatar: ""
+            }
+
             property JsonObject windows: JsonObject {
                 property bool showTitlebar: true // Client-side decoration for shell apps
                 property bool centerTitle: true
@@ -227,6 +234,10 @@ Singleton {
 
             property JsonObject screenshotTool: JsonObject {
                 property bool showContentRegions: true
+            }
+            property JsonObject sounds: JsonObject {
+                property string theme: "freedesktop"
+                property bool battery: false
             }
         }
     }

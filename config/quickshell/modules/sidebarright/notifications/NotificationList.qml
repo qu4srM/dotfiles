@@ -95,15 +95,6 @@ Item {
                 colBackground: Appearance.colors.colSurfaceContainer
                 colBackgroundHover: Appearance.colors.colPrimaryHover
                 buttonRadius: Appearance.rounding.normal
-                buttonText: Translation.tr("Silent")
-                onClicked: () => {
-                    Notifications.silent = !Notifications.silent;
-                }
-            }
-            ActionButton {
-                colBackground: Appearance.colors.colSurfaceContainer
-                colBackgroundHover: Appearance.colors.colPrimaryHover
-                buttonRadius: Appearance.rounding.normal
                 buttonText: Translation.tr("Clear")
                 onClicked: () => {
                     Notifications.discardAllNotifications()

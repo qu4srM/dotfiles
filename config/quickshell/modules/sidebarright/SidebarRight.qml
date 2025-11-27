@@ -80,8 +80,8 @@ Scope {
                     ColumnLayout {
                         id: columnLayout
                         anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 10
+                        anchors.margins: Appearance.margins.panelMargin
+                        spacing: Appearance.margins.panelMargin
                         StatusPanel {}
                         PanelButtons {}
                         Rectangle {

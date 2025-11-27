@@ -23,7 +23,7 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: Appearance.colors.colsecondary
+        color: Appearance.colors.colOnSecondary
         radius: Appearance.rounding.full
     }
     Rectangle {

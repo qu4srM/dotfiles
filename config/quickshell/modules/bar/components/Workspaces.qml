@@ -44,7 +44,7 @@ Rectangle {
         implicitWidth: parent.width
         implicitHeight: 6
         hoverEnabled: true
-        onEntered: GlobalStates.overviewOpen = true
+        onEntered: GlobalStates.capsuleOpen = true
     }
 
     Item {

@@ -120,8 +120,12 @@ Singleton {
 
         property color colTertiary: mcolors.mTertiary
         property color colOnTertiary: mcolors.mOnTertiary
+        property color colTertiaryHover: Colors.setMix(colors.colTertiary, colOnTertiary, 0.87)
+        property color colTertiaryActive: Colors.setMix(colors.colTertiary, colOnTertiary, 0.7)
         property color colTertiaryContainer: mcolors.mTertiaryContainer
         property color colOnTertiaryContainer: mcolors.mOnTertiaryContainer
+        property color colTertiaryContainerHover: Colors.setMix(colors.colTertiaryContainer, colOnTertiaryContainer, 0.9)
+        property color colTertiaryContainerActive: Colors.setMix(colors.colTertiaryContainer, colOnTertiaryContainer, 0.8)
 
         property color colError: mcolors.mError
         property color colOnError: mcolors.mOnError
@@ -369,7 +373,7 @@ Singleton {
         property int unsharpenmore: 6
         property int verysmall: 10
         property int small: 12
-        property int normal: 14
+        property int normal: 17
         property int large: 23
         property int verylarge: 30
         property int full: 9999
@@ -380,17 +384,18 @@ Singleton {
         property QtObject family: QtObject {
             property string main: "Rubik"
             property string title: "Gabarito"
+            property string background: "Luckiest Guy" //Bungee, Lilita One, Jersey 10, Titan One, Luckiest Guy(Android 16), Rubik Mono One, Bebas Neue
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
-            property string expressive: "Space Grotesk"
+            property string expressive: "Signika Negative" //Comfortaa, Signika Negative 
         }
         property QtObject pixelSize: QtObject {
             property int smallest: 10
             property int smaller: 12
-            property int small: 15
-            property int normal: 16
+            property int small: 14
+            property int normal: 15
             property int large: 17
             property int larger: 19
             property int huge: 22
@@ -541,5 +546,6 @@ Singleton {
     margins: QtObject {
         property real itemBarMargin: 6
         property real panelMargin: 4
+        property real itemPanelMargin: 8
     }
 }

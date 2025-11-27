@@ -11,12 +11,14 @@ ColumnLayout {
     anchors.fill: parent
     anchors.topMargin: 10
     anchors.bottomMargin: 10
-    Rectangle {
+    ShapesIcons {
         id: volumeIcon
+        enable: true
+        useSystemShape: false 
+        shape: "12sidedcookie"
         Layout.alignment: Qt.AlignHCenter
         implicitWidth: parent.width - 20
         implicitHeight: parent.width - 20
-        radius: Appearance.rounding.full
         color: Appearance.colors.colPrimary 
         StyledMaterialSymbol {
             anchors.centerIn: parent

@@ -34,25 +34,28 @@ Scope {
             }
             Item {
                 id: weather
-                anchors.top: parent.top 
-                anchors.right: parent.right 
-                anchors.topMargin: 80
-                anchors.rightMargin: 50
+                anchors.bottom: clock.top 
+                anchors.right: clock.right 
+                anchors.bottomMargin: -30
+                anchors.rightMargin: 70
                 implicitWidth: shape.implicitWidth
                 implicitHeight: shape.implicitHeight
-                Rectangle {
+                z: 10
+                ShapesIcons {
                     id: shape
-                    color: Appearance.colors.colPrimary
-                    rotation: -45
                     implicitWidth: 120
                     implicitHeight: shape.implicitWidth - 30
-                    radius: Appearance.rounding.full
+                    enable: true
+                    useSystemShape: false 
+                    shape: "oval"
+                    color: Appearance.colors.colPrimary
                 }
                 StyledText { 
                     anchors.right: parent.right 
                     anchors.rightMargin: 15
                     text: Weather.temperature
                     color: Appearance.colors.colOnPrimary
+                    font.family: Appearance.font.family.background
                     font.pixelSize: 40
                 }
                 /*
@@ -64,7 +67,9 @@ Scope {
                     source: Quickshell.iconPath(Icons.getWeatherIcon(Weather.condition))
                 }*/
             }
-            DesktopClock {}
+            DesktopClock {
+                id: clock
+            }
 
 
             /*WallpaperOverlay {

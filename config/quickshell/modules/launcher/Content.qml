@@ -24,7 +24,7 @@ Item {
         id: content
         anchors.fill: parent
         color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colBackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-        radius: 10
+        radius: Appearance.rounding.normal
         border.width: Config.options.bar.showBackground ? 0 : 1
         border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
         ColumnLayout {
@@ -57,7 +57,7 @@ Item {
                         id: search
                         Layout.fillWidth: true
                         renderType: Text.NativeRendering
-                        implicitHeight: 36
+                        implicitHeight: 40
                         color: Config.options.bar.showBackground ? Appearance.colors.colText : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)   
                         background: Rectangle {
                             anchors.fill: parent
@@ -173,16 +173,20 @@ Item {
                         anchors.topMargin: 20
                         spacing: 0
 
-                        IconImage {
-                            id: iconImage
-                            source: Quickshell.iconPath(modelData.icon)
-                            asynchronous: true
+                        Item {
                             Layout.alignment: Qt.AlignHCenter
-                            width: 40
-                            height: 40
-                            scale: grid.currentIndex === index ? 1.2 : 1.0
-                            Behavior on scale {
-                                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                            width: 50
+                            height: 50
+                            Image {
+                                id: iconImage
+                                source: Quickshell.iconPath(modelData.icon)
+                                Layout.alignment: Qt.AlignHCenter
+                                width: parent.width
+                                height: width
+                                scale: grid.currentIndex === index ? 1.2 : 1.0
+                                Behavior on scale {
+                                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                                }
                             }
                         }
 
