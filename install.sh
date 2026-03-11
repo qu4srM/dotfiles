@@ -1,28 +1,58 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+
+###################################
+# Colors
+###################################
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
 
 ###################################
 # Paths
 ###################################
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 BACKUP_DIR="$HOME/dotfiles_backup"
 CONFIG_DIR="$HOME/.config"
 
-DEPENDENCIES_FILE="$SCRIPT_DIR/dependencies.txt"
-AUR_FILE="$SCRIPT_DIR/aur_dependencies.txt"
-
-echo "LOG:Repositorio detectado"
-echo "LOG:$REPO_DIR"
-
-mkdir -p "$BACKUP_DIR"
-mkdir -p "$CONFIG_DIR"
+DEPENDENCIES_FILE="$REPO_DIR/dependencies.txt"
+AUR_FILE="$REPO_DIR/aur_dependencies.txt"
 
 ###################################
-# Detectar gestor de paquetes
+# Logging
+###################################
+
+log() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+success() {
+    echo -e "${GREEN}[OK]${NC} $1"
+}
+
+warn() {
+    echo -e "${YELLOW}[WARN]${NC} $1"
+}
+
+error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+###################################
+# Progress (for QML installer)
+###################################
+
+progress() {
+    echo "PROGRESS:$1"
+}
+
+###################################
+# Detect package manager
 ###################################
 
 detect_package_manager() {
@@ -37,23 +67,23 @@ detect_package_manager() {
         PKG_MANAGER="unknown"
     fi
 
-    echo "LOG:Gestor detectado -> $PKG_MANAGER"
+    log "Detected package manager: $PKG_MANAGER"
 }
 
 ###################################
-# Instalar dependencias oficiales
+# Install official dependencies
 ###################################
 
 install_dependencies() {
 
     if [ ! -f "$DEPENDENCIES_FILE" ]; then
-        echo "LOG:dependencies.txt no encontrado"
+        warn "dependencies.txt not found"
         return
     fi
 
     deps=$(grep -v '^#' "$DEPENDENCIES_FILE" | tr '\n' ' ')
 
-    echo "LOG:Instalando dependencias oficiales"
+    log "Installing official dependencies"
 
     case "$PKG_MANAGER" in
 
@@ -71,159 +101,190 @@ install_dependencies() {
         ;;
 
         *)
-            echo "LOG:Gestor no soportado"
+            error "Unsupported package manager"
+            exit 1
         ;;
     esac
+
+    success "Dependencies installed"
 }
 
 ###################################
-# Instalar AUR
+# Install AUR dependencies
 ###################################
 
 install_aur() {
 
-    if [ "$PKG_MANAGER" != "pacman" ]; then
-        return
-    fi
+    [ "$PKG_MANAGER" != "pacman" ] && return
 
     if [ ! -f "$AUR_FILE" ]; then
-        echo "LOG:aur_dependencies.txt no encontrado"
+        warn "aur_dependencies.txt not found"
         return
     fi
 
     if ! command -v yay >/dev/null; then
 
-        echo "LOG:yay no encontrado, instalando..."
+        log "Installing yay (AUR helper)"
 
-        sudo pacman -S --needed git base-devel --noconfirm
+        sudo pacman -S --needed --noconfirm git base-devel
 
         git clone https://aur.archlinux.org/yay.git /tmp/yay
-
         cd /tmp/yay
-
         makepkg -si --noconfirm
     fi
 
     aurdeps=$(grep -v '^#' "$AUR_FILE" | tr '\n' ' ')
 
-    echo "LOG:Instalando paquetes AUR"
+    log "Installing AUR packages"
 
     yay -S --needed --noconfirm $aurdeps
+
+    success "AUR packages installed"
 }
 
 ###################################
-# Backup
+# Backup existing configs
 ###################################
 
-echo "PROGRESS:5"
-echo "LOG:Creando backup de configuraciones"
+backup_configs() {
 
-for dir in quickshell ags kitty bin rofi wlogout swaylock cava fastfetch waybar hypr; do
+    log "Creating configuration backup"
 
-  if [ -d "$CONFIG_DIR/$dir" ]; then
+    mkdir -p "$BACKUP_DIR"
 
-    cp -rfp "$CONFIG_DIR/$dir" "$BACKUP_DIR/"
+    for dir in ags kitty bin rofi wlogout swaylock cava fastfetch waybar hypr quickshell; do
 
-    echo "LOG:Backup $dir"
+        if [ -d "$CONFIG_DIR/$dir" ]; then
 
-  else
+            cp -rfp "$CONFIG_DIR/$dir" "$BACKUP_DIR/"
+            success "Backup: $dir"
 
-    echo "LOG:Omitido $dir"
+        else
 
-  fi
+            warn "Skipped: $dir"
 
-done
+        fi
 
-###################################
-# Dependencias
-###################################
-
-echo "PROGRESS:20"
-
-detect_package_manager
-install_dependencies
-install_aur
+    done
+}
 
 ###################################
-# ZSH
+# Install ZSH configuration
 ###################################
 
-echo "PROGRESS:40"
-echo "LOG:Instalando configuración ZSH"
+install_zsh() {
 
-if [ -d "$REPO_DIR/home/powerlevel10k" ]; then
-  cp -rf "$REPO_DIR/home/powerlevel10k" "$HOME/"
-fi
+    log "Installing ZSH configuration"
 
-if [ -f "$REPO_DIR/home/.zshrc" ]; then
-  cp "$REPO_DIR/home/.zshrc" "$HOME/"
-fi
+    if [ -d "$REPO_DIR/home/powerlevel10k" ]; then
+        cp -rf "$REPO_DIR/home/powerlevel10k" "$HOME/"
+    fi
 
-if [ -f "$REPO_DIR/home/.p10k.zsh" ]; then
-  cp "$REPO_DIR/home/.p10k.zsh" "$HOME/"
-fi
+    if [ -f "$REPO_DIR/home/.zshrc" ]; then
+        cp -f "$REPO_DIR/home/.zshrc" "$HOME/"
+    fi
 
-###################################
-# Permisos scripts
-###################################
+    if [ -f "$REPO_DIR/home/.p10k.zsh" ]; then
+        cp -f "$REPO_DIR/home/.p10k.zsh" "$HOME/"
+    fi
 
-echo "PROGRESS:60"
-echo "LOG:Asignando permisos a scripts"
-
-SCRIPT_DIRS=(
-  "config/ags/scripts"
-  "config/ags"
-  "config/bin"
-  "config/hypr"
-  "config/rofi/launcher"
-  "config/rofi/wall"
-  "config/waybar"
-  "config/wlogout"
-)
-
-for dir in "${SCRIPT_DIRS[@]}"; do
-
-  full="$REPO_DIR/$dir"
-
-  if [ -d "$full" ]; then
-
-      find "$full" -type f -name "*.sh" -exec chmod +x {} \;
-
-      echo "LOG:Permisos -> $dir"
-
-  fi
-
-done
+    success "ZSH configured"
+}
 
 ###################################
-# Copiar configuraciones
+# Script permissions
 ###################################
 
-echo "PROGRESS:80"
-echo "LOG:Instalando configuraciones"
+fix_permissions() {
 
-if [ -d "$REPO_DIR/config" ]; then
+    log "Fixing script permissions"
 
-  mkdir -p $CONFIG_DIR/{quickshell,ags,kitty,bin,hypr,rofi,fastfetch,wlogout,swaylock,cava,waybar}
+    SCRIPT_DIRS=(
+        "config/ags/scripts"
+        "config/ags"
+        "config/bin"
+        "config/hypr"
+        "config/rofi/launcher"
+        "config/rofi/wall"
+        "config/waybar"
+        "config/wlogout"
+    )
 
-  cp -rfp "$REPO_DIR/config/"* "$CONFIG_DIR/"
+    for dir in "${SCRIPT_DIRS[@]}"; do
 
-fi
+        full="$REPO_DIR/$dir"
+
+        if [ -d "$full" ]; then
+
+            find "$full" -type f -name "*.sh" -exec chmod +x {} \;
+            success "Permissions fixed: $dir"
+
+        fi
+
+    done
+}
 
 ###################################
-# Finalizar
+# Install configs
 ###################################
 
-echo "PROGRESS:95"
-echo "LOG:Finalizando instalación"
+install_configs() {
 
-sleep 1
+    log "Installing dotfiles"
 
-echo "LOG:Backup guardado en $BACKUP_DIR"
+    if [ -d "$REPO_DIR/config" ]; then
 
-echo "PROGRESS:100"
-echo "LOG:Instalación completada"
+        mkdir -p "$CONFIG_DIR"
 
-echo "LOG:Reinicia Hyprland para aplicar cambios"
+        cp -rfn "$REPO_DIR/config/"* "$CONFIG_DIR/"
 
-echo "DONE"
+        success "Configs installed"
+
+    else
+
+        error "Config directory not found"
+        exit 1
+
+    fi
+}
+
+###################################
+# Main installer
+###################################
+
+main() {
+
+    progress 5
+    log "Starting installation"
+
+    progress 10
+    detect_package_manager
+
+    progress 20
+    install_dependencies
+
+    progress 35
+    install_aur
+
+    progress 50
+    backup_configs
+
+    progress 65
+    install_zsh
+
+    progress 80
+    fix_permissions
+
+    progress 90
+    install_configs
+
+    progress 100
+
+    success "Installation completed!"
+    log "Backup saved at: $BACKUP_DIR"
+    log "Restart Hyprland to apply changes"
+
+    echo "DONE"
+}
+
+main
