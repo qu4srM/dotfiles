@@ -28,8 +28,6 @@ Singleton {
         setProc.startDetached()
     }
 
-
-
     function updateWallpapers () {
         wallpapersList.running = true
     }

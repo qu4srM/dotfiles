@@ -13,8 +13,6 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    width: iconSize + 2
-    height: iconSize + 2
     required property int workspaceId
     property bool fillMaterial
     property string iconNerd
@@ -46,7 +44,7 @@ Item {
                     if (Config.options.bar.showBackground) {
                         return mouseArea.containsMouse ? Appearance.colors.colPrimaryHover : Appearance.colors.colText
                     } else {
-                        return mouseArea.containsMouse ? Appearance.colors.colprimary_hover : Appearance.colors.colprimarytext
+                        return mouseArea.containsMouse ? "white" : '#dbdbdb'
                     }
                 }
                 font.variableAxes: { 
@@ -76,16 +74,31 @@ Item {
                 }
             }
         }
+        Loader {
+            id: dot 
+            anchors.centerIn: parent 
+            active: !root.hasWindows
+                    && !iconMaterialLoader.active
+                    && !iconNerdLoader.active
+
+            sourceComponent: Rectangle {
+                width: root.iconSize * 0.30
+                height: width
+                radius: width / 2
+                color: mouseArea.containsMouse
+                    ? Appearance.colors.colOnPrimary
+                    : Appearance.colors.colOnText
+            }
+        }
     }
 
     Loader {
-        anchors.centerIn: parent 
+        anchors.fill: parent
+        anchors.margins: 2
         active: root.hasWindows
         sourceComponent: IconImage {
             id: icon
-            anchors.centerIn: parent
             property var biggestWindow: HyprlandData.biggestWindowForWorkspace(root.workspaceId)
-            implicitSize: 13
             source: Quickshell.iconPath(Icons.getIcon(biggestWindow?.class), "image-missing")
         }
     }

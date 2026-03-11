@@ -19,9 +19,11 @@ import Quickshell.Services.UPower
 
 Rectangle {
     id: root
+    signal wifiClicked
+
     Layout.fillWidth: parent
     implicitHeight: columnLayout.implicitHeight + 10 + 10
-    color: Appearance.colors.colSurfaceContainer
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 1.0)
     radius: Appearance.rounding.normal - 2
     
     ColumnLayout {
@@ -34,10 +36,16 @@ Rectangle {
             spacing: 10
             QuickMultiButton {
                 id: wifi2
-                icon: Icons.getNetworkIcon(Network.signal)
-                commandToggle: `nmcli radio wifi | grep -q enabled && nmcli radio wifi off || nmcli radio wifi on`
-                cmd: "hyprpicker"
-                text: Translation.tr(Network.name)
+                icon: Icons.getNetworkIcon(Network.signalStrengthl)
+                text: Translation.tr(Network.networkName)
+                toggled: Network.wifiEnabled
+
+                releaseAction: () => {
+                    root.wifiClicked()
+                }
+                onClicked: () => {
+                    Network.enableWifi(!Network.wifiEnabled)
+                }
             }
             QuickMultiButton {
                 id: bluetooth2

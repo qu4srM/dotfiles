@@ -13,6 +13,7 @@ Singleton {
     property string fileDir: Paths.state
     property string fileName: "states.json"
     property string filePath: Paths.statePath//`${root.fileDir}/${root.fileName}`
+    property bool ready: false
 
     Timer {
         id: fileReloadTimer

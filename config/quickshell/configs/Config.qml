@@ -60,6 +60,12 @@ Singleton {
                     property real maxAllowed: 90 // Realistically should already provide some protection when it's 99...
                 }
             }
+            property JsonObject api: JsonObject {
+                property string todoist: ""
+                property string calendar: ""
+            }
+
+
 
             property JsonObject background: JsonObject {
                 property bool fixedClockPosition: false
@@ -132,14 +138,20 @@ Singleton {
 
             property JsonObject dock: JsonObject {
                 property bool enable: false
+                property string position: "bottom"
                 property bool monochromeIcons: false
-                property real height: 60
+                property real size: 50
                 property real hoverRegionHeight: 2
                 property bool pinnedOnStartup: false
                 property bool hoverToReveal: true // When false, only reveals on empty workspace
                 property list<string> pinnedApps: [ // IDs of pinned entries
                     "org.kde.dolphin", "kitty", "code-oss", "zen", "burpsuite", "steam", "lutris", "discord", "blender", "eclipse", "spotify", "obsidian", "onlyoffice-desktopeditors"]
                 property list<string> ignoredAppRegexes: []
+                property JsonObject magnification: JsonObject {
+                    property bool enable: true
+                    property int maxDist: 100
+                    property double maxBoost: 0.5
+                }
             }
             property JsonObject launcher: JsonObject {
                 property real rowsApps: 4
@@ -155,6 +167,14 @@ Singleton {
                 }
             }
 
+            property JsonObject lock: JsonObject {
+                property bool useHyprlock: false
+                property bool showLockedText: true
+                property JsonObject security: JsonObject {
+                    property bool unlockKeyring: true
+                    property bool requirePasswordToPower: false
+                }
+            }
             property JsonObject language: JsonObject {
                 property string engine: "es_CO"
             }
@@ -238,6 +258,10 @@ Singleton {
             property JsonObject sounds: JsonObject {
                 property string theme: "freedesktop"
                 property bool battery: false
+            }
+            property JsonObject widgets: JsonObject {
+                property real delay: 1500 // 1.5 seconds
+                property string galleryPath: ""
             }
         }
     }

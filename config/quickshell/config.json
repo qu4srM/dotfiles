@@ -1,0 +1,230 @@
+{
+    "api": {
+        "calendar": "https://calendar.google.com/calendar/ical/653a31c31f6d34f73e21b6c1cd4b7629a8309c61681dfe4a0d948971ff9603d9%40group.calendar.google.com/private-0835d7bc71593f3b5fbefa103bfa2f99/basic.ics",
+        "todoist": "60b1d7f4479ae587cb95591e230aa996d957cf0f"
+    },
+    "appearance": {
+        "extraBackgroundTint": true,
+        "fakeScreenRounding": 2,
+        "palette": {
+            "type": "auto"
+        },
+        "shapes": {
+            "enable": false,
+            "shape": "circle"
+        },
+        "transparency": {
+            "automatic": true,
+            "backgroundTransparency": 0.11,
+            "contentTransparency": 0.57,
+            "enable": false
+        },
+        "wallpaperTheming": {
+            "enableAppsAndShell": true,
+            "enableQtApps": true,
+            "enableTerminal": true
+        }
+    },
+    "audio": {
+        "protection": {
+            "enable": true,
+            "maxAllowed": 90,
+            "maxAllowedIncrease": 10
+        }
+    },
+    "background": {
+        "clockX": -500,
+        "clockY": -500,
+        "fixedClockPosition": false,
+        "parallax": {
+            "enableSidebar": true,
+            "enableWorkspace": true,
+            "workspaceZoom": 1.07
+        },
+        "thumbnailPath": "",
+        "wallpaperOverlayPath": "",
+        "wallpaperPath": "/home/qu4s4r/Pictures/Wallpapers/wall-86.jpg"
+    },
+    "bar": {
+        "autoHide": {
+            "enable": false,
+            "pushWindows": false,
+            "showWhenPressingSuper": {
+                "delay": 140,
+                "enable": true
+            }
+        },
+        "borderless": false,
+        "bottom": false,
+        "cornerStyle": 0,
+        "floating": true,
+        "resources": {
+            "alwaysShowCpu": false,
+            "alwaysShowSwap": true
+        },
+        "screenList": [
+        ],
+        "showBackground": false,
+        "topLeftIcon": "spark",
+        "tray": {
+            "monochromeIcons": true
+        },
+        "utilButtons": {
+            "showColorPicker": false,
+            "showDarkModeToggle": true,
+            "showKeyboardToggle": true,
+            "showMicToggle": false,
+            "showPerformanceProfileToggle": false,
+            "showScreenSnip": true
+        },
+        "verbose": true,
+        "weather": {
+            "city": "",
+            "enable": false,
+            "enableGPS": true,
+            "fetchInterval": 10,
+            "useUSCS": false
+        },
+        "workspaces": {
+            "alwaysShowNumbers": false,
+            "monochromeIcons": true,
+            "showAppIcons": true,
+            "showNumberDelay": 300,
+            "shown": 10
+        }
+    },
+    "battery": {
+        "automaticSuspend": true,
+        "critical": 5,
+        "low": 20,
+        "suspend": 3
+    },
+    "dock": {
+        "enable": true,
+        "hoverRegionHeight": 2,
+        "hoverToReveal": true,
+        "ignoredAppRegexes": [
+        ],
+        "magnification": {
+            "enable": true,
+            "maxBoost": 0.7,
+            "maxDist": 140
+        },
+        "monochromeIcons": true,
+        "pinnedApps": [
+            "org.kde.dolphin",
+            "zen",
+            "firefox",
+            "code-oss",
+            "kitty",
+            "burpsuite",
+            "steam",
+            "lutris",
+            "discord",
+            "blender",
+            "eclipse",
+            "spotify",
+            "obsidian",
+            "onlyoffice-desktopeditors"
+        ],
+        "pinnedOnStartup": true,
+        "position": "bottom",
+        "size": 54
+    },
+    "hacking": {
+        "folder": "",
+        "platform": "hackthebox",
+        "targetIp": "",
+        "vpn": ""
+    },
+    "hacks": {
+        "arbitraryRaceConditionDelay": 20
+    },
+    "interactions": {
+        "scrolling": {
+            "fasterTouchpadScroll": true,
+            "mouseScrollDeltaThreshold": 120,
+            "mouseScrollFactor": 120,
+            "touchpadScrollFactor": 450
+        }
+    },
+    "language": {
+        "engine": "es_CO"
+    },
+    "launcher": {
+        "columnsApps": 5,
+        "rowsApps": 4
+    },
+    "light": {
+        "night": {
+            "automatic": true,
+            "colorTemperature": 5000,
+            "from": "19:00",
+            "to": "06:30"
+        }
+    },
+    "lock": {
+        "security": {
+            "requirePasswordToPower": false,
+            "unlockKeyring": true
+        },
+        "showLockedText": true,
+        "useHyprlock": false
+    },
+    "media": {
+        "filterDuplicatePlayers": true
+    },
+    "notification": {
+        "timeout": 7000
+    },
+    "notion": {
+        "data_source_id": "",
+        "database_id": "",
+        "token": ""
+    },
+    "osd": {
+        "timeout": 1000
+    },
+    "osk": {
+        "layout": "qwerty_full",
+        "pinnedOnStartup": false
+    },
+    "overview": {
+        "columns": 5,
+        "enable": true,
+        "rows": 2,
+        "scale": 0.18
+    },
+    "screenshotTool": {
+        "showContentRegions": true
+    },
+    "sounds": {
+        "battery": false,
+        "theme": "freedesktop"
+    },
+    "time": {
+        "dateFormat": "ddd MMM dd",
+        "format": "hh:mm A",
+        "hour": "h A",
+        "meridiem": "A",
+        "minutes": "mm",
+        "pomodoro": {
+            "alertSound": "",
+            "breakTime": 300,
+            "cyclesBeforeLongBreak": 4,
+            "focus": 1500,
+            "longBreak": 900
+        }
+    },
+    "user": {
+        "avatar": ""
+    },
+    "widgets": {
+        "delay": 1500,
+        "galleryPath": "/home/qu4s4r/.config/fastfetch/images/"
+    },
+    "windows": {
+        "centerTitle": true,
+        "showTitlebar": true
+    }
+}

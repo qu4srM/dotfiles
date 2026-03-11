@@ -9,7 +9,6 @@ Text {
     font {
         family: Appearance?.font.family.main ?? "sans-serif"
         pixelSize: Appearance?.font.pixelSize.normal ?? size
-        weight: Appearance?.font.weight.medium ?? 400
     }
-    color: Appearance?.colors.colText ?? "black"
+    color: Config.options.bar.showBackground ? Appearance?.colors.colText ?? "black" : Appearance.colors.colOnText
 }

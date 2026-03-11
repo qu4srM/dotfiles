@@ -12,7 +12,7 @@ Item {
     width: 400
     height: 200
 
-    property bool verticalMode: true
+    property bool verticalMode: false
 
     x: Config.options.background.clockX ?? (parent.width - width) / 2
     y: Config.options.background.clockY ?? 100

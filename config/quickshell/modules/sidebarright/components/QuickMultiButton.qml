@@ -14,12 +14,14 @@ import Quickshell
 
 Rectangle {
     id: root
-    property string commandToggle: "whoami"
-    property string icon: "hola"
-    property string cmd: "hyprpicker"
-    property string text: "none"
+    property string commandToggle: ""
+    property string icon: ""
+    property string cmd: ""
+    property string text: ""
 
     property bool toggled: false
+    property var releaseAction
+    property var onClicked
 
 
     color: Config.options.bar.showBackground 
@@ -28,7 +30,19 @@ Rectangle {
 
     Layout.fillWidth: true
     implicitHeight: 50
-    radius: Appearance.rounding.verysmall
+    radius: Appearance.rounding.normal
+    RectangleRing {
+        id: box
+        anchors.fill: parent 
+        radius: parent.radius
+        source: ShaderEffectSource {
+            anchors.fill: parent 
+            sourceRect: Qt.rect(0,0,200,400)
+            hideSource: true
+            live: true
+            visible: true
+        }
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -49,7 +63,7 @@ Rectangle {
             buttonRadiusBottomLeft: 8
             buttonRadiusBottomRight: 8
             onPressed: {
-                Quickshell.execDetached(["bash", "-c", root.commandToggle])
+                root.onClicked()
             }
 
             StyledToolTip {
@@ -63,15 +77,11 @@ Rectangle {
     } 
 
 
-    Process {
-        id: runCommand
-        command: ["bash", "-c", root.cmd]
-    }
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
-        onClicked: runCommand.startDetached()
+        onClicked: root.releaseAction()
     }
     Behavior on color {
         ColorAnimation {

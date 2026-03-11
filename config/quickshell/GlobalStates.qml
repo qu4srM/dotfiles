@@ -9,6 +9,10 @@ import Quickshell.Io
 Singleton {
     id: root
     property bool barOpen: true
+    property bool backgroundOpen: true 
+    property bool capsuleOpen: false
+    property bool prototypeOpen: false
+    property bool sticksOpen: false
     property bool drawersOpen: true
     property bool sidebarRightOpen: false
     property bool sidebarLeftOpen: false

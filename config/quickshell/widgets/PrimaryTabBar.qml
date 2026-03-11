@@ -22,13 +22,13 @@ Item {
         id: indicator
         anchors.horizontalCenter: parent.horizontalCenter
         implicitWidth: parent.width
-        implicitHeight: 26
-        clip: true
+        implicitHeight: parent.height
+        clip: false
         Rectangle {
             id: indicatorItem
             property int tabCount: root.tabButtonList.length
             property real fullTabSize: parent.implicitWidth / tabCount;
-            property real targetWidth: 50;
+            property real targetWidth: 100;
             
             anchors {
                 top: parent.top
@@ -83,8 +83,6 @@ Item {
                 state: root.state
                 implicitWidth: (root.width / root.tabButtonList.length)
                 implicitHeight: 40
-                anchors.top: parent.top
-                anchors.topMargin: 4
             }
         }
     }

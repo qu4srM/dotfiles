@@ -186,194 +186,19 @@ Singleton {
         property color colprimaryicon: "#e0d5e0"
         property color colprimarytext: "#E2E2E9"
         property color colsecondarytext: "#8393a6"
-        property color colglassmorphism: "#ffffff"
+        property color colglassmorphism: '#2d2d2d'
         property color coltooltip: mcolors.mInverseOnSurface
-        property color colOnText: "white"
+        property color colOnText: "black"
         property color colMSymbol: "white"
         property color coloutlined: "white"
         property color colshadow: "#000000"
     }
-    /*
-    colors: QtObject {
-        property bool darkmode: true
-        property bool transparent: false
-        property color colbackground: "#1B1B1F"  
-        property color colprimary: "#7d03ba"
-        property color colprimary_hover: "#a503ba"
-        //........
-        property color colPrimary: "#aac7ff"
-        property color colOnPrimary: "#0a305f"
-        property color colPrimaryHover: "#5b8adb"
-        property color colPrimaryActive: "#648ed7"
-        property color colPrimaryContainer: "#284777"
-        property color colOnPrimaryContainer: "#d6e3ff"
-        property color colInversePrimary: "#415f91"
-
-        property color colSecondary: "#bec6dc"
-        property color colOnSecondary: "#283141"
-        property color colSecondaryContainer: "#3e4759"
-        property color colOnSecondaryContainer: "#dae2f9"
-
-        property color colTertiary: "#ddbce0"
-        property color colOnTertiary: "#3f2844"
-        property color colTertiaryContainer: "#573e5c"
-        property color colOnTertiaryContainer: "#fad8fd"
-
-        property color colError: "#ffb4ab"
-        property color colOnError: "#690005"
-        property color colErrorContainer: "#93000a"
-        property color colOnErrorContainer: "#ffdad6"
-
-        property color colSurface: "#111318"
-        property color colSurfaceDim: "#111318"
-        property color colSurfaceBright: "#37393e"
-        property color colSurfaceContainerLowest: "#0c0e13"
-        property color colSurfaceContainerLow: "#191c20"
-        property color colSurfaceContainer: "#1d2024"
-        property color colSurfaceContainerHigh: "#282a2f"
-        property color colSurfaceContainerHighest: "#33353a"
-        property color colOnSurface: "#e2e2e9"
-        property color colOnSurfaceVar: "#c4c6d0"
-        property color colInverseSurface: "#e2e2e9"
-        property color colInverseOnSurface: "#2e3036"
-        property color colOutline: "#8e9099"
-        property color colOutlineVariant: "#8e9099"
-
-        property color colScrim: "#000000"
-        property color colShadow: "#000000"
-
-        
-        property color colNeutral: "#919093"
-        property color colNeutralVariant: "#8E9098"
-
-        property QtObject palettes: QtObject {
-            property QtObject primary: QtObject {
-                property color col0: "#000000"
-                property color col5: "#00102B"
-                property color col10: "#001B3E"
-                property color col15: "#002551"
-                property color col20: "#002F64"
-                property color col25: "#033A77"
-                property color col30: "#194683"
-                property color col35: "#285290"
-                property color col40: "#365E9D"
-                property color col50: "#5177B8"
-                property color col60: "#6B91D3"
-                property color col70: "#86ACF0"
-                property color col80: "#AAC7FF"
-                property color col90: "#D6E3FF"
-                property color col95: "#ECF0FF"
-                property color col98: "#F9F9FF"
-                property color col99: "#FDFBFF"
-                property color col100: "#FFFFFF"
-            }
-
-            property QtObject secondary: QtObject {
-                property color col0: "#000000"
-                property color col5: "#09111E"
-                property color col10: "#141C29"
-                property color col15: "#1E2634"
-                property color col20: "#29313F"
-                property color col25: "#343C4A"
-                property color col30: "#3F4756"
-                property color col35: "#4B5362"
-                property color col40: "#575E6F"
-                property color col50: "#707788"
-                property color col60: "#8991A2"
-                property color col70: "#A4ABBD"
-                property color col80: "#BFC6D9"
-                property color col90: "#DBE2F6"
-                property color col95: "#ECF0FF"
-                property color col98: "#F9F9FF"
-                property color col99: "#FDFBFF"
-                property color col100: "#FFFFFF"
-            }
-
-            property QtObject tertiary: QtObject {
-                property color col0: "#000000"
-                property color col5: "#1B0A21"
-                property color col10: "#27142C"
-                property color col15: "#321F37"
-                property color col20: "#3D2942"
-                property color col25: "#49344D"
-                property color col30: "#553F59"
-                property color col35: "#614B65"
-                property color col40: "#6E5772"
-                property color col50: "#886F8B"
-                property color col60: "#A288A6"
-                property color col70: "#BEA2C1"
-                property color col80: "#DABDDD"
-                property color col90: "#F7D9FA"
-                property color col95: "#FFEBFE"
-                property color col98: "#FFF7FB"
-                property color col99: "#FFFBFF"
-                property color col100: "#FFFFFF"
-            }
-
-            property QtObject neutral: QtObject {
-                property color col0: "#000000"
-                property color col5: "#101113"
-                property color col10: "#1B1B1E"
-                property color col15: "#252628"
-                property color col20: "#303033"
-                property color col25: "#3B3B3E"
-                property color col30: "#464649"
-                property color col35: "#525255"
-                property color col40: "#5E5E61"
-                property color col50: "#77777A"
-                property color col60: "#919093"
-                property color col70: "#ACABAE"
-                property color col80: "#C7C6C9"
-                property color col90: "#E3E2E5"
-                property color col95: "#F2F0F3"
-                property color col98: "#FAF9FC"
-                property color col99: "#FDFBFF"
-                property color col100: "#FFFFFF"
-            }
-
-            property QtObject neutralVariant: QtObject {
-                property color col0: "#000000"
-                property color col5: "#0E1117"
-                property color col10: "#191C22"
-                property color col15: "#23262C"
-                property color col20: "#2E3037"
-                property color col25: "#393B42"
-                property color col30: "#44474D"
-                property color col35: "#505259"
-                property color col40: "#5C5E65"
-                property color col50: "#75777E"
-                property color col60: "#8E9098"
-                property color col70: "#A9ABB3"
-                property color col80: "#C5C6CE"
-                property color col90: "#E1E2EA"
-                property color col95: "#EFF0F9"
-                property color col98: "#F9F9FF"
-                property color col99: "#FDFBFF"
-                property color col100: "#FFFFFF"
-            }
-        }
-
-        //........
-        property color colsecondary: "#36343B"
-        property color colsecondary_hover: "#5a5762"
-        property color coltertiary: "#414148"
-        property color colprimaryicon: "#e0d5e0"
-        //property color colprimarytext: "#e0d5e0"
-        property color colprimarytext: "#E2E2E9"
-        property color colsecondarytext: "#8393a6"
-        property color colglassmorphism: "#ffffff"
-        property color coltooltip: "#3C4043"
-        property color colOnText: "white"
-        property color colMSymbol: "white"
-        property color coloutlined: "white"
-        property color colshadow: "#000000"
-    }*/
     rounding: QtObject {
         property int unsharpen: 2
         property int unsharpenmore: 6
         property int verysmall: 10
         property int small: 12
-        property int normal: 17
+        property int normal: 20
         property int large: 23
         property int verylarge: 30
         property int full: 9999
@@ -394,8 +219,8 @@ Singleton {
         property QtObject pixelSize: QtObject {
             property int smallest: 10
             property int smaller: 12
-            property int small: 14
-            property int normal: 15
+            property int small: 13
+            property int normal: 14
             property int large: 17
             property int larger: 19
             property int huge: 22
@@ -532,9 +357,9 @@ Singleton {
         property int expressiveEffects: 200 * scale
     }
     sizes: QtObject {
-        property real barHeight: 40
+        property real barHeight: 36
         property real dockHeight: 40
-        property real sidebarWidth: 380
+        property real sidebarWidth: 360
         property real sidebarWidthExtended: 750
         property real sidebarLeftWidth: 460
         property real workspacesWidth: 200

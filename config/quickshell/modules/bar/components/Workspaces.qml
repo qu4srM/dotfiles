@@ -2,16 +2,18 @@ import qs
 import qs.configs
 import qs.services
 import qs.widgets 
+import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 
 Rectangle {
     id: root
-    implicitWidth: workspacesRow.implicitWidth + 10
+    implicitWidth: workspacesRow.implicitWidth + 8
     Layout.alignment: Qt.AlignVCenter
-    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
     radius: Appearance.rounding.normal
     
     /* Icons Nerd
@@ -20,7 +22,7 @@ Rectangle {
     ]
     */
     property var iconsWorkspaces: [
-        "public", "code_blocks", "terminal", "folder", "edit_square", "·", "·", "gamepad", "settings", "vpn_key"
+        //"public", "code_blocks", "terminal", "folder", "edit_square", "·", "·", "gamepad", "settings", "vpn_key"
     ]
 
     property int activeIndex: {
@@ -37,61 +39,27 @@ Rectangle {
         }
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
     }
-
-    MouseArea {
-        id: mouseArea
-        anchors.top: parent.top
-        implicitWidth: parent.width
-        implicitHeight: 6
-        hoverEnabled: true
-        onEntered: GlobalStates.capsuleOpen = true
-    }
-
     Item {
         id: indicator
-        anchors.fill: parent
-        Loader {
+        anchors.fill: parent 
+        Rectangle {
             anchors.verticalCenter: parent.verticalCenter
-            active: !shapeLoader.active 
-            sourceComponent: Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 20
-                height: 20
-                radius: Appearance.rounding.full 
-                color: Appearance.colors.colSecondaryContainer
+            width: height
+            height: root.implicitHeight - 6
+            radius: Appearance.rounding.full 
+            color: Config.options.bar.showBackground ? Appearance.colors.colSecondaryContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.2)
 
-                x: {
-                    if (root.activeIndex < 0) return 0
-                    let item = repeater.itemAt(root.activeIndex)
-                    return item ? item.x + workspacesRow.x : 0
-                }
+            x: {
+                if (root.activeIndex < 0) return 0
+                let item = repeater.itemAt(root.activeIndex)
+                return item ? item.x + workspacesRow.x : 0
+            }
 
-                Behavior on x {
-                    animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
-                }
+            Behavior on x {
+                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
             }
         }
-
-        Loader {
-            id: shapeLoader
-            anchors.verticalCenter: parent.verticalCenter
-            active: Config.options.appearance.shapes.enable
-            sourceComponent: ShapesIcons {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 20 
-                height: 20
-                color: Appearance.colors.colSecondaryContainer
-                x: {
-                    if (root.activeIndex < 0) return 0
-                    let item = repeater.itemAt(root.activeIndex)
-                    return item ? item.x + workspacesRow.x : 0
-                }
-
-                Behavior on x {
-                    animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
-                }
-            }
-        }
+        
     }
 
     Row {
@@ -103,12 +71,15 @@ Rectangle {
             id: repeater
             model: Config.options.bar.workspaces.shown
             Workspace {
+                id: workspace
                 required property var modelData
                 required property int index
                 workspaceId: 1 + index
-                iconMaterial: root.iconsWorkspaces[index]
-                fillMaterial: modelData.focused ? 1 : 0
-                iconSize: 18
+                //iconMaterial: root.iconsWorkspaces[index]
+                //fillMaterial: modelData.focused ? 1 : 0
+                implicitWidth: implicitHeight - 6
+                implicitHeight: root.implicitHeight
+                iconSize: 20
             }
         }
 

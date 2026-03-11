@@ -40,7 +40,20 @@ Rectangle {
             ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
             : (toggled
                 ? Appearance.colors.colPrimary
-                : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)))
+                : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.90)))
+
+    RectangleRing {
+        id: box
+        anchors.fill: parent 
+        radius: parent.radius
+        source: ShaderEffectSource {
+            anchors.fill: parent 
+            sourceRect: Qt.rect(0,0,200,400)
+            hideSource: true
+            live: true
+            visible: true
+        }
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -52,7 +65,7 @@ Rectangle {
             Layout.alignment: root.activeText ? Qt.AlignVCenter : Qt.AlignVCenter | Qt.AlignHCenter
             text: root.icon
             size: 20
-            color: Appearance.colors.colText
+            color: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
             fill: root.toggled ? 1 : 0
             Behavior on fill {
                 NumberAnimation {

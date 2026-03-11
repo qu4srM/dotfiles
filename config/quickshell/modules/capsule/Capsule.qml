@@ -3,6 +3,7 @@ import qs.configs
 import qs.modules.capsule
 import qs.utils
 import qs.widgets 
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
@@ -47,7 +48,7 @@ Scope {
         model: Quickshell.screens
         LazyLoader {
             id: capsuleLoader 
-            active: GlobalStates.capsuleOpen
+            active: true//GlobalStates.capsuleOpen
             required property ShellScreen modelData 
             component: StyledWindow {
                 id: capsule
@@ -59,67 +60,65 @@ Scope {
                 WlrLayershell.layer: WlrLayer.Overlay
                 anchors {
                     top: true
+                    left: true 
+                    right: true
                 }
-                margins {
-                    top: Appearance.sizes.barHeight + Appearance.margins.panelMargin * 2
-                }
-
-                implicitWidth: 200 //Appearance.sizes.capsuleWidth
-                implicitHeight: 100
+                implicitHeight: 600
                 property string pathIcons: "root:/assets/icons/"
                 property string pathScripts: "~/.config/quickshell/scripts/"
 
+                mask: Region { item: content}
+                function hide () {
+                    content.expanded = false
+                }
                 HyprlandFocusGrab {
-                    id: grab
-                    windows: [ capsule ]
-                    active: GlobalStates.capsuleOpen
+                    active: content.expanded
+                    windows: [capsule]
                     onCleared: () => {
-                        if (!active)
-                            root.hide()
+                        capsule.hide()
                     }
                 }
-
-                /*Loader {
-                    id: capsuleLoader2
-                    active: GlobalStates.capsuleOpen
-                    anchors.fill: parent
-                    focus: GlobalStates.capsuleOpen
-                    Keys.onPressed: (event) => {
-                        if (event.key === Qt.Key_Escape) {
-                            root.hide();
-                        }
-                    }
-                    sourceComponent: Rectangle {
-                        color: Config.options.bar.showBackground ? Appearance.colors.colSurface : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                        anchors.fill: parent
-                        radius: Appearance.rounding.normal
-                        StyledText {
-                            text: "Hola Mundo"
-                        }
-                        //Content {}
-                    }
-                }*/
-                Text {
-                    text: "Hola"
-                }
+                
                 Rectangle {
-                    implicitWidth: 100
-                    implicitHeight: 40
-                    color: Appearance.colors.colBackground
-                    radius: Appearance.rounding.full
-                }
+                    id: content
+                    property bool expanded: false
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top 
+                    anchors.topMargin: 3
 
-            }
-        }
-    }
-    component Panels: Loader {
-        required property bool active
-        anchors.fill: parent
-        active: active
-        focus: active
-        Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Escape) {
-                root.hide();
+                    implicitWidth: expanded ? contentExpanded.width : 200
+                    implicitHeight: expanded ? contentExpanded.height : 34
+ 
+                    radius: Appearance.rounding.normal
+                    color: "#000000"
+                    clip: true
+
+                    Behavior on implicitWidth {
+                        NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
+                    }
+                    Behavior on implicitHeight {
+                        NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
+                    }
+                    MouseArea {
+                        anchors.fill: parent 
+                        onClicked: {
+                            content.expanded = true
+                        }
+                    }
+
+
+                    CapsuleCollapsed {
+                        id: contentCollapsed
+                        visible: !content.expanded
+                        anchors.fill: parent
+                    }
+
+                    CapsuleExpanded {
+                        id: contentExpanded
+                        visible: content.expanded
+                    }
+                }
+            
             }
         }
     }

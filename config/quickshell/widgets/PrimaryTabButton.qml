@@ -30,7 +30,7 @@ TabButton {
         anchors.centerIn: parent
         ColumnLayout {
             anchors.centerIn: parent
-            spacing: 4
+            spacing: 0
             StyledMaterialSymbol {
                 id: icon 
                 Layout.alignment: Qt.AlignHCenter

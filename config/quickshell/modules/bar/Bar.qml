@@ -30,9 +30,9 @@ Scope {
                     right: true
                 }
                 margins {
-                    left: Config.options.bar.floating ? Appearance.margins.panelMargin : 0
-                    right: Config.options.bar.floating ? Appearance.margins.panelMargin : 0
-                    top: Config.options.bar.floating ? Appearance.margins.panelMargin : 0
+                    left: 0
+                    right: 0
+                    top: 0//Appearance.margins.panelMargin
                 }
                 property string pathIcons: "root:/assets/icons/"
                 property string colorMain: "transparent"
@@ -40,9 +40,9 @@ Scope {
 
                 implicitHeight: Appearance.sizes.barHeight
                 WlrLayershell.layer: WlrLayer.Top
-
+                /*
                 Rectangle {
-                    visible: !Config.options.bar.showBackground 
+                    visible: !Config.options.bar.showBackground
                     id: shadow
                     anchors.top: parent.top 
                     implicitWidth: parent.width 
@@ -53,11 +53,11 @@ Scope {
                     visible: !Config.options.bar.showBackground 
                     target: shadow
                     blur: 30
-                }
+                }*/
 
                 Rectangle {
                     anchors.fill: parent 
-                    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : "transparent"
+                    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : "transparent"//Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                     radius: Config.options.bar.floating ? Appearance.rounding.normal : 0
 
                     // === IZQUIERDA ===
@@ -68,53 +68,26 @@ Scope {
                         anchors.leftMargin: Appearance.margins.panelMargin
                         spacing: Appearance.margins.panelMargin
                         width: Math.min(implicitWidth, parent.width * 0.35)
-                        Separator { implicitWidth: 6 }
-                        ActionButton {
-                            colBackground: "transparent"
-                            colBackgroundHover: "transparent"
-                            implicitHeight: bar.implicitHeight 
-                            releaseAction: () => GlobalStates.sidebarLeftOpen = true
-                            contentItem: Item { 
-                                width: parent.width
-                                CustomIcon {
-                                    colorize: true 
-                                    color: Appearance.colors.colOnPrimaryFixedVariant
-                                    anchors.centerIn: parent 
-                                    source: "gemini-symbolic"
-                                    size: Appearance.font.pixelSize.large
-                                }
-                            }
+                        Workspaces {
+                            implicitHeight: parent.height - 8
                         }
-                        Separator { implicitWidth: 6 }
+                        
                         AppLabel {}
                         
-                        MediaControl {}
-                        /*
+                        
+                        //MediaControl {}
+                        
+                        
+                        
                         ActionButton {
                             colBackground: "transparent"
-                            colBackgroundHover: Appearance.colors.colPrimaryHover
-                            buttonText: Paths.getName("/home/qu4s4r/Pictures/wall-05.jpg")
+                            colBackgroundHover: Appearance.colors.colOnPrimary
+                            buttonText: Translation.tr("Overview")
+                            changeColor: true 
+                            textColor: "black"
                             implicitHeight: bar.implicitHeight 
-                            releaseAction: () => {
-                                const pathFile = Config.options.background.wallpaperPath;
-                                const nameFile = Paths.getName(pathFile)
-
-                                Quickshell.execDetached([
-                                    "bash", "-c",
-                                    `~/.local/share/pipx/venvs/rembg/bin/python ~/.config/quickshell/scripts/create_depth_image_rembg.py ${pathFile} ~/.cache/quickshell/overlay/${nameFile}-overlay.png`
-                                ])
-                                Config.options.background.wallpaperOverlayPath = Paths.strip(Paths.cache + "/quickshell/overlay/" + Paths.getName(Config.options.background.wallpaperPath)) + "-overlay.png"
-                                console.log("Execute")
-                            }
-                        }*/
-                        /*
-                        ActionButton {
-                            colBackground: "transparent"
-                            colBackgroundHover: Appearance.colors.colPrimaryHover
-                            buttonText: Translation.tr("Wallpapers")
-                            implicitHeight: bar.implicitHeight 
-                            releaseAction: () => GlobalStates.wallSelectorOpen = true
-                        }*/
+                            releaseAction: () => GlobalStates.overviewOpen = !GlobalStates.overviewOpen 
+                        }
                         /*
                         IconTextButton {
                             colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
@@ -131,6 +104,7 @@ Scope {
 
                     // === CENTRO ===
                     RowLayout {
+                        visible: false
                         id: centerRow
                         anchors.horizontalCenter: parent.horizontalCenter 
                         anchors.top: parent.top 
@@ -139,6 +113,7 @@ Scope {
                         spacing: Appearance.margins.panelMargin
                         width: implicitWidth
 
+                        
                         ContainerRectangle {
                             implicitWidth: 130
                             implicitHeight: parent.height
@@ -148,7 +123,7 @@ Scope {
                                 StyledMaterialSymbol {
                                     text: "deployed_code"
                                     size: 18
-                                    color: Appearance.colors.colText
+                                    color: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
                                 }
                                 StyledText {
                                 text: HackingData.vpnIp
@@ -163,6 +138,8 @@ Scope {
                             iconMaterial: "screenshot_region"
                             iconSize: 16
                             materialIconFill: true
+                            changeColor: true
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
@@ -180,6 +157,8 @@ Scope {
                             iconMaterial: "dropper_eye"
                             iconSize: 16
                             materialIconFill: true
+                            changeColor: true
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
@@ -194,7 +173,7 @@ Scope {
                                 StyledMaterialSymbol {
                                     text: "view_in_ar"
                                     size: 18
-                                    color: Appearance.colors.colText
+                                    color: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
                                 }
                                 StyledText {
                                     text: HackingData.targetIp
@@ -212,21 +191,51 @@ Scope {
                         anchors.margins: Appearance.margins.panelMargin
                         spacing: Appearance.margins.panelMargin
                         width: implicitWidth
-
-                        ContainerRectangle {
-                            implicitWidth: 130
+                        ActionButtonIcon {
+                            Layout.alignment: Qt.AlignVCenter
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+                            iconMaterial: "dropper_eye"
+                            iconSize: 16
+                            materialIconFill: true
+                            changeColor: true
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
                             implicitHeight: parent.height
-                            RowLayout {
-                                anchors.centerIn: parent 
-                                spacing: 4
-                                StyledMaterialSymbol {
-                                    text: "host"
-                                    size: 18
-                                    color: Appearance.colors.colText
-                                }
-                                StyledText {
-                                    text: HackingData.hostIp
-                                }
+                            implicitWidth: implicitHeight
+                            buttonRadius: Appearance.rounding.full
+                            onPressed: Execute.openHyprpicker()
+                        }
+                        ActionButtonIcon {
+                            Layout.alignment: Qt.AlignVCenter
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            iconMaterial: "screenshot_region"
+                            iconSize: Appearance.font.pixelSize.large
+                            materialIconFill: true
+                            changeColor: true
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : Appearance.colors.colOnText
+                            implicitHeight: parent.height
+                            implicitWidth: implicitHeight
+                            buttonRadius: Appearance.rounding.full
+                            onPressed: Execute.openScreenshot()
+                        }
+                        ActionButtonIcon {
+                            Layout.alignment: Qt.AlignVCenter
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            iconMaterial: "note_stack_add"
+                            iconSize: Appearance.font.pixelSize.large
+                            materialIconFill: true
+                            changeColor: true
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : Appearance.colors.colOnText
+                            implicitHeight: parent.height
+                            implicitWidth: implicitHeight
+                            buttonRadius: Appearance.rounding.full
+                            releaseAction: () => {
+                                Quickshell.execDetached(["bash", "-c", "qs ipc call notes addNote"])
+                            }
+                            altAction: () => {
+                                GlobalStates.sticksOpen = !GlobalStates.sticksOpen
                             }
                         }
 
@@ -235,11 +244,13 @@ Scope {
                         }
                         ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                            iconMaterial: "view_sidebar"
-                            iconSize: Appearance.font.pixelSize.normal
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            iconMaterial: "instant_mix"
+                            iconSize: Appearance.font.pixelSize.large
                             materialIconFill: true
+                            changeColor: true
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : Appearance.colors.colOnText
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
@@ -247,8 +258,9 @@ Scope {
                                 GlobalStates.sidebarRightOpen = true
                             }
                         }
+                        
                         ContainerRectangle {
-                            implicitWidth: clock.implicitWidth + 14
+                            implicitWidth: clock.implicitWidth + 10
                             implicitHeight: parent.height
                             StyledText {
                                 id: clock

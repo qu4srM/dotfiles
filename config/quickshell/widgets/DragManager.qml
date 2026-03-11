@@ -8,16 +8,17 @@ import QtQuick
 MouseArea {
     id: root
     hoverEnabled: true
-    acceptedButtons: Qt.LeftButton
+    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
     property bool interactive: true
     property bool automaticallyReset: true
+
     readonly property real dragDiffX: _dragDiffX
     readonly property real dragDiffY: _dragDiffY
 
-    signal dragPressed(diffX: real, diffY: real)
-    signal dragReleased(diffX: real, diffY: real)
-    
+    signal dragPressed(real diffX, real diffY)
+    signal dragReleased(real diffX, real diffY)
+
     property real startX: 0
     property real startY: 0
     property bool dragging: false
@@ -31,42 +32,50 @@ MouseArea {
 
     onPressed: (mouse) => {
         if (!root.interactive) {
-            if (mouse.button === Qt.LeftButton) {
-                mouse.accepted = false;
-            }
-            return;
+            if (mouse.button === Qt.LeftButton)
+                mouse.accepted = false
+            return
         }
+
         if (mouse.button === Qt.LeftButton) {
             startX = mouse.x
             startY = mouse.y
+            dragging = false
         }
     }
+
     onReleased: (mouse) => {
-        if (!root.interactive) {
-            return;
-        }
+        if (!root.interactive)
+            return
+
         dragging = false
-        root.dragReleased(_dragDiffX, _dragDiffY);
-        if (root.automaticallyReset) {
-            root.resetDrag();
-        }
+        root.dragReleased(_dragDiffX, _dragDiffY)
+
+        if (root.automaticallyReset)
+            root.resetDrag()
     }
+
     onPositionChanged: (mouse) => {
-        if (!root.interactive) {
-            return;
-        }
+        if (!root.interactive)
+            return
+
         if (mouse.buttons & Qt.LeftButton) {
-            root._dragDiffX = mouse.x - startX
-            root._dragDiffY = mouse.y - startY
-            const dist = Math.sqrt(root._dragDiffX * root._dragDiffX + root._dragDiffY * root._dragDiffY);
-            root.dragPressed(_dragDiffX, _dragDiffY);
-            root.dragging = true;
+            _dragDiffX = mouse.x - startX
+            _dragDiffY = mouse.y - startY
+
+            root.dragPressed(_dragDiffX, _dragDiffY)
+            dragging = true
         }
     }
+
     onCanceled: (mouse) => {
-        if (!root.interactive) {
-            return;
-        }
-        released(mouse);
+        if (!root.interactive)
+            return
+
+        dragging = false
+        root.dragReleased(_dragDiffX, _dragDiffY)
+
+        if (root.automaticallyReset)
+            root.resetDrag()
     }
 }

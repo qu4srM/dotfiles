@@ -17,6 +17,7 @@ QtObject {
 
     property string assetsPath: Quickshell.shellPath("assets")
     property string scriptPath: Quickshell.shellPath("scripts")
+    property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     property string statePath: state + "/quickshell/states.json"
     property string todoPath: state + "/user/todo.json"
     property string hackingPath: state + "/Machines/"

@@ -32,15 +32,12 @@ Scope {
             property string pathScripts: "~/.config/quickshell/scripts/"
 
             WlrLayershell.layer: WlrLayer.Overlay
-            implicitHeight: grid.implicitHeight + 100
-            implicitWidth: grid.implicitWidth + 50
+            implicitHeight: content.height
+            implicitWidth: content.width
 
             function hide() {
                 GlobalStates.launcherOpen = false
-            }
-
-            onVisibleChanged: {
-                if (visible) search.forceActiveFocus()
+                grid.currentIndex = 0
             }
 
             HyprlandFocusGrab {
@@ -59,52 +56,57 @@ Scope {
 
             Rectangle {
                 id: content
-                anchors.fill: parent
-                anchors.margins: 10
-                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colbackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                radius: 10
-                border.width: Config.options.bar.showBackground ? 0 : 1
-                border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+                width: columnLayout.implicitWidth
+                height: columnLayout.implicitHeight + 20
+                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colbackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency('#222136', 0.3)
+                radius: 20
+                border.width: Config.options.bar.showBackground ? 0 : 2
+                border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
 
                 ColumnLayout {
                     id: columnLayout
-                    anchors.fill: parent
+                    anchors.top: parent.top 
+                    anchors.topMargin: 6
+                    anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 0
 
                     Rectangle {
                         id: searchContainer
-                        Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredWidth: parent.width - 30
-                        Layout.preferredHeight: searchbox.implicitHeight
-                        Layout.topMargin: 20
-                        color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        Layout.rightMargin: 10
+                        height: searchbox.implicitHeight
+                        color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : "transparent"
                         radius: 4
-
-                        Row {
+                        RowLayout {
                             id: searchbox
                             anchors.fill: parent
-                            anchors.leftMargin: 10
+                            spacing: 0
 
                             StyledMaterialSymbol {
-                                anchors.verticalCenter: parent.verticalCenter
+                                Layout.alignment: Qt.AlignVCenter
                                 text: "search"
-                                font.pixelSize: 20
+                                font.pixelSize: 26
                                 color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
                             }
 
                             TextField {
                                 id: search
                                 Layout.fillWidth: true
+                                font.pixelSize: 18
                                 color: Config.options.bar.showBackground ? Appearance.colors.colprimarytext : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
-                                placeholderText: "Applications"
-                                focus: launcher.visible
+                                placeholderText: Translation.tr("Apps")
+                                placeholderTextColor: '#cacaca'
+                                focus: true
                                 background: Rectangle {
                                     anchors.fill: parent
                                     color: "transparent"
                                 }
 
-                                Keys.onEscapePressed: launcher.hide()
-
+                                Keys.onEscapePressed: () => {
+                                    launcher.hide()
+                                    text = ""
+                                }
                                 Keys.onPressed: (event) => {
                                     const cols = Math.max(1, Math.floor(grid.width / grid.cellWidth))
                                     if (event.modifiers & Qt.ControlModifier) {
@@ -142,6 +144,7 @@ Scope {
                                 onAccepted: {
                                     if (grid.currentItem?.modelData)
                                         grid.currentItem.modelData.execute()
+                                        GlobalStates.launcherOpen = false
                                     text = ""
                                 }
 
@@ -149,16 +152,23 @@ Scope {
                             }
                         }
                     }
-
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        Layout.rightMargin: 10
+                        height: 2
+                        color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                    }
                     GridView {
                         id: grid
+                        verticalLayoutDirection: GridView.TopToBottom
                         Layout.alignment: Qt.AlignHCenter
-                        implicitWidth: cellWidth * 5
-                        implicitHeight: cellHeight * 4 + 10
+                        implicitWidth: cellWidth * Config.options.launcher.columnsApps
+                        implicitHeight: cellHeight * Config.options.launcher.rowsApps
                         keyNavigationWraps: true
                         keyNavigationEnabled: true
-                        cellWidth: 80
-                        cellHeight: 80
+                        cellWidth: 100
+                        cellHeight: 84
                         snapMode: GridView.SnapToRow
                         clip: true
                         cacheBuffer: 0
@@ -169,22 +179,20 @@ Scope {
                         highlight: Rectangle {
                             width: grid.cellWidth
                             height: grid.cellHeight
-                            radius: 8
-                            color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHighest : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                            color: "transparent"
                         }
-
                         highlightFollowsCurrentItem: true
                         highlightMoveDuration: 100
                         preferredHighlightBegin: grid.topMargin
                         preferredHighlightEnd: grid.height - grid.bottomMargin
                         highlightRangeMode: GridView.ApplyRange
+                        ScrollBar.vertical: ScrollBar {}
 
                         delegate: MouseArea {
                             id: appItem
                             required property DesktopEntry modelData
-                            property string shape: Config.options.appearance.shape
+                            required property real index
                             hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
                             implicitWidth: grid.cellWidth
                             implicitHeight: grid.cellHeight
 
@@ -192,37 +200,44 @@ Scope {
                                 modelData.execute()
                                 launcher.hide()
                             }
-                            ShapesIcons {
-                                id: shapes
+                            Rectangle {
                                 anchors.top: parent.top
-                                anchors.topMargin: 2
+                                anchors.topMargin: 4
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                implicitWidth: iconImage.width + 12
-                                implicitHeight: iconImage.height + 12
+                                implicitWidth: iconImage.width
+                                implicitHeight: iconImage.height
+                                radius: Appearance.rounding.small + 2
+                                color: "transparent"
+                                border.width: Config.options.bar.showBackground ? 0 : (grid.currentIndex === index) ? 2 : 0
+                                border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.8)
                             }
 
                             Column {
                                 anchors.centerIn: parent
-                                spacing: 6
+                                spacing: 4
 
                                 IconImage {
                                     id: iconImage
+                                    anchors.horizontalCenter: parent.horizontalCenter
                                     source: Quickshell.iconPath(modelData.icon)
                                     asynchronous: true
-                                    width: 42
-                                    height: 42
+                                    width: 54
+                                    height: 54
                                 }
 
                                 Text {
-                                    text: modelData.name.length > 12 ? modelData.name.slice(0, 12) + "…" : modelData.name
-                                    font.pixelSize: 12
+                                    text: modelData.name
+                                    font.pixelSize: 13
                                     color: "#f0f0f0"
+
+                                    width: grid.cellWidth - 12
                                     horizontalAlignment: Text.AlignHCenter
-                                    wrapMode: Text.NoWrap
+
+                                    wrapMode: Text.WordWrap
                                     elide: Text.ElideRight
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    width: parent.width
+                                    maximumLineCount: 1
                                 }
+
                             }
                         }
 

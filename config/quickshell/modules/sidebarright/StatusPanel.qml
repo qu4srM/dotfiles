@@ -21,7 +21,7 @@ Rectangle {
     property string settingsQmlPath: Quickshell.shellPath("settings.qml")
     Layout.fillWidth: true
     implicitHeight: 60
-    color: Appearance.colors.colSurfaceContainer
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
     radius: Appearance.rounding.normal - 2
 
     RowLayout {
@@ -87,6 +87,17 @@ Rectangle {
                 StyledToolTip {
                     content: Translation.tr("Reboot") + " Hyprland"
                 }
+                RectangleRing {
+                    anchors.fill: parent 
+                    radius: parent.radius
+                    source: ShaderEffectSource {
+                        anchors.fill: parent 
+                        sourceRect: Qt.rect(0,0,200,400)
+                        hideSource: true
+                        live: true
+                        visible: true
+                    }
+                }
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
@@ -107,6 +118,17 @@ Rectangle {
                 StyledToolTip {
                     content: Translation.tr("Settings")
                 }
+                RectangleRing {
+                    anchors.fill: parent 
+                    radius: parent.radius
+                    source: ShaderEffectSource {
+                        anchors.fill: parent 
+                        sourceRect: Qt.rect(0,0,200,400)
+                        hideSource: true
+                        live: true
+                        visible: true
+                    }
+                }
             }
             ActionButtonIcon {
                 anchors.verticalCenter: parent.verticalCenter
@@ -125,6 +147,17 @@ Rectangle {
                 }
                 StyledToolTip {
                     content: Translation.tr("Power Menu")
+                }
+                RectangleRing {
+                    anchors.fill: parent 
+                    radius: parent.radius
+                    source: ShaderEffectSource {
+                        anchors.fill: parent 
+                        sourceRect: Qt.rect(0,0,200,400)
+                        hideSource: true
+                        live: true
+                        visible: true
+                    }
                 }
             }
 
