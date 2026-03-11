@@ -2,59 +2,174 @@
 
 set -e
 
-# Directorio del repositorio (donde está el script)
+###################################
+# Paths
+###################################
+
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 BACKUP_DIR="$HOME/dotfiles_backup"
 CONFIG_DIR="$HOME/.config"
 
-echo "📁 Repositorio: $REPO_DIR"
-echo "📦 Backup en: $BACKUP_DIR"
-echo "--------------------------------------------------------"
+DEPENDENCIES_FILE="$SCRIPT_DIR/dependencies.txt"
+AUR_FILE="$SCRIPT_DIR/aur_dependencies.txt"
+
+echo "LOG:Repositorio detectado"
+echo "LOG:$REPO_DIR"
 
 mkdir -p "$BACKUP_DIR"
 mkdir -p "$CONFIG_DIR"
 
-echo "📦 Backup de $CONFIG_DIR → $BACKUP_DIR"
-echo "--------------------------------------------------------"
+###################################
+# Detectar gestor de paquetes
+###################################
 
-# Copiar solo los directorios que existen
-for dir in ags kitty bin rofi wlogout swaylock cava fastfetch waybar hypr; do
+detect_package_manager() {
+
+    if command -v pacman >/dev/null; then
+        PKG_MANAGER="pacman"
+    elif command -v apt >/dev/null; then
+        PKG_MANAGER="apt"
+    elif command -v dnf >/dev/null; then
+        PKG_MANAGER="dnf"
+    else
+        PKG_MANAGER="unknown"
+    fi
+
+    echo "LOG:Gestor detectado -> $PKG_MANAGER"
+}
+
+###################################
+# Instalar dependencias oficiales
+###################################
+
+install_dependencies() {
+
+    if [ ! -f "$DEPENDENCIES_FILE" ]; then
+        echo "LOG:dependencies.txt no encontrado"
+        return
+    fi
+
+    deps=$(grep -v '^#' "$DEPENDENCIES_FILE" | tr '\n' ' ')
+
+    echo "LOG:Instalando dependencias oficiales"
+
+    case "$PKG_MANAGER" in
+
+        pacman)
+            sudo pacman -Sy --needed --noconfirm $deps
+        ;;
+
+        apt)
+            sudo apt update
+            sudo apt install -y $deps
+        ;;
+
+        dnf)
+            sudo dnf install -y $deps
+        ;;
+
+        *)
+            echo "LOG:Gestor no soportado"
+        ;;
+    esac
+}
+
+###################################
+# Instalar AUR
+###################################
+
+install_aur() {
+
+    if [ "$PKG_MANAGER" != "pacman" ]; then
+        return
+    fi
+
+    if [ ! -f "$AUR_FILE" ]; then
+        echo "LOG:aur_dependencies.txt no encontrado"
+        return
+    fi
+
+    if ! command -v yay >/dev/null; then
+
+        echo "LOG:yay no encontrado, instalando..."
+
+        sudo pacman -S --needed git base-devel --noconfirm
+
+        git clone https://aur.archlinux.org/yay.git /tmp/yay
+
+        cd /tmp/yay
+
+        makepkg -si --noconfirm
+    fi
+
+    aurdeps=$(grep -v '^#' "$AUR_FILE" | tr '\n' ' ')
+
+    echo "LOG:Instalando paquetes AUR"
+
+    yay -S --needed --noconfirm $aurdeps
+}
+
+###################################
+# Backup
+###################################
+
+echo "PROGRESS:5"
+echo "LOG:Creando backup de configuraciones"
+
+for dir in quickshell ags kitty bin rofi wlogout swaylock cava fastfetch waybar hypr; do
+
   if [ -d "$CONFIG_DIR/$dir" ]; then
+
     cp -rfp "$CONFIG_DIR/$dir" "$BACKUP_DIR/"
-    echo "✅ Respaldo de $CONFIG_DIR/$dir completado."
+
+    echo "LOG:Backup $dir"
+
   else
-    echo "⚠️ Carpeta no encontrada: $CONFIG_DIR/$dir (omitida)"
+
+    echo "LOG:Omitido $dir"
+
   fi
+
 done
 
-echo "📦 Instalando powerlevel10k y zsh desde $REPO_DIR → $HOME"
-echo "--------------------------------------------------------"
+###################################
+# Dependencias
+###################################
 
-# Verificar si 'powerlevel10k' es un directorio y copiarlo
+echo "PROGRESS:20"
+
+detect_package_manager
+install_dependencies
+install_aur
+
+###################################
+# ZSH
+###################################
+
+echo "PROGRESS:40"
+echo "LOG:Instalando configuración ZSH"
+
 if [ -d "$REPO_DIR/home/powerlevel10k" ]; then
   cp -rf "$REPO_DIR/home/powerlevel10k" "$HOME/"
-  echo "✅ Instalado powerlevel10k."
-else
-  echo "⚠️ No se encontró el directorio powerlevel10k en el repositorio (omitido)."
 fi
 
-# Verificar si los archivos .zshrc y .p10k.zsh existen en 'home'
 if [ -f "$REPO_DIR/home/.zshrc" ]; then
-  cp -f "$REPO_DIR/home/.zshrc" "$HOME/"
-  echo "✅ Instalado .zshrc."
-else
-  echo "⚠️ No se encontró .zshrc en el repositorio (omitido)."
+  cp "$REPO_DIR/home/.zshrc" "$HOME/"
 fi
 
 if [ -f "$REPO_DIR/home/.p10k.zsh" ]; then
-  cp -f "$REPO_DIR/home/.p10k.zsh" "$HOME/"
-  echo "✅ Instalado .p10k.zsh."
-else
-  echo "⚠️ No se encontró .p10k.zsh en el repositorio (omitido)."
+  cp "$REPO_DIR/home/.p10k.zsh" "$HOME/"
 fi
 
-echo "🔑 Asignando permisos de ejecución a scripts..."
-cd "$REPO_DIR"  # Asegurarse de estar en la raíz del repositorio
+###################################
+# Permisos scripts
+###################################
+
+echo "PROGRESS:60"
+echo "LOG:Asignando permisos a scripts"
+
 SCRIPT_DIRS=(
   "config/ags/scripts"
   "config/ags"
@@ -65,33 +180,50 @@ SCRIPT_DIRS=(
   "config/waybar"
   "config/wlogout"
 )
-for dir in "${SCRIPT_DIRS[@]}"; do
-  full_path="$REPO_DIR/$dir"
-  if [ -d "$full_path" ]; then
-    find "$full_path" -type f -name "*.sh" -exec chmod +x {} \;
-    echo "✅ Ejecutables en: $dir"
-  else
-    echo "⚠️ Carpeta no encontrada: $dir (omitida)"
-  fi
-done
-echo "--------------------------------------------------------"
 
-# Intentar cambiar a 'config', pero verificar si existe
+for dir in "${SCRIPT_DIRS[@]}"; do
+
+  full="$REPO_DIR/$dir"
+
+  if [ -d "$full" ]; then
+
+      find "$full" -type f -name "*.sh" -exec chmod +x {} \;
+
+      echo "LOG:Permisos -> $dir"
+
+  fi
+
+done
+
+###################################
+# Copiar configuraciones
+###################################
+
+echo "PROGRESS:80"
+echo "LOG:Instalando configuraciones"
+
 if [ -d "$REPO_DIR/config" ]; then
-  echo "📥 Instalando configuraciones en $CONFIG_DIR"
-  echo "--------------------------------------------------------"
-  cd "$REPO_DIR/config"  # Cambiar al directorio 'config'
-  mkdir -p $CONFIG_DIR/{ags,kitty,bin,hypr,rofi,fastfetch,wlogout,swaylock,cava,waybar}
-  cp -rfp * $CONFIG_DIR/
-else
-  echo "⚠️ No se encontró el directorio 'config' en el repositorio. Omite la instalación de configuraciones."
+
+  mkdir -p $CONFIG_DIR/{quickshell,ags,kitty,bin,hypr,rofi,fastfetch,wlogout,swaylock,cava,waybar}
+
+  cp -rfp "$REPO_DIR/config/"* "$CONFIG_DIR/"
+
 fi
 
-echo "🎉 ¡Instalación completada con éxito!"
-echo "📁 Dotfiles copiados y configuraciones aplicadas."
-echo "🔐 Scripts marcados como ejecutables donde fue necesario."
-echo "🗂️ Archivos originales respaldados en: $BACKUP_DIR"
-echo "✨ Gracias por usar los dotfiles de Qu4s4rM ✨"
-echo "💡 Ahora salimos de hyprland"
-hyprctl dispatch exit
-echo "--------------------------------------------------------"
+###################################
+# Finalizar
+###################################
+
+echo "PROGRESS:95"
+echo "LOG:Finalizando instalación"
+
+sleep 1
+
+echo "LOG:Backup guardado en $BACKUP_DIR"
+
+echo "PROGRESS:100"
+echo "LOG:Instalación completada"
+
+echo "LOG:Reinicia Hyprland para aplicar cambios"
+
+echo "DONE"
