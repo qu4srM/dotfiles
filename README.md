@@ -113,6 +113,11 @@ Algunas versiones de rembg requieren:
 
 Está en desarrollo la forma de personalizarlo al antojo, se pueden modificar los archivos dentro de `home/` o `configs/` según lo que tu quieras.
 
+También es necesario compilar los shaders de qt, para ello se utiliza: 
+```
+/usr/lib/qt6/bin/qsb 
+```
+
 ---
 
 ## 🔁 Respaldo
