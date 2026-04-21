@@ -1,7 +1,7 @@
 import qs
 import qs.services
 import qs.configs
-import qs.utils
+import qs.configs.utils
 import qs.widgets
 import QtQuick
 import QtQuick.Layouts
@@ -42,7 +42,7 @@ Item {
         anchors.rightMargin: Appearance.margins.panelMargin + 60
         anchors.leftMargin: Appearance.margins.panelMargin
         implicitHeight: columnLayout.implicitHeight + 20
-        color: Config.options.bar.showBackground ? Appearance.colors.colBackground : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+        color: Config.options.bar.showBackground ? Appearance.colors.colBackground : Appearance.colors.colGlass
         radius: Appearance.rounding.small
         visible: opacity > 0 
         opacity: root.show ? 1 : 0

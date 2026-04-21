@@ -3,7 +3,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
-import qs.utils
+import qs.configs.utils
 import "./"
 
 Singleton {
@@ -186,9 +186,15 @@ Singleton {
         property color colprimaryicon: "#e0d5e0"
         property color colprimarytext: "#E2E2E9"
         property color colsecondarytext: "#8393a6"
-        property color colglassmorphism: '#2d2d2d'
+        property color colGlass: darkmode ? Qt.rgba(0.04,0.04,0.02,0.2) : Qt.rgba(0.96, 0.96, 0.98, 0.1)
+        property color colGlassHover: darkmode ? Qt.rgba(0.04,0.04,0.02,0.3) : Qt.rgba(0.96, 0.96, 0.98, 0.2)
+        property color colGlassBorder: darkmode ? Qt.rgba(1,1,1,0.08) : Qt.rgba(0,0,0,0.06)
+        
+        property color colCapsule: "black"
+        property color colCapsuleSurface: Qt.rgba(0.07, 0.07, 0.07)
+        property color colCapsuleBorder: "white"
         property color coltooltip: mcolors.mInverseOnSurface
-        property color colOnText: "black"
+        property color colOnText: darkmode ? "black" : 'white'
         property color colMSymbol: "white"
         property color coloutlined: "white"
         property color colshadow: "#000000"
@@ -209,7 +215,7 @@ Singleton {
         property QtObject family: QtObject {
             property string main: "Rubik"
             property string title: "Gabarito"
-            property string background: "Luckiest Guy" //Bungee, Lilita One, Jersey 10, Titan One, Luckiest Guy(Android 16), Rubik Mono One, Bebas Neue
+            property string background: "Inter" //Bungee, Lilita One, Jersey 10, Titan One, Luckiest Guy(Android 16), Rubik Mono One, Bebas Neue
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
@@ -359,6 +365,8 @@ Singleton {
     sizes: QtObject {
         property real barHeight: 36
         property real dockHeight: 40
+        property real capsuleWidth: 200 
+        property real capsuleHeight: 34
         property real sidebarWidth: 360
         property real sidebarWidthExtended: 750
         property real sidebarLeftWidth: 460

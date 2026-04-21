@@ -13,6 +13,7 @@ Singleton {
     property string distroId: "unknown"
     property string distroIcon: "linux-symbolic"
     property string username: "user"
+    property string hostname: "hostname"
     property string homeUrl: ""
     property string documentationUrl: ""
     property string supportUrl: ""
@@ -61,6 +62,7 @@ Singleton {
         repeat: false
         onTriggered: {
             getUsername.running = true
+            getHostname.running = true
             fileOsRelease.reload()
             const textOsRelease = fileOsRelease.text()
             // Extract the friendly name (PRETTY_NAME field, fallback to NAME)
@@ -125,6 +127,29 @@ Singleton {
             }
         }
     }
+    Process {
+        id: getHostname
+        command: ["cat", "/etc/hostname"]
+        stdout: SplitParser {
+            onRead: data => {
+                root.hostname = data.trim()
+            }
+        }
+    }
+    Process {
+        id: getDesktopEnvironment
+        running: true
+        command: ["bash", "-c", "echo $XDG_CURRENT_DESKTOP,$WAYLAND_DISPLAY"]
+        stdout: StdioCollector {
+            id: deCollector
+            onStreamFinished: {
+                const [desktop, wayland] = deCollector.text.split(",")
+                root.desktopEnvironment = desktop.trim()
+                root.windowingSystem = wayland.trim().length > 0 ? "Wayland" : "X11"
+            }
+        }
+    }
+
     FileView {
         id: fileOsRelease
         path: "/etc/os-release"

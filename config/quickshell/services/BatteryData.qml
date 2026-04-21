@@ -1,7 +1,7 @@
 pragma Singleton
 
 import qs.configs
-import qs.utils
+import qs.configs.utils
 
 import Quickshell
 import Quickshell.Io

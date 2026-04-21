@@ -1,8 +1,8 @@
 import qs 
 import qs.configs
+import qs.configs.utils
 import qs.modules.overview
 import qs.widgets 
-import qs.utils
 
 import QtQuick
 import QtQuick.Layouts

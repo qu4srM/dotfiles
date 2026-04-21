@@ -2,8 +2,8 @@ import qs
 import qs.modules.background
 import qs.modules.background.widgets
 import qs.configs
+import qs.configs.utils
 import qs.widgets
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -30,7 +30,7 @@ Item {
         columnSpacing: gap
 
         
-
+        /*
         Notion {
             Layout.row: 0
             Layout.column: 0
@@ -40,6 +40,7 @@ Item {
             Layout.preferredWidth: cellSize
             Layout.preferredHeight: cellSize
         }
+        
         Gallery {
             Layout.row: 0
             Layout.column: 1
@@ -48,7 +49,7 @@ Item {
 
             Layout.preferredWidth: cellSize
             Layout.preferredHeight: cellSize
-        }
+        }*/
 
         Todoist {
             Layout.row: 1

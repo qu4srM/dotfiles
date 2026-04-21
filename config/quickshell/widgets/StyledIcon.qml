@@ -22,4 +22,3 @@ IconImage {
               : Qt.resolvedUrl("../assets/icons/default.svg"))*/
 
 }
-

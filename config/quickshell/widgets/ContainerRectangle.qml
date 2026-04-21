@@ -1,7 +1,6 @@
-import qs 
 import qs.configs
 import qs.widgets 
-import qs.utils
+import qs.configs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -10,6 +9,6 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 Rectangle {
-    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 1)
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
     radius: Appearance.rounding.normal
 }

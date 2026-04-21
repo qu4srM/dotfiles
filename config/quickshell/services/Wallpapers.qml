@@ -1,7 +1,7 @@
 pragma Singleton
 
 import qs.configs
-import qs.utils
+import qs.configs.utils
 
 import Quickshell
 import Quickshell.Io
@@ -23,7 +23,7 @@ Singleton {
     function updateMaterialColor(mode) {
         const wall = Config.options.background.wallpaperPath
         let selectedMode = mode ? mode : (Theme.options.darkmode ? "dark" : "light")
-        const cmd = `python3 ~/.config/quickshell/scripts/generate_colors.py --path "${wall}" --mode ${selectedMode} > ~/.config/quickshell/theme.json`
+        const cmd = `python3 ${Paths.scriptPath}/generate_colors.py --path "${wall}" --mode ${selectedMode} > ${Paths.materialThemePath}`
         setProc.command = ["bash", "-c", cmd]
         setProc.startDetached()
     }

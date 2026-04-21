@@ -41,7 +41,7 @@ ColumnLayout {
 
         motionAction: (value) => {
             value = Math.max(0, Math.min(1, value));
-            Quickshell.execDetached(["amixer", "set", "Master", `${Math.round(value * 100)}%`]);
+            Quickshell.execDetached(["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", `${Math.round(value * 100)}%`,"+ -l 1.5"]);
         }
     }
 }

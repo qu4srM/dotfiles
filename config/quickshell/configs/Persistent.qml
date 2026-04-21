@@ -1,7 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import qs.utils 
+import qs.configs.utils 
 
 import QtQuick
 import Quickshell
@@ -10,9 +10,7 @@ import Quickshell.Io
 Singleton {
     id: root
     property alias states: persistentStatesJsonAdapter
-    property string fileDir: Paths.state
-    property string fileName: "states.json"
-    property string filePath: Paths.statePath//`${root.fileDir}/${root.fileName}`
+    property string filePath: Paths.statesPath//`${root.fileDir}/${root.fileName}`
     property bool ready: false
 
     Timer {
@@ -52,6 +50,9 @@ Singleton {
             property JsonObject ai: JsonObject {
                 property string model
                 property real temperature: 0.5
+            }
+            property JsonObject capsule: JsonObject {
+                property int tab: 0
             }
 
             property JsonObject sidebarright: JsonObject {

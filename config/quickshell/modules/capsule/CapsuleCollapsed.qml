@@ -1,8 +1,7 @@
 import qs
 import qs.configs
-import qs.modules.capsule
-import qs.utils
 import qs.widgets 
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
@@ -17,23 +16,10 @@ import Quickshell.Hyprland
 
 
 
-
-import qs
-import qs.configs
-import qs.widgets
-import qs.utils
-import qs.services
-
-import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
-
 Item {
     id: root
 
-    property bool hasMedia:
-        Players.active
-        && Players.active.trackTitle
+    property bool hasMedia: Players.active?.trackTitle ?? false
 
     property bool isPlaying:
         Players.active?.isPlaying ?? false
@@ -46,7 +32,21 @@ Item {
         NumberAnimation { duration: 120 }
     }
 
+    CustomIcon {
+        visible: opacity > 0
+        opacity: GlobalStates.screenLock ? 1 : 0
+        anchors.left: parent.left 
+        anchors.leftMargin: 8
+        anchors.verticalCenter: parent.verticalCenter
+        colorize: true 
+        color: "white"
+        source: "lock"
+        size: 20
+    }
+
     RowLayout {
+        visible: opacity > 0
+        opacity: GlobalStates.screenLock ? 0 : 1
         anchors.fill: parent
         anchors.margins: 8
         spacing: 10
@@ -69,12 +69,14 @@ Item {
                     id: albumArt
                     anchors.fill: parent
                     source: Players.active?.trackArtUrl ?? ""
-                    asynchronous: true
+                    asynchronous: false
+                    cache: true
+                    smooth: false
                     fillMode: Image.PreserveAspectCrop
                     sourceSize.width: width
                     sourceSize.height: height
 
-                    transformOrigin: Item.Center
+                    /*transformOrigin: Item.Center
                     rotation: 0
 
                     RotationAnimator on rotation {
@@ -84,10 +86,11 @@ Item {
                         duration: 20000 
                         loops: Animation.Infinite
                         running: clip.playing
-                    }
+                    }*/
                 }
             }
             Rectangle {
+                visible: false
                 anchors.right: parent.right
                 anchors.rightMargin: width / 2
                 anchors.verticalCenter: parent.verticalCenter
@@ -96,6 +99,18 @@ Item {
                 color: "green"
                 radius: 999
             }
+            /*Loader {
+                active: clip.playing
+                anchors.right: parent.right
+                anchors.rightMargin: width / 2
+                anchors.verticalCenter: parent.verticalCenter
+                width: height
+                height: parent.height
+                sourceComponent: CavaBars {
+                    anchors.fill: parent
+                }
+            }*/
+            
         }
 
     }

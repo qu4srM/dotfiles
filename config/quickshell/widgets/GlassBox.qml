@@ -1,6 +1,5 @@
-import qs
 import qs.configs
-import qs.utils
+import qs.configs.utils
 import qs.widgets 
 
 import QtQuick
@@ -80,10 +79,10 @@ Item {
         property real glassHairlineReflectionDistance: box.glassHairlineReflectionDistance
 
         vertexShader: Qt.resolvedUrl(
-            Quickshell.shellDir + "/utils/glass.vert.qsb"
+            Quickshell.shellDir + "/configs/shaders/glass.vert.qsb"
         )
         fragmentShader: Qt.resolvedUrl(
-            Quickshell.shellDir + "/utils/glass.frag.qsb"
+            Quickshell.shellDir + "/configs/shaders/glass.frag.qsb"
         )
     }
 }

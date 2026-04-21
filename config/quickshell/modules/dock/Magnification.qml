@@ -1,8 +1,8 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.modules.dock
 import qs.widgets
-import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -38,7 +38,7 @@ MouseArea {
                 center = item.mapToItem(parent, 0, item.height / 2)
                 dist = Math.abs(mouse.y - center.y)
             } else {
-                center = item.mapToItem(parent, item.width / 2, 0)
+                center = item.mapToItem(parent, item.width / 2, item.height)
                 dist = Math.abs(mouse.x - center.x)
             }
 

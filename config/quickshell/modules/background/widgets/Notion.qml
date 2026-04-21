@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.widgets
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -10,10 +10,9 @@ import Quickshell.Widgets
 
 Rectangle {
     radius: Appearance.rounding.normal 
-    color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-
+    color: Appearance.colors.colGlass
     border.width: 1
-    border.color: Colors.setTransparency("white", 0.9)
+    border.color: Appearance.colors.colGlassBorder
 
     ColumnLayout {
         anchors.fill: parent 

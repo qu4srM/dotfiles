@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.widgets
-import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -58,7 +58,7 @@ Scope {
                 id: content
                 width: columnLayout.implicitWidth
                 height: columnLayout.implicitHeight + 20
-                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colbackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency('#222136', 0.3)
+                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colBackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency('#222136', 0.3)
                 radius: 20
                 border.width: Config.options.bar.showBackground ? 0 : 2
                 border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
@@ -209,7 +209,7 @@ Scope {
                                 radius: Appearance.rounding.small + 2
                                 color: "transparent"
                                 border.width: Config.options.bar.showBackground ? 0 : (grid.currentIndex === index) ? 2 : 0
-                                border.color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.8)
+                                border.color: Colors.setTransparency(Appearance.colors.colOnPrimary, 0)
                             }
 
                             Column {
@@ -220,9 +220,7 @@ Scope {
                                     id: iconImage
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     source: Quickshell.iconPath(modelData.icon)
-                                    asynchronous: true
-                                    width: 54
-                                    height: 54
+                                    implicitSize: 54
                                 }
 
                                 Text {

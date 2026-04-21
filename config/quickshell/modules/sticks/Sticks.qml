@@ -1,8 +1,8 @@
 import qs 
 import qs.modules.sticks
 import qs.configs
+import qs.configs.utils
 import qs.widgets 
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -32,7 +32,7 @@ Scope {
     }
     Connections {
         target: GlobalStates
-        function onsticksOpenChanged() {
+        function onSticksOpenChanged() {
             root.trigger();
         }
     }

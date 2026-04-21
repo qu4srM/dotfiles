@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 //import qs.modules.settings
-import qs.utils
 import qs.widgets 
 
 

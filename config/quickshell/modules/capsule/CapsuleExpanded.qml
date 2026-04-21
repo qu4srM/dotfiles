@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.modules.capsule
-import qs.utils
 import qs.widgets 
 
 import QtQuick
@@ -18,178 +18,209 @@ import Quickshell.Hyprland
 
 Item {
     id: root
+    required property bool show
 
-    property var tabButtonList: [
+    property var tabs: [
         //{ "icon": "dashboard", "name": Translation.tr("Dashboard") },
         //{ "icon": "book", "name": Translation.tr("Study") },
         //{ "icon": "deployed_code", "name": Translation.tr("Hacking") },
         { "icon": "person", "name": Translation.tr("Dashboard") },
-        { "icon": "queue_music", "name": Translation.tr("Media") },
+        { "icon": "timer", "name": Translation.tr("Timers") },
         { "icon": "palette", "name": Translation.tr("Backgrounds") },
     ]
-    property var sizeWidth: [640, 400, 645]
-    property var sizeHeight: [160, 200, 280]
 
-    property int currentTab: Persistent.states.sidebarleft.currentTab
+
+    property int currentTab: Persistent.states.capsule.tab
+
 
     function focusActiveItem() {
         stackLayout.currentItem.forceActiveFocus()
     }
-    width: sizeWidth[root.currentTab] ?? sizeWidth[0]
-    height: sizeHeight[root.currentTab] ?? sizeHeight[0]
+    width: buttons.implicitWidth + separator.implicitWidth + view.implicitWidth + (content.spacing * 2) + (content.anchors.margins * 2) 
+    height: view.implicitHeight + (content.anchors.margins * 2)
 
-    ColumnLayout {
-        anchors.fill: parent
+    RowLayout {
+        id: content
+        anchors.fill: parent 
         anchors.margins: 8
-        spacing: 10
+        spacing: 8
         Item {
-            Layout.fillWidth: true 
-            implicitHeight: 40
-
+            id: buttons
+            implicitWidth: 30
+            Layout.fillHeight: true 
             Rectangle {
-                implicitWidth: (100 * 3) + 10
-                implicitHeight: parent.implicitHeight
-                radius: Appearance.rounding.full
-                color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                RectangleRing {
-                    anchors.fill: parent 
-                    radius: parent.radius
-                    source: ShaderEffectSource {
-                        anchors.fill: parent 
-                        sourceRect: Qt.rect(0,0,200,400)
-                        hideSource: true
-                        live: true
-                        visible: true
-                    }
-                }
-                PrimaryTabBar {
-                    id: tabBar
-                    anchors.fill: parent
-                    anchors.margins: 0
-                    externalTrackedTab: root.currentTab
-                    tabButtonList: root.tabButtonList
-                    function onCurrentIndexChanged(currentIndex) {
-                        Persistent.states.sidebarleft.currentTab = currentIndex
+                implicitWidth: implicitHeight
+                implicitHeight: 30
+                anchors.horizontalCenter: parent.horizontalCenter 
+                color: Appearance.colors.colPrimary
+                radius: Appearance.rounding.small
+                y: implicitHeight * root.currentTab + (columnButtons.spacing * currentTab)
+                Behavior on y {
+                    NumberAnimation {
+                        duration: Appearance.animationDurations.expressiveFastSpatial
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
                     }
                 }
             }
-            RowLayout {
-                anchors.right: parent.right
-                height: parent.implicitHeight
-                spacing: 6
-                ActionButtonIcon {
-                    anchors.verticalCenter: parent.verticalCenter
-                    colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                    colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                    iconMaterial: "restart_alt"
-                    iconSize: 20
-                    implicitWidth: implicitHeight
-                    implicitHeight: parent.height - 2
-                    buttonRadiusTopLeft: 30
-                    buttonRadiusTopRight: 30
-                    buttonRadiusBottomLeft: 30
-                    buttonRadiusBottomRight: 30
-                    onPressed: {
-                        Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
+
+            ColumnLayout {
+                id: columnButtons
+                anchors.top: parent.top 
+                anchors.horizontalCenter: parent.horizontalCenter
+                WheelHandler {
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+
+                    onWheel: (event) => {
+                        if (event.angleDelta.y < 0)
+                            root.currentTab = Math.min(root.currentTab + 1, root.tabs.length - 1)
+
+                        else if (event.angleDelta.y > 0)
+                            root.currentTab = Math.max(root.currentTab - 1, 0)
+
+                        Persistent.states.capsule.tab = root.currentTab
                     }
-                    StyledToolTip {
-                        content: Translation.tr("Reboot") + " Hyprland"
-                    }
-                    RectangleRing {
-                        anchors.fill: parent 
-                        radius: parent.radius
-                        source: ShaderEffectSource {
-                            anchors.fill: parent 
-                            sourceRect: Qt.rect(0,0,200,400)
-                            hideSource: true
-                            live: true
-                            visible: true
+                }
+
+                Repeater {
+                    model: root.tabs 
+                    delegate: MouseArea {
+                        id: tabButton
+                        required property var modelData 
+                        required property int index
+                        implicitWidth: implicitHeight 
+                        implicitHeight: 30
+                        onClicked: {
+                            root.currentTab = tabButton.index
+                            Persistent.states.capsule.tab = tabButton.index
+                        }
+                        StyledMaterialSymbol {
+                            anchors.centerIn: parent
+                            text: tabButton.modelData.icon
+                            size: 18
+                            color: root.currentTab == tabButton.index ? "black" : "white"
+                            fill: 0
                         }
                     }
                 }
-                ActionButtonIcon {
-                    anchors.verticalCenter: parent.verticalCenter
-                    colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                    colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                    iconMaterial: "settings"
-                    iconSize: 16
-                    implicitWidth: implicitHeight
-                    implicitHeight: parent.height - 2
-                    buttonRadiusTopLeft: 30
-                    buttonRadiusTopRight: 30
-                    buttonRadiusBottomLeft: 30
-                    buttonRadiusBottomRight: 30
-                    onPressed: {
-                        GlobalStates.sidebarRightOpen = false
-                        Quickshell.execDetached(["qs", "-p", Paths.settingsQmlPath])
-                    }
-                    StyledToolTip {
-                        content: Translation.tr("Settings")
-                    }
-                    RectangleRing {
-                        anchors.fill: parent 
-                        radius: parent.radius
-                        source: ShaderEffectSource {
-                            anchors.fill: parent 
-                            sourceRect: Qt.rect(0,0,200,400)
-                            hideSource: true
-                            live: true
-                            visible: true
-                        }
+
+            }
+            Rectangle {
+                id: menuButtons
+                property bool expanded: false 
+                anchors.bottom: parent.bottom 
+                implicitWidth: 30
+                implicitHeight: expanded ? buttonsSystem.implicitHeight + 6: implicitWidth
+                color: Appearance.colors.colPrimary 
+                radius: Appearance.rounding.small
+                Behavior on implicitHeight {
+                    NumberAnimation {
+                        duration: Appearance.animationDurations.expressiveFastSpatial
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
                     }
                 }
-                ActionButtonIcon {
-                    anchors.verticalCenter: parent.verticalCenter
-                    colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                    colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                    iconMaterial: "power_settings_new"
-                    iconSize: 16
-                    implicitWidth: implicitHeight
-                    implicitHeight: parent.height - 2
-                    buttonRadiusTopLeft: 30
-                    buttonRadiusTopRight: 30
-                    buttonRadiusBottomLeft: 30
-                    buttonRadiusBottomRight: 30
-                    onPressed: {
-                        GlobalStates.sessionOpen = true
-                    }
-                    StyledToolTip {
-                        content: Translation.tr("Power Menu")
-                    }
-                    RectangleRing {
-                        anchors.fill: parent 
-                        radius: parent.radius
-                        source: ShaderEffectSource {
-                            anchors.fill: parent 
-                            sourceRect: Qt.rect(0,0,200,400)
-                            hideSource: true
-                            live: true
-                            visible: true
+                HoverHandler {
+                    id: dockHover
+                    enabled: true
+                    onHoveredChanged: menuButtons.expanded = hovered
+                }
+                StyledMaterialSymbol {
+                    visible: opacity > 0
+                    opacity: menuButtons.expanded ? 0 : 1
+                    anchors.centerIn: parent
+                    text: "menu"
+                    size: 18
+                    color: "black"
+                    fill: 0
+                }
+                ColumnLayout {
+                    id: buttonsSystem
+                    visible: menuButtons.expanded
+                    anchors.centerIn: parent
+                    PowerButton {
+                        iconButton: "restart_alt"
+                        textTooltip: Translation.tr("Reboot") + " Hyprland"
+                        onPressed: {
+                            Quickshell.execDetached(["bash", "-c", "~/.config/quickshell/scripts/screenshot.sh"])
                         }
                     }
+                    PowerButton {
+                        iconButton: "settings"
+                        textTooltip: Translation.tr("Settings") 
+                        onPressed: {
+                            Quickshell.execDetached(["qs", "-p", Paths.settingsQmlPath])
+                        }
+                    }
+                    PowerButton {
+                        iconButton: "power_settings_new"
+                        textTooltip: Translation.tr("Power Menu") 
+                        onPressed: {
+                            GlobalStates.sessionOpen = true
+                        }
+                    }
+
                 }
             }
+        }
+        Rectangle {
+            id: separator
+            Layout.fillHeight: true 
+            implicitWidth: 2
+            color: Appearance.colors.colCapsuleSurface
         }
         ClippingRectangle {
             id: view
-            Layout.fillWidth: true 
-            Layout.fillHeight: true
-            radius: Appearance.rounding.normal
+            implicitWidth: swipeView.width
+            implicitHeight: swipeView.height
+            radius: Appearance.rounding.small
             color: "transparent"
-
-            StackLayout {
-                id: stackLayout
-                anchors.fill: parent
+            SwipeView {
+                id: swipeView
+                implicitWidth: currentItem.implicitWidth
+                implicitHeight: currentItem.implicitHeight
+                interactive: false
+                orientation: Qt.Vertical
+                spacing: 10
+                clip: true 
                 currentIndex: root.currentTab
-                MediaPanel { Layout.fillWidth: true; Layout.fillHeight: true }
-                MediaPanel { Layout.fillWidth: true; Layout.fillHeight: true }
-                WallpapersList { id: walls;}
-
+                Dashboard {
+                    show: root.show
+                }
+                Timers {}
+                //MediaPanel {}
+                WallpapersList {}   
             }
             
         }
-
-        //MusicPanel {}
-        //TimerPanel {}
+    }
+    component PowerButton: ActionButtonIcon {
+        id: btn
+        property string textTooltip
+        property string iconButton
+        colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainerHigh : Appearance.colors.colGlass
+        colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colPrimary : Appearance.colors.colGlassHover
+        iconMaterial: btn.iconButton
+        iconSize: 18
+        changeColor: true 
+        iconColor: Appearance.colors.colOnText
+        implicitWidth: implicitHeight
+        implicitHeight: 26
+        buttonRadius: 10
+        StyledToolTip {
+            content: btn.textTooltip
+        }
+        /*
+        RectangleRing {
+            anchors.fill: parent 
+            radius: parent.buttonRadius
+            source: ShaderEffectSource {
+                anchors.fill: parent 
+                sourceRect: Qt.rect(0,0,200,400)
+                hideSource: true
+                live: false
+                visible: true
+            }
+        }*/
     }
 }

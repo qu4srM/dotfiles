@@ -1,6 +1,5 @@
-import qs
 import qs.configs
-import qs.utils
+import qs.configs.utils
 import qs.widgets 
 
 import QtQuick
@@ -55,10 +54,10 @@ Item {
         property var lightDir: box.lightDir
 
         vertexShader: Qt.resolvedUrl(
-            Quickshell.shellDir + "/utils/glow.vert.qsb"
+            Quickshell.shellDir + "/configs/shaders/glow.vert.qsb"
         )
         fragmentShader: Qt.resolvedUrl(
-            Quickshell.shellDir + "/utils/glow.frag.qsb"
+            Quickshell.shellDir + "/configs/shaders/glow.frag.qsb"
         )
     }
 }

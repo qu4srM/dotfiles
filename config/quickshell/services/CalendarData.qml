@@ -1,7 +1,7 @@
 pragma Singleton
 
 import qs
-import qs.utils
+import qs.configs.utils
 import qs.configs
 
 import Quickshell
@@ -86,20 +86,26 @@ Singleton {
             }
         }
     }
+    function trigger() {
+        calendarProc.running = true
+        timer.restart();
+    }
 
     Timer {
-        interval: 300000
-        running: true
+        id: timer
+        interval: 60000
         repeat: true
         onTriggered: calendarProc.running = true
     }
-    Component.onCompleted: startDelay.start() 
+
+
     Timer {
         id: startDelay
         interval: Config.options.widgets.delay
         repeat: false
+        running: true
         onTriggered: {
-            calendarProc.running = true
+            root.trigger()
         }
     }
 }

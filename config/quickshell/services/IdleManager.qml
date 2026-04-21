@@ -1,5 +1,6 @@
 pragma Singleton
 
+import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -23,8 +24,8 @@ Singleton {
 
         reloadableId: "idleInhibitor"
     }
-/*
-    IdleInhibitor {
+
+    /*IdleInhibitor {
         enabled: props.enabled
         window: PanelWindow {
             implicitWidth: 0

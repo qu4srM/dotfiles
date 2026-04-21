@@ -1,8 +1,8 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.modules.dock
 import qs.widgets
-import qs.utils
 
 import QtQuick
 import QtQuick.Layouts
@@ -26,18 +26,11 @@ Rectangle {
             : Appearance.colors.colBackground)
         : (Config.options.appearance.shapes.enable
             ? "transparent"
-            : Colors.setTransparency(
-                Appearance.colors.colglassmorphism, 0.95))
+            : Appearance.colors.colGlass)
+    border.width: 1
+    border.color: Appearance.colors.colGlassBorder
+    
 
-    RectangleRing {
-        anchors.fill: parent
-        radius: parent.radius
-        source: ShaderEffectSource {
-            anchors.fill: parent
-            hideSource: true
-            live: true
-        }
-    }
     ListView {
         id: list
         anchors.left: root.isLeft ? parent.left : undefined

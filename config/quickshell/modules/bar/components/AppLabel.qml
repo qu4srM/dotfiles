@@ -17,10 +17,10 @@ ContainerRectangle {
     property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
 
     implicitHeight: parent.height - Appearance.margins.panelMargin * 2
-    implicitWidth: textItem.implicitWidth
+    implicitWidth: textItem.implicitWidth + (Config.options.bar.showBackground ? 6 : 0)
     StyledText {
         id: textItem
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
             root.activeWindow?.appId.charAt(0).toUpperCase() + root.activeWindow?.appId.slice(1) :
             (root.biggestWindow?.class) ?? Translation.tr("Desktop")

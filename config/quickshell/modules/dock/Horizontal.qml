@@ -1,8 +1,8 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.modules.dock
 import qs.widgets
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -26,29 +26,25 @@ Rectangle {
             : Appearance.colors.colBackground)
         : (Config.options.appearance.shapes.enable
             ? "transparent"
-            : Colors.setTransparency(
-                Appearance.colors.colglassmorphism, 0.7))
+            : Appearance.colors.colGlass)
 
     border.width: 1
-    border.color: '#18ffffff'
+    border.color: Appearance.colors.colGlassBorder
     ListView {
         id: list
-        anchors.bottom: parent.bottom
+        anchors.bottom: parent ? parent.bottom : undefined
         anchors.bottomMargin: 6
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
         implicitWidth: contentWidth
         implicitHeight: parent.implicitHeight
         orientation: ListView.Horizontal
-        model: ScriptModel {
-            values: Apps.apps
-        }
-
-        Component.onCompleted: forceLayout()
-        onCountChanged: Qt.callLater(() => forceLayout())
+        interactive: false
+        model: ScriptModel { values: Apps.apps }
+        
             
         delegate: DockItem {
             id: dockItem
-            anchors.bottom: parent.bottom
+            anchors.bottom: parent ? parent.bottom : undefined
             baseSize: list.height - 10
 
             implicitWidth: baseSize * hoverScale

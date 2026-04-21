@@ -1,6 +1,6 @@
 import qs 
 import qs.configs
-import qs.utils
+import qs.configs.utils
 
 import QtQuick
 import QtQuick.Shapes

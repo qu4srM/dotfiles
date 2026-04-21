@@ -1,8 +1,8 @@
 import qs 
 import qs.configs
+import qs.configs.utils
 import qs.modules.sidebarright.components
 import qs.widgets 
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -23,7 +23,7 @@ Rectangle {
 
     Layout.fillWidth: parent
     implicitHeight: columnLayout.implicitHeight + 10 + 10
-    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 1.0)
+    color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
     radius: Appearance.rounding.normal - 2
     
     ColumnLayout {

@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.widgets 
-import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -26,7 +26,7 @@ Rectangle {
 
     color: Config.options.bar.showBackground 
         ? mouseArea.containsMouse ? Appearance.colors.colSurfaceContainerHighestHover : Appearance.colors.colSurfaceContainerHigh
-        : mouseArea.containsMouse ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6) : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+        : mouseArea.containsMouse ? Appearance.colors.colGlassHover : Appearance.colors.colGlass
 
     Layout.fillWidth: true
     implicitHeight: 50
@@ -39,7 +39,7 @@ Rectangle {
             anchors.fill: parent 
             sourceRect: Qt.rect(0,0,200,400)
             hideSource: true
-            live: true
+            live: false
             visible: true
         }
     }

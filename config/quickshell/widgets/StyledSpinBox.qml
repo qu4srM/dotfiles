@@ -1,4 +1,4 @@
-import qs.utils
+import qs.configs.utils
 import qs.configs
 import QtQuick
 import QtQuick.Controls

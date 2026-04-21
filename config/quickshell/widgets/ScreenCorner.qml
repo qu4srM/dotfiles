@@ -1,4 +1,3 @@
-import qs
 import qs.configs
 import qs.widgets
 

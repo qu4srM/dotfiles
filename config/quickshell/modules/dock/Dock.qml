@@ -1,8 +1,8 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.modules.dock
 import qs.widgets
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -47,7 +47,7 @@ Scope {
 
         LazyLoader {
             id: dockLoader
-            active: dockEnabled
+            active: dockEnabled && !GlobalStates.screenLock
             required property ShellScreen modelData
 
             component: StyledWindow {
@@ -63,7 +63,6 @@ Scope {
                 screen: dockLoader.modelData
                 name: "dock"
                 color: "transparent"
-                visible: !GlobalStates.screenLock
                 //exclusiveZone: 0
             
                 anchors {
@@ -111,122 +110,15 @@ Scope {
                     || (Config.options.dock.hoverToReveal && dock.hovered)
                     || ((!GlobalStates.wallSelectorOpen && !GlobalStates.launcherOpen)
                         && !ToplevelManager.activeToplevel?.activated)
-                
-                
-                /*Item {
-                    id: dockArea
-                    enabled: root.ready
-
-                    width: isHorizontal
-                        ? loader.item?.implicitWidth
-                        : parent.width - 50 
-                    height: isVertical
-                        ? 400
-                        : parent.height - 50
-
-                    anchors {
-                        left: isLeft ? parent.left : undefined 
-                        right: isRight ? parent.right : undefined
-                        bottom: isBottom ? parent.bottom : undefined
-                        verticalCenter: isVertical ? parent.verticalCenter : undefined
-                        horizontalCenter: isHorizontal ? parent.horizontalCenter : undefined
-                        
-                        leftMargin: isLeft
-                            ? (dock.reveal
-                                ? 0
-                                : (Config.options.dock.hoverToReveal
-                                    ? -loader.item?.implicitWidth - 2
-                                    : loader.item?.implicitWidth))
-                            : undefined
-                        rightMargin: isRight
-                            ? (dock.reveal
-                                ? 0
-                                : (Config.options.dock.hoverToReveal
-                                    ? -loader.item?.implicitWidth - 2
-                                    : loader.item?.implicitWidth))
-                            : undefined
-                        bottomMargin: isBottom
-                            ? (dock.reveal
-                                ? 0
-                                : (Config.options.dock.hoverToReveal
-                                    ? -loader.item?.implicitHeight - 8
-                                    : loader.item?.implicitHeight))
-                            : undefined
-                    }
-
-                    Behavior on anchors.leftMargin {
-                        enabled: isLeft
-                        animation: Appearance.animation.elementMoveFast
-                            .numberAnimation.createObject(this)
-                    }
-
-                    Behavior on anchors.rightMargin {
-                        enabled: isRight
-                        animation: Appearance.animation.elementMoveFast
-                            .numberAnimation.createObject(this)
-                    }
-
-                    Behavior on anchors.bottomMargin {
-                        enabled: isBottom
-                        animation: Appearance.animation.elementMoveFast
-                            .numberAnimation.createObject(this)
-                    }
-
-                    HoverHandler {
-                        id: dockHover
-                        enabled: root.ready && !root.pinned
-                    }
-                    Rectangle {
-                        anchors.fill: parent 
-                    }
-
-                    Loader {
-                        id: loader
-                        anchors.verticalCenter: isVertical ? parent.verticalCenter : undefined
-                        anchors.horizontalCenter: isHorizontal ? parent.horizontalCenter : undefined
-
-                        anchors.left: isLeft ? parent.left : undefined 
-                        anchors.right: isRight ? parent.right : undefined 
-                        anchors.bottom: isBottom ? parent.bottom : undefined
-                        anchors.margins: 2
-
-                        sourceComponent: isVertical ? verticalComponent : horizontalComponent
-                    }
-                    Component {
-                        id: verticalComponent
-
-                        Vertical {
-                            id: columnItems
-                            area: dockArea
-                            ready: root.ready
-                            isLeft: dock.isLeft
-                        }
-                    }
-
-                    Component {
-                        id: horizontalComponent
-
-                        Horizontal {
-                            id: rowItems
-                            area: dockArea
-                            ready: root.ready
-                        }
-                    }
-                    
-                }*/
-                /**/
-                    
-                
-                    
+    
                 Item {
                     id: docks
                     anchors.fill: parent 
                     
                     DockOptions {
-                        scope: root
                         window: dock
                         anchor.window: dock
-                        anchor.rect.x: dockBottom.x + Apps.lastClickedPositionApp + 80 - (widthC / 2)
+                        anchor.rect.x: dockBottom.x + Apps.lastClickedPositionApp + 80 - (implicitWidth / 2)
                         anchor.rect.y: dock.height
                     }
 

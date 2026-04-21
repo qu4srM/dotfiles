@@ -152,7 +152,7 @@ backup_configs() {
 
     mkdir -p "$BACKUP_DIR"
 
-    for dir in ags kitty bin rofi wlogout swaylock cava fastfetch waybar hypr quickshell; do
+    for dir in cava fastfetch fonts hypr kitty qt5ct qt6ct quickshell; do
 
         if [ -d "$CONFIG_DIR/$dir" ]; then
 
@@ -200,14 +200,8 @@ fix_permissions() {
     log "Fixing script permissions"
 
     SCRIPT_DIRS=(
-        "config/ags/scripts"
-        "config/ags"
-        "config/bin"
+        "config/quickshell/scripts"
         "config/hypr"
-        "config/rofi/launcher"
-        "config/rofi/wall"
-        "config/waybar"
-        "config/wlogout"
     )
 
     for dir in "${SCRIPT_DIRS[@]}"; do

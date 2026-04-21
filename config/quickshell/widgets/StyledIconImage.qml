@@ -14,4 +14,3 @@ IconImage {
     asynchronous: true
     source: Quickshell.iconPath(root.icon, true) !== "" ? Quickshell.iconPath(root.icon) : Qt.resolvedUrl("../assets/icons/" + root.icon)
 }
-

@@ -1,7 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import qs.utils
+import qs.configs.utils
 
 import QtQuick
 import Quickshell
@@ -10,7 +10,7 @@ import Quickshell.Io
 
 Singleton {
     id: root
-    property string filePath: Paths.config + "/quickshell/config.json"
+    property string filePath: Paths.config + "/quickshell/cm/config.json"
     property alias options: configOptionsJsonAdapter
     property bool ready: false
 
@@ -241,6 +241,7 @@ Singleton {
 
             property JsonObject user: JsonObject {
                 property string avatar: ""
+                property string nickname: ""
             }
 
             property JsonObject windows: JsonObject {

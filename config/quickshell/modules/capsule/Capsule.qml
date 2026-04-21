@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.modules.capsule
-import qs.utils
 import qs.widgets 
 import qs.services
 
@@ -18,37 +18,13 @@ import Quickshell.Hyprland
 
 
 Scope {
-    id: root
-        
-    function hide() {
-        GlobalStates.capsuleOpen = false
-    }
+    id: root 
 
-    function trigger() {
-        GlobalStates.capsuleOpen = true;
-        timeout.restart();
-    }
-
-    Timer {
-        id: timeout
-        interval: 3000
-        repeat: false
-        onTriggered: root.hide()
-    }
-    Connections {
-        target: GlobalStates
-        function onCapsuleOpenChanged() {
-            if (GlobalStates.capsuleOpen)
-                root.trigger();
-            else
-                timeout.stop();
-        }
-    }
     Variants {
         model: Quickshell.screens
         LazyLoader {
             id: capsuleLoader 
-            active: true//GlobalStates.capsuleOpen
+            active: GlobalStates.capsuleOpen
             required property ShellScreen modelData 
             component: StyledWindow {
                 id: capsule
@@ -63,10 +39,10 @@ Scope {
                     left: true 
                     right: true
                 }
-                implicitHeight: 600
+                implicitHeight: 500
                 property string pathIcons: "root:/assets/icons/"
                 property string pathScripts: "~/.config/quickshell/scripts/"
-
+                
                 mask: Region { item: content}
                 function hide () {
                     content.expanded = false
@@ -82,40 +58,70 @@ Scope {
                 Rectangle {
                     id: content
                     property bool expanded: false
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top 
-                    anchors.topMargin: 3
 
-                    implicitWidth: expanded ? contentExpanded.width : 200
-                    implicitHeight: expanded ? contentExpanded.height : 34
- 
-                    radius: Appearance.rounding.normal
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 1
+
+                    implicitWidth: expanded ? contentExpanded.width : Appearance.sizes.capsuleWidth
+                    implicitHeight: expanded ? contentExpanded.height : Appearance.sizes.capsuleHeight
+
+                    radius: Appearance.rounding.unsharpenmore + 4
                     color: "#000000"
                     clip: true
+                    border.width: 1
+                    border.color: '#18ffffff'
+
+                    Behavior on radius {
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                    }
+
 
                     Behavior on implicitWidth {
-                        NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
-                    }
-                    Behavior on implicitHeight {
-                        NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
-                    }
-                    MouseArea {
-                        anchors.fill: parent 
-                        onClicked: {
-                            content.expanded = true
-                        }
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                     }
 
+                    Behavior on implicitHeight {
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: content.expanded = !content.expanded
+                    }
 
                     CapsuleCollapsed {
                         id: contentCollapsed
-                        visible: !content.expanded
                         anchors.fill: parent
+
+                        visible: opacity > 0
+                        opacity: content.expanded ? 0 : 1
+
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 400
+                                easing.type: Easing.BezierSpline
+                                easing.bezierCurve: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
+                            }
+                        }
                     }
 
                     CapsuleExpanded {
                         id: contentExpanded
-                        visible: content.expanded
+                        show: content.expanded
+
+                        anchors.centerIn: parent
+
+                        visible: opacity > 0
+                        opacity: content.expanded ? 1 : 0
+
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 400
+                                easing.type: Easing.BezierSpline
+                                easing.bezierCurve: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
+                            }
+                        }
                     }
                 }
             

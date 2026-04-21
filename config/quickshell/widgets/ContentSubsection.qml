@@ -1,6 +1,5 @@
-import qs
 import qs.configs
-import qs.utils
+import qs.configs.utils
 import qs.widgets 
 
 import Qt5Compat.GraphicalEffects

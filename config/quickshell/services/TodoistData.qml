@@ -1,7 +1,7 @@
 pragma Singleton
 
 import qs.configs
-import qs.utils
+import qs.configs.utils
 
 import Quickshell
 import Quickshell.Io
@@ -68,21 +68,26 @@ Singleton {
             }
         }
     }
+    function trigger() {
+        todoistProc.running = true
+        timer.restart();
+    }
 
     Timer {
+        id: timer
         interval: 60000
-        running: true
         repeat: true
-
         onTriggered: todoistProc.running = true
     }
-    Component.onCompleted: startDelay.start() 
+
+
     Timer {
         id: startDelay
         interval: Config.options.widgets.delay
         repeat: false
+        running: true
         onTriggered: {
-            todoistProc.running = true
+            root.trigger()
         }
     }
 }

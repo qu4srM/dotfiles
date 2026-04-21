@@ -1,7 +1,7 @@
 import qs 
-import qs.configs 
+import qs.configs
+import qs.configs.utils 
 import qs.widgets
-import qs.utils
 import QtQuick
 import QtQuick.Layouts
 

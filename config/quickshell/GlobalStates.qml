@@ -10,13 +10,11 @@ Singleton {
     id: root
     property bool barOpen: true
     property bool backgroundOpen: true 
-    property bool capsuleOpen: false
+    property bool capsuleOpen: true
     property bool prototypeOpen: false
     property bool sticksOpen: false
     property bool drawersOpen: true
     property bool sidebarRightOpen: false
-    property bool sidebarLeftOpen: false
-    property var sidebarLeftRef: null 
     property bool dashboardOpen: false
     property bool wallSelectorOpen: false
     property bool launcherOpen: false

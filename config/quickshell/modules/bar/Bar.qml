@@ -2,7 +2,7 @@ import qs
 import qs.configs
 import qs.modules.bar.components
 import qs.widgets 
-import qs.utils
+import qs.configs.utils
 import qs.services
 
 import QtQuick
@@ -113,73 +113,6 @@ Scope {
                         spacing: Appearance.margins.panelMargin
                         width: implicitWidth
 
-                        
-                        ContainerRectangle {
-                            implicitWidth: 130
-                            implicitHeight: parent.height
-                            RowLayout {
-                                anchors.centerIn: parent 
-                                spacing: 4
-                                StyledMaterialSymbol {
-                                    text: "deployed_code"
-                                    size: 18
-                                    color: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
-                                }
-                                StyledText {
-                                text: HackingData.vpnIp
-                                }
-                            }
-                        }
-
-                        ActionButtonIcon {
-                            Layout.alignment: Qt.AlignVCenter
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                            iconMaterial: "screenshot_region"
-                            iconSize: 16
-                            materialIconFill: true
-                            changeColor: true
-                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
-                            implicitHeight: parent.height
-                            implicitWidth: implicitHeight
-                            buttonRadius: Appearance.rounding.full
-                            onPressed: Execute.openScreenshot()
-                        }
-
-                        Workspaces {
-                            implicitHeight: parent.height
-                        }
-
-                        ActionButtonIcon {
-                            Layout.alignment: Qt.AlignVCenter
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
-                            iconMaterial: "dropper_eye"
-                            iconSize: 16
-                            materialIconFill: true
-                            changeColor: true
-                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
-                            implicitHeight: parent.height
-                            implicitWidth: implicitHeight
-                            buttonRadius: Appearance.rounding.full
-                            onPressed: Execute.openHyprpicker()
-                        }
-                        ContainerRectangle {
-                            implicitWidth: 130
-                            implicitHeight: parent.height
-                            RowLayout {
-                                anchors.centerIn: parent 
-                                spacing: 4
-                                StyledMaterialSymbol {
-                                    text: "view_in_ar"
-                                    size: 18
-                                    color: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
-                                }
-                                StyledText {
-                                    text: HackingData.targetIp
-                                }
-                            }
-                        }
                     }
 
                     // === DERECHA ===
@@ -191,19 +124,22 @@ Scope {
                         anchors.margins: Appearance.margins.panelMargin
                         spacing: Appearance.margins.panelMargin
                         width: implicitWidth
+                        StyledText {
+                            text: Paths.stringify(Paths.home)
+                        }
                         ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter
-                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+                            colBackground: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
+                            colBackgroundHover: Config.options.bar.showBackground ? Appearance.colors.colsecondary_hover : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
                             iconMaterial: "dropper_eye"
                             iconSize: 16
                             materialIconFill: true
                             changeColor: true
-                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : "white"
+                            iconColor: Config.options.bar.showBackground ? Appearance.colors.colText : Appearance.colors.colOnText
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
-                            onPressed: Execute.openHyprpicker()
+                            onPressed: Quickshell.execDetached(["hyprpicker"])
                         }
                         ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter
@@ -217,7 +153,13 @@ Scope {
                             implicitHeight: parent.height
                             implicitWidth: implicitHeight
                             buttonRadius: Appearance.rounding.full
-                            onPressed: Execute.openScreenshot()
+                            onPressed: () => {
+                                Quickshell.execDetached([
+                                    "bash", 
+                                    "-c", 
+                                    "grim -g \"$(slurp)\" - | wl-copy"
+                                ])
+                            }
                         }
                         ActionButtonIcon {
                             Layout.alignment: Qt.AlignVCenter

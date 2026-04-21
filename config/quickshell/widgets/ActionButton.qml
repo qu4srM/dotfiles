@@ -89,6 +89,7 @@ Button {
         }
     }
     contentItem: StyledText {
+        horizontalAlignment: Text.AlignHCenter
         text: root.buttonText
         color: mouseArea.containsMouse ? root.colTextHovered : (root.changeColor) ? root.textColor : root.colText
     }

@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.widgets 
-import qs.utils 
 import qs.services
 
 import Qt5Compat.GraphicalEffects
@@ -17,8 +17,8 @@ import Quickshell.Hyprland
 
 Item {
     id: root 
-    width: grid.implicitWidth
-    height: grid.implicitHeight
+    implicitWidth: grid.implicitWidth
+    implicitHeight: grid.implicitHeight
     focus: true
 
     // 🔥 Fuerza foco cuando aparece (StackLayout fix)
@@ -30,10 +30,10 @@ Item {
         verticalLayoutDirection: GridView.TopToBottom
 
         implicitWidth: cellWidth * 7
-        implicitHeight: 4 + cellHeight * 3
+        implicitHeight: 4 + cellHeight * 4
 
-        cellWidth: 90
-        cellHeight: 70
+        cellWidth: 85
+        cellHeight: 65
 
         snapMode: GridView.SnapToRow
         clip: true
@@ -44,8 +44,8 @@ Item {
 
         currentIndex: count > 0 ? 0 : -1
 
-        topMargin: 7
-        bottomMargin: grid.count === 0 ? 0 : 7
+        topMargin: 0
+        bottomMargin: 0//grid.count === 0 ? 0 : 7
 
         highlight: Rectangle {
             width: grid.cellWidth
@@ -102,8 +102,7 @@ Item {
                                ? 0
                                : (grid.currentIndex === index ? 2 : 0)
 
-                border.color: Colors.setTransparency(
-                                  Appearance.colors.colglassmorphism, 0.8)
+                border.color: Appearance.colors.colPrimary
 
                 Behavior on border.width {
                     NumberAnimation { duration: 120 }

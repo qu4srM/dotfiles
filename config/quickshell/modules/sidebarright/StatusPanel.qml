@@ -1,8 +1,8 @@
 import qs 
 import qs.configs
+import qs.configs.utils
 import qs.modules.sidebarright.components
-import qs.widgets 
-import qs.utils
+import qs.widgets
 import qs.services
 
 import QtQuick

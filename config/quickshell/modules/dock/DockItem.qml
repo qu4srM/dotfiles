@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.widgets
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -85,22 +85,13 @@ Rectangle {
             anchors.fill: parent
         }
 
-
-        Image {
+        IconImage {
             id: icon
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: root.jumpOffset
-            width: parent.width - 10
-            height: width
             source: isLauncher
                 ? Qt.resolvedUrl(Quickshell.shellPath("assets/icons") + "/" + modelData.icon)
                 : Quickshell.iconPath(appData?.icon ?? "")
-            smooth: true
-            mipmap: true
-            antialiasing: true
-            asynchronous: true
-            cache: false
-            fillMode: Image.PreserveAspectFit
+            implicitSize: parent.width - 6
         }
         Loader {
             active: Config.options.dock.monochromeIcons
@@ -116,7 +107,7 @@ Rectangle {
                 ColorOverlay {
                     anchors.fill: desaturatedIcon
                     source: desaturatedIcon
-                    color: Colors.setTransparency('#282828', 1)
+                    color: Colors.setTransparency(Appearance.colors.colOnPrimary, 1)
                 }
             }
         }
@@ -132,7 +123,7 @@ Rectangle {
 
             color: Config.options.bar.showBackground
                 ? Appearance.colors.colOnTooltip
-                : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+                : Appearance.colors.colGlass
 
             implicitWidth: tooltipText.implicitWidth + 10
             implicitHeight: tooltipText.implicitHeight + 10
@@ -144,7 +135,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: isLauncher ? "Launcher" : (appData?.name ?? "App")
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: Appearance.colors.colTooltip
+                color: "white"
             }
         }
         
@@ -156,7 +147,7 @@ Rectangle {
 
             Row {
                 anchors.centerIn: parent
-                spacing: 4
+                spacing: 2
                 Repeater {
                     model: ScriptModel {
                         values: {
@@ -172,8 +163,8 @@ Rectangle {
                     }
 
                     delegate: Rectangle {
-                        implicitWidth: 3
-                        implicitHeight: 3
+                        implicitWidth: 4
+                        implicitHeight: 4
                         radius: Appearance.rounding.full
                         color: Appearance.colors.colPrimary
                     }

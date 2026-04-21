@@ -2,7 +2,7 @@ pragma Singleton
 
 import qs 
 import qs.configs
-import qs.utils
+import qs.configs.utils
 
 import QtQuick
 import Quickshell
@@ -19,7 +19,7 @@ Singleton {
     
     Process {
         id: scanLanguagesProcess
-        command: ["find", Qt.resolvedUrl(Paths.config + "/quickshell/utils/translations/").toString().replace("file://", ""), "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
+        command: ["find", Qt.resolvedUrl(Paths.config + "/quickshell/configs/utils/translations/").toString().replace("file://", ""), "-name", "*.json", "-exec", "basename", "{}", ".json", ";"]
         running: false
         
         stdout: SplitParser {
@@ -126,7 +126,7 @@ Singleton {
         
         // Load translation file
         root.isLoading = true
-        var translationsPath = Qt.resolvedUrl(Paths.config + "/quickshell/utils/translations/" + targetLang + ".json")
+        var translationsPath = Qt.resolvedUrl(Paths.config + "/quickshell/configs/utils/translations/" + targetLang + ".json")
         translationFileView.path = translationsPath
     }
     
@@ -167,7 +167,7 @@ Singleton {
     }
     
     function scanLanguages() {
-        var translationsDir = Qt.resolvedUrl(Paths.config + "/quickshell/utils/translations/").toString().replace("file://", "")
+        var translationsDir = Qt.resolvedUrl(Paths.config + "/quickshell/configs/utils/translations/").toString().replace("file://", "")
         root.isScanning = true
         scanLanguagesProcess.running = true
     }

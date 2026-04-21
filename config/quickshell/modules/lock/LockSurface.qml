@@ -1,7 +1,7 @@
 import qs 
 import qs.configs
+import qs.configs.utils
 import qs.widgets
-import qs.utils
 import qs.services
 
 import QtQuick
@@ -49,14 +49,16 @@ MouseArea {
        ======================= */
     ColumnContainer {
         anchors.top: parent.top
-        anchors.topMargin: 30
+        anchors.topMargin: 70
         anchors.horizontalCenter: parent.horizontalCenter
         colBackground: "transparent"
         spacing: 0
-
         StyledText {
             Layout.alignment: Qt.AlignHCenter
             text: Time.date
+            font.family: Appearance.font.family.background
+            font.pixelSize: 20
+            color: Colors.setTransparency("white", 0.3)
         }
 
         Clock {
@@ -69,22 +71,20 @@ MouseArea {
        ======================= */
     ColumnContainer {
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40   // deja espacio para el password
+        anchors.bottomMargin: 20   // deja espacio para el password
         anchors.horizontalCenter: parent.horizontalCenter
         colBackground: "transparent"
         spacing: 10
 
         ClippingRectangle {
             Layout.alignment: Qt.AlignHCenter
-            width: 40
-            height: 40
+            width: 50
+            height: 50
             color: "transparent"
             radius: Appearance.rounding.full 
 
             Image {
-                source: Qt.resolvedUrl(
-                    Quickshell.shellPath("assets/") + "avatar.jpg"
-                )
+                source: Config.options.user.avatar 
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
                 smooth: true
@@ -97,10 +97,77 @@ MouseArea {
 
         StyledText {
             Layout.alignment: Qt.AlignHCenter
-            text: "Qu4s4r"
+            text: Config.options.user.nickname
+        }
+        Rectangle {
+            id: box
+            visible: root.context.currentText.length
+            implicitWidth: layout.implicitWidth
+            implicitHeight: layout.implicitHeight
+            color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
+            radius: Appearance.rounding.unsharpenmore + 4
+            RowLayout {
+                id: layout
+                TextField {
+                    id: passwordBox
+                    Layout.fillHeight: true
+                    implicitWidth: 170
+                    padding: 10
+                    clip: true
+                    focus: true
+
+                    placeholderText: root.context.showFailure && text.length === 0
+                        ? Translation.tr("Incorrect password")
+                        : Translation.tr("Password")
+
+                    placeholderTextColor: Appearance.colors.colOnText
+                    verticalAlignment: TextInput.AlignVCenter
+                    color: "white"
+                    font.pixelSize: Appearance.font.pixelSize.small
+
+                    enabled: !root.context.unlockInProgress
+                    echoMode: TextInput.Password
+                    inputMethodHints: Qt.ImhSensitiveData
+
+                    onTextChanged: root.context.currentText = text
+                    onAccepted: root.context.tryUnlock()
+
+                    background: null
+
+
+                    Connections {
+                        target: root.context
+                        function onCurrentTextChanged() {
+                            passwordBox.text = root.context.currentText
+                        }
+                    }
+
+                    Keys.onPressed: root.context.resetClearTimer()
+                }
+
+                ActionButton {
+                    Layout.fillHeight: true 
+                    Layout.margins: 4
+                    implicitWidth: implicitHeight
+                    colBackground: "transparent"
+                    colBackgroundHover: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+                    buttonRadius: Appearance.rounding.unsharpenmore
+                    onClicked: root.context.tryUnlock()
+
+                    contentItem: StyledMaterialSymbol {
+                        anchors.centerIn: parent
+                        size: 24
+                        text: "arrow_right_alt"
+                        color: "white"
+                    }
+                }
+            }
+
         }
 
+
         StyledText {
+            Layout.preferredHeight: box.implicitHeight
             Layout.alignment: Qt.AlignHCenter
             text: "Touch ID or Enter Password"
             color: "#aaaaaa"
@@ -110,84 +177,52 @@ MouseArea {
 
     }
 
-    /* =======================
-       PASSWORD ISLAND (TUYA)
-       ======================= */
     Item {
-        id: mainIsland 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
-
-        implicitWidth: mainIslandLayout.implicitWidth
-        implicitHeight: mainIslandLayout.implicitHeight
-
-        visible: root.context.currentText.length > 0
+        anchors.bottom: parent.bottom 
+        anchors.right: parent.right
+        anchors.margins: 10
+        implicitWidth: buttonsLayout.implicitWidth
+        implicitHeight: buttonsLayout.implicitHeight
         RowLayout {
-            id: mainIslandLayout
-            anchors.margins: 8
-            spacing: 4
-
-            TextField {
-                id: passwordBox
-                Layout.fillHeight: true
-                implicitWidth: 200
-                padding: 10
-                clip: true
-                focus: true
-
-                placeholderText: root.context.showFailure && text.length === 0
-                    ? Translation.tr("Incorrect password")
-                    : Translation.tr("Password")
-
-                placeholderTextColor: Appearance.colors.colOutline
-                horizontalAlignment: TextInput.AlignHCenter
-                verticalAlignment: TextInput.AlignVCenter
-                color: Appearance.colors?.colOnSurface ?? "white"
-                font.pixelSize: Appearance.font.pixelSize.small
-
-                enabled: !root.context.unlockInProgress
-                echoMode: TextInput.Password
-                inputMethodHints: Qt.ImhSensitiveData
-
-                onTextChanged: root.context.currentText = text
-                onAccepted: root.context.tryUnlock()
-
-                background: Rectangle {
-                    color: Appearance.colors.colSurfaceContainer
-                    radius: Appearance.rounding.full
+            id: buttonsLayout
+            spacing: 0
+            PowerButton {
+                iconMaterial: "coffee"
+                onPressed: {
+                    GlobalStates.sessionOpen = true
                 }
-
-                Connections {
-                    target: root.context
-                    function onCurrentTextChanged() {
-                        passwordBox.text = root.context.currentText
-                    }
-                }
-
-                Keys.onPressed: root.context.resetClearTimer()
             }
-
-            ActionButton {
-                implicitHeight: parent.height
-                implicitWidth: Layout.preferredHeight
-                colBackground: Appearance.colors?.colPrimary ?? "#0078d7"
-                buttonRadius: Appearance.rounding.full
-                onClicked: root.context.tryUnlock()
-
-                contentItem: StyledMaterialSymbol {
-                    anchors.centerIn: parent
-                    size: 24
-                    text: "arrow_right_alt"
-                    color: Appearance.colors?.colSurfaceContainer ?? "white"
+            PowerButton {
+                iconMaterial: "logout"
+                onPressed: {
+                    GlobalStates.sessionOpen = true
+                }
+            }
+            PowerButton {
+                iconMaterial: "power_settings_new"
+                onPressed: {
+                    GlobalStates.sessionOpen = true
                 }
             }
         }
+        
     }
-
     /* =======================
        COMPONENTS (TAL CUAL)
        ======================= */
+    component PowerButton: ActionButtonIcon {
+        property string textTooltip
+        implicitHeight: 40
+        implicitWidth: implicitHeight
+        colBackground: "transparent"
+        colBackgroundHover: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+        buttonRadius: Appearance.rounding.unsharpenmore
+        iconSize: 20
+        changeColor: true 
+        iconColor: "#fff"
+    }
+
+    
     component ColumnContainer: Item {
         id: columnToolBar
         property real padding: 8
@@ -225,7 +260,8 @@ MouseArea {
                 text: modelData
                 font.family: Appearance.font.family.background
                 font.pixelSize: 100
-                color: "white"
+                font.weight: 700
+                color: Colors.setTransparency("white", 0.6)
             }
         }
     }

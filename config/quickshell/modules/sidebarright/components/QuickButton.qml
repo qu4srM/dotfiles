@@ -1,7 +1,7 @@
 import qs
 import qs.configs
+import qs.configs.utils
 import qs.widgets
-import qs.utils
 
 import QtQuick
 import QtQuick.Controls
@@ -37,10 +37,10 @@ Rectangle {
                 ? Appearance.colors.colPrimary
                 : Appearance.colors.colSurfaceContainerHigh))
         : (mouseArea.containsMouse
-            ? Colors.setTransparency(Appearance.colors.colglassmorphism, 0.6)
+            ? Appearance.colors.colGlassHover
             : (toggled
                 ? Appearance.colors.colPrimary
-                : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.90)))
+                : Appearance.colors.colGlass))
 
     RectangleRing {
         id: box
@@ -50,7 +50,7 @@ Rectangle {
             anchors.fill: parent 
             sourceRect: Qt.rect(0,0,200,400)
             hideSource: true
-            live: true
+            live: false
             visible: true
         }
     }

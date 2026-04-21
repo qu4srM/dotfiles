@@ -15,53 +15,39 @@ Singleton {
     property bool visibleOptions: false
     property var lastClickApp
     property real lastClickedPositionApp
-    property var options: ({
-        "New Window": {
+    property var options: [
+        {
+            name: "New Window",
             execute: function() {
+                if (!lastClickApp) return
                 lastClickApp.app?.execute()
                 visibleOptions = false
             }
         },
-        "Move to Special Workspace": {
+        {
+            name: "Move to Special Workspace",
             execute: function() {
                 console.log("Special Workspace")
             }
         },
-        "Show Overview": {
+        {
+            name: "Show Overview",
             execute: function() {
+                if (!lastClickApp?.windows?.length) return
                 console.log(HyprlandData.windowByAddress[`0x${lastClickApp.windows[0].HyprlandToplevel.address}`].workspace.id)
             }
         },
-        /*
-        "Close Window": {
+        {
+            name: "Close All Windows",
             execute: function() {
-                if (!lastClickApp?.windows?.length)
-                    return
-
-                let win = lastClickApp.windows[lastClickApp.windows.length - 1]
-                win.close()
-
-                visibleOptions = false
-                let res
-                for (let win of lastClickApp.windows) {
-                    console.log(win.HyprlandToplevel.address)
-                }
-                console.log(Object.keys(HyprlandData.windowByAddress[`0x${lastClickApp.windows[0].HyprlandToplevel.address}`]))
-            }
-        },*/
-        "Close All Windows": {
-            execute: function() {
-                if (!lastClickApp?.windows?.length)
-                    return
-
+                if (!lastClickApp?.windows?.length) return
                 for (let win of lastClickApp.windows) {
                     win.close()
                 }
-
                 visibleOptions = false
             }
         }
-    })
+    ]
 
     property list<var> apps: {
         let result = []

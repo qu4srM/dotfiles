@@ -1,7 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import qs.utils
+import qs.configs.utils
 
 import QtQuick
 import Quickshell
@@ -10,7 +10,7 @@ import Quickshell.Io
 
 Singleton {
     id: root
-    property string filePath: Paths.config + "/quickshell/theme.json"
+    property string filePath: Paths.materialThemePath
     property alias options: materialOptionsJsonAdapter
     property bool ready: false
 

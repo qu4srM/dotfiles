@@ -1,7 +1,7 @@
 import qs 
 import qs.configs
 import qs.widgets 
-import qs.utils
+import qs.configs.utils
 import qs.services
 
 import QtQuick
