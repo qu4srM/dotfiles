@@ -10,13 +10,11 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
 
-Rectangle {
+DiagonalContainer {
     id: root
-
-    radius: Appearance.rounding.normal 
-    color: Appearance.colors.colGlass
-    border.width: 1
-    border.color: Appearance.colors.colGlassBorder
+    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : Appearance.colors.colGlass
+    borderWidth: 1
+    borderColor: Appearance.colors.colGlassBorder
 
     property string galleryDir: Config.options.widgets.galleryPath
     property var images: []

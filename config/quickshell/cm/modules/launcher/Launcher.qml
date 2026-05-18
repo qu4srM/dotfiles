@@ -2,6 +2,7 @@ import qs
 import qs.configs
 import qs.configs.utils
 import qs.widgets
+import qs.services
 
 import QtQuick
 import QtQuick.Controls
@@ -29,8 +30,8 @@ Scope {
 
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.exclusiveZone: -1
-            implicitWidth: 400
-            implicitHeight: 220
+            implicitWidth: Apps.apps.length * Config.options.dock.size + 10
+            implicitHeight: (Apps.apps.length * Config.options.dock.size + 40) / 2 
             anchors {
                 bottom: true
             }
@@ -53,6 +54,7 @@ Scope {
                 onCleared: { if (!active) launcher.hide() }
             }
             StyledToolTip {
+                id: tooltipText
                 y: 80
                 content: pathView.currentItem ? pathView.currentItem.appData.name : ""
                 Behavior on content { SequentialAnimation { 
@@ -69,7 +71,7 @@ Scope {
                 anchors.right: parent.right
                 height: 36
                 radius: 25
-                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colBackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colglassmorphism, 0.7)
+                color: Config.options.bar.showBackground ? Config.options.appearance.shape ? "transparent" : Appearance.colors.colBackground : Config.options.appearance.shape ? "transparent" : Colors.setTransparency(Appearance.colors.colGlass, 0.7)
                 border.color: '#18ffffff'
 
                 RowLayout {
@@ -189,9 +191,32 @@ Scope {
             }
         }
     }
-
     GlobalShortcut {
         name: "launcherToggle"
-        onPressed: GlobalStates.launcherOpen = !GlobalStates.launcherOpen
+        description: "Launcher toggle"
+        onPressed: {
+            GlobalStates.launcherOpen = !GlobalStates.launcherOpen
+        }
+    }
+    GlobalShortcut {
+        name: "launcherRelease"
+        description: "Launcher on release"
+        onPressed: {
+            GlobalStates.superReleaseMightTrigger = true;
+        }
+        onReleased: {
+            if (!GlobalStates.superReleaseMightTrigger) {
+                GlobalStates.superReleaseMightTrigger = true;
+                return;
+            }
+            GlobalStates.launcherOpen = !GlobalStates.launcherOpen
+        }
+    }
+    GlobalShortcut {
+        name: "launcherReleaseInterrupt"
+        onPressed: {
+            GlobalStates.superReleaseMightTrigger = false;
+        }
+
     }
 }

@@ -1,0 +1,15 @@
+[config]
+version_check = false
+
+[templates.quickshell]
+input_path = '~/.config/matugen/templates/colors.json'
+output_path = '~/.local/state/quickshell/user/colors.json'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland/colors.lua'
+output_path = '~/.config/hypr/hyprland/colors.lua'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty/colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+post_hook = 'kill -SIGUSR1 $(pidof kitty)'

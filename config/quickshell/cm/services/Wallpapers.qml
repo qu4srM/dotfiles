@@ -15,6 +15,7 @@ Singleton {
     property string actualCurrent: Config.options.background.wallpaperPath
     property string actualCurrentOverlay
     property string namePathWallpaper
+    property string type: "tonal-spot" // Scheme. Android 14(tonal-spot)
 
     Process {
         id: setProc
@@ -22,8 +23,17 @@ Singleton {
 
     function updateMaterialColor(mode) {
         const wall = Config.options.background.wallpaperPath
-        let selectedMode = mode ? mode : (Theme.options.darkmode ? "dark" : "light")
-        const cmd = `python3 ${Paths.scriptPath}/generate_colors.py --path "${wall}" --mode ${selectedMode} > ${Paths.materialThemePath}`
+        let selectedMode =
+            mode
+                ? mode
+                : (Theme.options.darkmode ? "dark" : "light")
+
+        const cmd = `
+            matugen image "${wall}" \
+            --mode "${selectedMode}" \
+            --type "scheme-${type}" \
+            --source-color-index 1
+        `
         setProc.command = ["bash", "-c", cmd]
         setProc.startDetached()
     }

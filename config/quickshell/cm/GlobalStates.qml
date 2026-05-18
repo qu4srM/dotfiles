@@ -24,4 +24,7 @@ Singleton {
     property bool screenLock: false
     property bool screenLockContainsCharacters: false
     property int currentTabDashboard
+
+    property bool superDown: false
+    property bool superReleaseMightTrigger: true
 }

@@ -92,7 +92,7 @@ Item {
             z: 9999
             color: root.colorMain
         }
-        Rectangle{
+        DiagonalContainer {
             id: end 
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -102,8 +102,11 @@ Item {
             implicitWidth: parent.width - 10
             implicitHeight: parent.height - progress - 8
             color: root.colorBg
-            topLeftRadius: root.radius
-            topRightRadius: root.radius
+            useUniformCorners: false
+            topLeftRadius: Appearance.rounding.unsharpenmore
+            topRightRadius: Appearance.rounding.unsharpenmore
+            bottomLeftRadius: 0
+            bottomRightRadius: 0
 
         }
         Item {
@@ -118,7 +121,7 @@ Item {
                 color: root.colorMain
             }
         }
-        Rectangle{
+        DiagonalContainer {
             id: start
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -128,8 +131,11 @@ Item {
             implicitWidth: parent.width - 10
             implicitHeight: progress - 8
             color: root.colorMain
-            bottomLeftRadius: root.radius
-            bottomRightRadius: root.radius
+            useUniformCorners: false
+            topLeftRadius: 0
+            topRightRadius: 0
+            bottomLeftRadius: Appearance.rounding.unsharpenmore
+            bottomRightRadius: Appearance.rounding.unsharpenmore
 
         }
 

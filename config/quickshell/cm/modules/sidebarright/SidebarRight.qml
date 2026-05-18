@@ -67,11 +67,11 @@ Scope {
                     sidebar.hide();
                 }
             }
-            sourceComponent: Rectangle {
+            sourceComponent: DiagonalContainer {
                 color: Config.options.bar.showBackground ? Appearance.colors.colBackground : Appearance.colors.colGlass
                 implicitWidth: sidebarLoader.width 
                 implicitHeight: sidebarLoader.height
-                radius: Appearance.rounding.normal
+                cornerSize: Appearance.rounding.small
                 
                 StyledRectangularShadow {
                     visible: true//Config.options.bar.showBackground

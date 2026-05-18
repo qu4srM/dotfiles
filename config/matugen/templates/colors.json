@@ -1,0 +1,95 @@
+{
+    "darkmode": true,
+    "transparent": false,
+    "scheme": "vibrant",
+
+    "material_colors": {
+        "colBackground": "{{colors.background.default.hex}}",
+        "colOnBackground": "{{colors.on_background.default.hex}}",
+
+        "colSurface": "{{colors.surface.default.hex}}",
+        "colSurfaceDim": "{{colors.surface_dim.default.hex}}",
+        "colSurfaceBright": "{{colors.surface_bright.default.hex}}",
+
+        "colSurfaceContainerLowest": "{{colors.surface_container_lowest.default.hex}}",
+        "colSurfaceContainerLow": "{{colors.surface_container_low.default.hex}}",
+        "colSurfaceContainer": "{{colors.surface_container.default.hex}}",
+        "colSurfaceContainerHigh": "{{colors.surface_container_high.default.hex}}",
+        "colSurfaceContainerHighest": "{{colors.surface_container_highest.default.hex}}",
+
+        "colOnSurface": "{{colors.on_surface.default.hex}}",
+
+        "colSurfaceVariant": "{{colors.surface_variant.default.hex}}",
+        "colOnSurfaceVariant": "{{colors.on_surface_variant.default.hex}}",
+
+        "colOutline": "{{colors.outline.default.hex}}",
+        "colOutlineVariant": "{{colors.outline_variant.default.hex}}",
+
+        "colInverseSurface": "{{colors.inverse_surface.default.hex}}",
+        "colInverseOnSurface": "{{colors.inverse_on_surface.default.hex}}",
+
+        "colShadow": "{{colors.shadow.default.hex}}",
+        "colScrim": "{{colors.scrim.default.hex}}",
+
+        "colSurfaceTint": "{{colors.surface_tint.default.hex}}",
+
+        "colPrimary": "{{colors.primary.default.hex}}",
+        "colPrimaryDim": "{{colors.primary.default.hex}}",
+        "colOnPrimary": "{{colors.on_primary.default.hex}}",
+
+        "colPrimaryContainer": "{{colors.primary_container.default.hex}}",
+        "colOnPrimaryContainer": "{{colors.on_primary_container.default.hex}}",
+
+        "colInversePrimary": "{{colors.inverse_primary.default.hex}}",
+
+        "colPrimaryFixed": "{{colors.primary_fixed.default.hex}}",
+        "colPrimaryFixedDim": "{{colors.primary_fixed_dim.default.hex}}",
+
+        "colOnPrimaryFixed": "{{colors.on_primary_fixed.default.hex}}",
+        "colOnPrimaryFixedVariant": "{{colors.on_primary_fixed_variant.default.hex}}",
+
+        "colSecondary": "{{colors.secondary.default.hex}}",
+        "colSecondaryDim": "{{colors.secondary.default.hex}}",
+
+        "colOnSecondary": "{{colors.on_secondary.default.hex}}",
+
+        "colSecondaryContainer": "{{colors.secondary_container.default.hex}}",
+        "colOnSecondaryContainer": "{{colors.on_secondary_container.default.hex}}",
+
+        "colSecondaryFixed": "{{colors.secondary_fixed.default.hex}}",
+        "colSecondaryFixedDim": "{{colors.secondary_fixed_dim.default.hex}}",
+
+        "colOnSecondaryFixed": "{{colors.on_secondary_fixed.default.hex}}",
+        "colOnSecondaryFixedVariant": "{{colors.on_secondary_fixed_variant.default.hex}}",
+
+        "colTertiary": "{{colors.tertiary.default.hex}}",
+        "colTertiaryDim": "{{colors.tertiary.default.hex}}",
+
+        "colOnTertiary": "{{colors.on_tertiary.default.hex}}",
+
+        "colTertiaryContainer": "{{colors.tertiary_container.default.hex}}",
+        "colOnTertiaryContainer": "{{colors.on_tertiary_container.default.hex}}",
+
+        "colTertiaryFixed": "{{colors.tertiary_fixed.default.hex}}",
+        "colTertiaryFixedDim": "{{colors.tertiary_fixed_dim.default.hex}}",
+
+        "colOnTertiaryFixed": "{{colors.on_tertiary_fixed.default.hex}}",
+        "colOnTertiaryFixedVariant": "{{colors.on_tertiary_fixed_variant.default.hex}}",
+
+        "colError": "{{colors.error.default.hex}}",
+        "colErrorDim": "{{colors.error.default.hex}}",
+
+        "colOnError": "{{colors.on_error.default.hex}}",
+
+        "colErrorContainer": "{{colors.error_container.default.hex}}",
+        "colOnErrorContainer": "{{colors.on_error_container.default.hex}}",
+
+        "colSuccess": "{{colors.primary.default.hex}}",
+        "colOnSuccess": "{{colors.on_primary.default.hex}}",
+
+        "colSuccessContainer": "{{colors.primary_container.default.hex}}",
+        "colOnSuccessContainer": "{{colors.on_primary_container.default.hex}}"
+    },
+
+    "term_colors": {}
+}

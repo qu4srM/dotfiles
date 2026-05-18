@@ -17,14 +17,14 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
 
-Rectangle {
+DiagonalContainer {
     id: root
     signal wifiClicked
 
     Layout.fillWidth: parent
     implicitHeight: columnLayout.implicitHeight + 10 + 10
     color: Config.options.bar.showBackground ? Appearance.colors.colSurfaceContainer : "transparent"
-    radius: Appearance.rounding.normal - 2
+    cornerSize: Appearance.rounding.small -  2
     
     ColumnLayout {
         id: columnLayout

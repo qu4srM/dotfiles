@@ -107,8 +107,8 @@ Item {
                                 acceptedButtons: Qt.LeftButton
                                 onClicked: {
                                     if (root.draggingTargetWorkspace === -1) {
+                                        Hyprland.dispatch(`hl.dsp.focus({workspace = ${workspace.workspaceValue}})`)
                                         GlobalStates.overviewOpen = false
-                                        Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
                                     }
                                 }
                             }
@@ -188,6 +188,7 @@ Item {
                     MouseArea {
                         id: dragArea
                         anchors.fill: parent
+                        propagateComposedEvents: true
                         hoverEnabled: true
                         onEntered: hovered = true
                         onExited: hovered = false
@@ -208,7 +209,12 @@ Item {
                             window.Drag.active = false
                             root.draggingFromWorkspace = -1
                             if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
-                                Hyprland.dispatch(`movetoworkspacesilent ${targetWorkspace}, address:${window.windowData?.address}`)
+                                Hyprland.dispatch(`
+                                    hl.dsp.window.move({
+                                        workspace = "${targetWorkspace}",
+                                        window = "address:${window.windowData?.address}"
+                                    })
+                                `)
                                 updateWindowPosition.restart()
                                 HyprlandData.updateAll()
                             }
@@ -223,10 +229,10 @@ Item {
 
                             if (event.button === Qt.LeftButton) {
                                 GlobalStates.overviewOpen = false
-                                Hyprland.dispatch(`focuswindow address:${windowData.address}`)
+                                Hyprland.dispatch(`hl.dsp.focus({window = "address:${windowData.address}"})`)
                                 event.accepted = true
                             } else if (event.button === Qt.MiddleButton) {
-                                Hyprland.dispatch(`closewindow address:${windowData.address}`)
+                                Hyprland.dispatch(`hl.dsp.close({window = "address:${windowData.address}"})`)
                                 event.accepted = true
                             }
                         }

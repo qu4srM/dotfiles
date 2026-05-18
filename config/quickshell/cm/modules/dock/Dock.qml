@@ -77,7 +77,7 @@ Scope {
                 exclusiveZone:  root.pinned
                                 ? (isVertical
                                     ? implicitWidth - 60
-                                    : implicitHeight - 60)
+                                    : implicitHeight - 56)
                                 : 0
                 //exclusiveZone: 0
                 //exclusionMode: ExclusionMode.Ignore

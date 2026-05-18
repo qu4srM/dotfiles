@@ -11,14 +11,14 @@ import Quickshell
 import Quickshell.Wayland
 
 
-Rectangle {
+DiagonalContainer {
     id: root
     required property Item area
     required property bool ready
     Layout.alignment: Qt.AlignHCenter
     implicitWidth: list.contentWidth + 10
     implicitHeight: area.height - 2
-    radius: Appearance.rounding.small
+    cornerSize: Appearance.rounding.small
 
     color: Config.options.bar.showBackground
         ? (Config.options.appearance.shapes.enable
@@ -28,8 +28,9 @@ Rectangle {
             ? "transparent"
             : Appearance.colors.colGlass)
 
-    border.width: 1
-    border.color: Appearance.colors.colGlassBorder
+    borderWidth: 1
+    borderColor: Appearance.colors.colGlassBorder
+    clip: false
     ListView {
         id: list
         anchors.bottom: parent ? parent.bottom : undefined

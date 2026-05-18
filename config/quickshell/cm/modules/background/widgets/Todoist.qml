@@ -7,11 +7,10 @@ import qs.services
 import QtQuick
 import QtQuick.Layouts
 
-Rectangle {
-    radius: Appearance.rounding.normal 
+DiagonalContainer {
     color: Config.options.bar.showBackground ? Appearance.colors.colBackground : Appearance.colors.colGlass
-    border.width: 1
-    border.color: Appearance.colors.colGlassBorder
+    borderWidth: 1
+    borderColor: Appearance.colors.colGlassBorder
 
     CustomIcon { 
         anchors.top: parent.top

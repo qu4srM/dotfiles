@@ -38,10 +38,10 @@ Scope {
         }
         implicitWidth: roundCorner.implicitWidth
         implicitHeight: roundCorner.implicitHeight
-        RoundCorner {
+        RectCorner {
             id: roundCorner
             corner: cornerWindow.corner
-            size: Appearance.rounding.normal
+            size: Appearance.rounding.small
         }
     }
     Variants {
@@ -57,22 +57,22 @@ Scope {
 
             CornerWindow{
                 screen: modelData
-                corner: RoundCorner.CornerEnum.TopLeft
+                corner: RectCorner.CornerEnum.TopLeft
                 fullscreen: monitorScope.fullscreen
             }
             CornerWindow{
                 screen: modelData
-                corner: RoundCorner.CornerEnum.TopRight
+                corner: RectCorner.CornerEnum.TopRight
                 fullscreen: monitorScope.fullscreen
             }
             CornerWindow{
                 screen: modelData
-                corner: RoundCorner.CornerEnum.BottomLeft
+                corner: RectCorner.CornerEnum.BottomLeft
                 fullscreen: monitorScope.fullscreen
             }
             CornerWindow{
                 screen: modelData
-                corner: RoundCorner.CornerEnum.BottomRight
+                corner: RectCorner.CornerEnum.BottomRight
                 fullscreen: monitorScope.fullscreen
             }
         }

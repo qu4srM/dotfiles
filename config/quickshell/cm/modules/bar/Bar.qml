@@ -21,6 +21,7 @@ Scope {
             required property ShellScreen modelData 
             component: StyledWindow {
                 id: bar
+                property bool floating: Config.options.bar.floating
                 screen: barLoader.modelData
                 name: "bar"
                 color: "transparent"
@@ -30,9 +31,9 @@ Scope {
                     right: true
                 }
                 margins {
-                    left: 0
-                    right: 0
-                    top: 0//Appearance.margins.panelMargin
+                    left: floating ? Appearance.margins.panelMargin : 0
+                    right: floating ? Appearance.margins.panelMargin : 0
+                    top: floating ? Appearance.margins.panelMargin : 0
                 }
                 property string pathIcons: "root:/assets/icons/"
                 property string colorMain: "transparent"
@@ -54,11 +55,15 @@ Scope {
                     target: shadow
                     blur: 30
                 }*/
-
-                Rectangle {
+                DiagonalContainer {
                     anchors.fill: parent 
-                    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : "transparent"//Colors.setTransparency(Appearance.colors.colglassmorphism, 0.9)
-                    radius: Config.options.bar.floating ? Appearance.rounding.normal : 0
+                    color: Config.options.bar.showBackground ? Appearance.colors.colBackground : "transparent"
+                    cornerSize: Appearance.rounding.small
+
+                }
+
+                Item {
+                    anchors.fill: parent 
 
                     // === IZQUIERDA ===
                     RowLayout {

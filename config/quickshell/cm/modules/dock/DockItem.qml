@@ -63,7 +63,13 @@ Rectangle {
                 }
 
                 if (root.modelData?.running) {
-                    Quickshell.execDetached(["bash", "-c", "hyprctl dispatch focuswindow class:" + root.modelData?.appId])
+                    Quickshell.execDetached([
+                        "hyprctl",
+                        "eval",
+                        `hl.dispatch(hl.dsp.focus({
+                            window = "class:^(${root.modelData?.appId})$"
+                        }))`
+                    ])
                     Apps.visibleOptions = false
                     return;
                     

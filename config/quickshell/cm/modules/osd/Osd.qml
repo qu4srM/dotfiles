@@ -86,11 +86,11 @@ Scope {
             property string pathIcons: "root:/assets/icons/"
             property string colorMain: "transparent"
             property string pathScripts: "~/.config/quickshell/scripts/"
-            Rectangle {
+            DiagonalContainer {
                 anchors.fill: parent
                 anchors.margins: 10
                 color: Appearance.colors.colBackground
-                radius: Appearance.rounding.full
+                cornerSize: Appearance.rounding.small
                 Loader {
                     id: osdIndicatorLoader
                     anchors.fill: parent

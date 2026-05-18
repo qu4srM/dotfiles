@@ -61,8 +61,11 @@ PopupWindow {
                         MouseArea {
                             anchors.fill: parent 
                             onClicked: Quickshell.execDetached([
-                                "hyprctl", "dispatch", "focuswindow", 
-                                "address:0x" + windowPreview.modelData.HyprlandToplevel.address
+                                "hyprctl",
+                                "eval",
+                                `hl.dispatch(hl.dsp.focus({
+                                    window = "address:0x${windowPreview.modelData.HyprlandToplevel.address}"
+                                }))`
                             ])
                         }
                         ScreencopyView {

@@ -378,7 +378,7 @@ Singleton {
     }
     margins: QtObject {
         property real itemBarMargin: 6
-        property real panelMargin: 4
+        property real panelMargin: 7
         property real itemPanelMargin: 8
     }
 }

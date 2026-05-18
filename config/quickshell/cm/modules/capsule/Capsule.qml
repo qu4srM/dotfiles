@@ -39,9 +39,13 @@ Scope {
                     left: true 
                     right: true
                 }
+                margins {
+                    top: Config.options.bar.floating ? Appearance.margins.panelMargin : 0
+                }
                 implicitHeight: 500
                 property string pathIcons: "root:/assets/icons/"
                 property string pathScripts: "~/.config/quickshell/scripts/"
+
                 
                 mask: Region { item: content}
                 function hide () {
@@ -55,7 +59,7 @@ Scope {
                     }
                 }
                 
-                Rectangle {
+                DiagonalContainer {
                     id: content
                     property bool expanded: false
 
@@ -66,13 +70,12 @@ Scope {
                     implicitWidth: expanded ? contentExpanded.width : Appearance.sizes.capsuleWidth
                     implicitHeight: expanded ? contentExpanded.height : Appearance.sizes.capsuleHeight
 
-                    radius: Appearance.rounding.unsharpenmore + 4
+                    cornerSize: Appearance.rounding.small - 4
                     color: "#000000"
-                    clip: true
-                    border.width: 1
-                    border.color: '#18ffffff'
+                    borderWidth: 1
+                    borderColor: '#18ffffff'
 
-                    Behavior on radius {
+                    Behavior on cornerSize {
                         animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                     }
 

@@ -23,7 +23,7 @@ Scope {
                 id: overview
                 screen: overviewLoader.modelData
                 name: "overview"
-                color: Colors.setTransparency(Appearance.colors.colglassmorphism, 0.90)
+                color: Colors.setTransparency(Appearance.colors.colGlass, 0.90)
 
                 property string pathIcons: "root:/assets/icons/"
                 property string colorMain: "transparent"
@@ -62,6 +62,7 @@ Scope {
                     blur: 30
                 }*/
 
+
                 Rectangle {
                     id: content
                     anchors.centerIn: parent
@@ -69,10 +70,21 @@ Scope {
                     height: widget.implicitHeight
                     color: "transparent"
                     radius: Config.options.bar.floating ? Appearance.rounding.normal : 0
+                    
                     OverviewWidget {
                         id: widget
                         anchors.centerIn: parent
                         styledWindow: overview
+                    }
+                    WheelHandler {
+                        
+                        onWheel: (event) => {
+                            if (event.angleDelta.y < 0)
+                                Hyprland.dispatch(`hl.dsp.focus({workspace = "r+1"})`)
+                            else if (event.angleDelta.y > 0)
+                                Hyprland.dispatch(`hl.dsp.focus({workspace = "r-1"})`)
+                        }
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                     }
                 }
             }

@@ -127,23 +127,24 @@ Variants {
             }
             
         }*/
-        ScreenCorner {
+        RectScreenCorner {
             anchors.topMargin: Appearance.sizes.barHeight
-            visible: Config.options.bar.showBackground && !Config.options.bar.floating
+            visible: Config.options.bar.showBackground && !Config.options.bar.floating && !GlobalStates.screenLock
             color: Appearance.colors.colBackground
-            topLeftRadius: Appearance.rounding.normal
-            topRightRadius: Appearance.rounding.normal
-            bottomLeftRadius: 0
-            bottomRightRadius: 0
+            size: Appearance.rounding.small
         }
+        /*
         Widgets {
             visible: opacity > 0
             opacity: GlobalStates.screenLock ? 0 : 1
-        }
+        }*/
         NotificationPopup {
             x: parent.width - 310
             y: Appearance.sizes.barHeight
         }
+
+
+
 
         /* ===============================
         VIDRIO CONTENEDOR MÓVIL
